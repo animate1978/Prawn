@@ -1,0 +1,8 @@
+<shrimp type="function" name="Length" description="Return the length of a vector" author="rconstruct">
+	<input name = "Vin" description="Input vector" type="point normal vector" default="vector(1)"/>
+	<output name="value" description="The lenght of the vector" type="float"/>
+	<rsl_code>
+		$(value) = length( $(Vin) );
+	</rsl_code>
+	<usage>Returns the length of a vector ( sqrt(Vin.Vin) ).</usage>
+</shrimp>

@@ -1,0 +1,22 @@
+<shrimp type="function" name="fBm1D" description="1 dimensional fractional Brownian motion." author="rconstruct">
+	<input name="x" description="Value to sample fBm at" storage="varying" type="float" default="s"/>
+	<input name="filterwidth" description="Filter width for antialiasing" type="float" default="0"/>
+	<input name="octaves" description="Maximum octaves of noise" storage="uniform" type="float" default="5"/>
+	<input name="lacunarity" description="Controls the smoothness of the fBm" type="float" default="2.17"/>
+	<input name="gain" description="Controls the contrast of the fBm" type="float" default="0.5"/>
+	<input name="amplitude" description="Amplitude of fBm" type="float" default="1"/>
+	<output name="value" description="fBm value at x" type="color point vector normal float"/>
+	<rsl_include>rsl_shrimp_fractal.h</rsl_include>
+	<rsl_code>
+	#define $(blockname)_$(value:type)
+	#ifdef $(blockname)_float
+		$(value) = $(amplitude) * fBm( $(x), $(filterwidth), $(octaves),
+					$(lacunarity),$(gain) );
+	#else
+		$(value) = $(amplitude) * $(value:type) (vector vfBm( $(x),
+					$(filterwidth), $(octaves), $(lacunarity),$(gain) ) );		
+	#endif
+	#undef $(blockname)_$(value:type)
+	</rsl_code>
+	<usage>1 dimensional fractional Brownian motion is a sumation of noises at different frequencies. Note that the output is not clamped and may exceed +1 or -1.</usage>
+</shrimp>

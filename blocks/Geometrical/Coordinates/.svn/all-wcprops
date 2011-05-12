@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Geometrical/Coordinates
+END
+cartesian2spherical.xml
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Geometrical/Coordinates/cartesian2spherical.xml
+END
+spherical2cartesian.xml
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Geometrical/Coordinates/spherical2cartesian.xml
+END
+cartesian2cylindrical.xml
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Geometrical/Coordinates/cartesian2cylindrical.xml
+END
+cylindrical2cartesian.xml
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Geometrical/Coordinates/cylindrical2cartesian.xml
+END
+cylindrical2spherical.xml
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Geometrical/Coordinates/cylindrical2spherical.xml
+END
+spherical2cylindrical.xml
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Geometrical/Coordinates/spherical2cylindrical.xml
+END
+cartesian2polar2d.xml
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Geometrical/Coordinates/cartesian2polar2d.xml
+END
+polar2cartesian2d.xml
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Geometrical/Coordinates/polar2cartesian2d.xml
+END

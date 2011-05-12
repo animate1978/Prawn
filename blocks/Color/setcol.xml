@@ -1,0 +1,12 @@
+<shrimp type="function" name="SetCol" description="Set the components of a color" author="rconstruct">
+	<input name="x" description="1st component" type="float" default="0"/>
+	<input name="y" description="2nd component" type="float" default="0"/>
+	<input name="z" description="3rd component" type="float" default="0"/>
+	<output name="Cout" description="Color output" type="color"/>
+	<rsl_code>
+		setcomp( $(Cout), 0, $(x) );
+		setcomp( $(Cout), 1, $(y) );
+		setcomp( $(Cout), 2, $(z) );
+	</rsl_code>
+	<usage>Sets the components of a color type variable.</usage>
+</shrimp>

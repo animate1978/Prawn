@@ -1,0 +1,50 @@
+Special thanks to Mario Marengo, for all the information in his odforce.net
+threads (particularly the glass and hair threads), and for allowing us to use
+some of his work.
+ Special thanks also to Tal Lancaster (from The RenderMan Repository,
+http://www.renderman.org ), for allowing us to use his work and the work he
+gathered over the years, at The RenderMan Repository, from authors such as
+ Larry Gritz, Stephen H. Westin, Rudy Cortez, Peter Stuart, just to name a few.
+
+Special thanks go also to Rudy Cortez, his work at The RenderMan Academy was an eye-opener and provided me with a great introduction to RSL.
+To sum it up, special thanks to all the people that made available their RSL
+code, giving everyone else the chance to learn with it. Without it, Shrimp would
+still exist, but its creative possibilities would be much more limited.
+
+Many thanks also to the Aqsis and Pixie developers, for their work in making
+sure everyone can have access to free (as in beer and as in freedom) RenderMan
+implementations, and particularly special thanks to Romain Behar, for managing
+to survive the never-ending succession of very long emails.
+
+And last, but not least, thanks to the 3Delight team, for providing a free
+first license to their commercial RenderMan implementation, 3Delight.
+
+If you think you should be here, contact us, and we'll gladly add you to the list ;)
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Note: I left all copyright notices of the relevant RSL code/code snippets in place, in the headers where such functions were declared, and also mentioning the RSL code authorship in the <usage></usage> tags of Shrimp's XML blocks, when the relevent code wasn't included in a header, but defined in the XML block itself.
+
+We tried to the best of our possibilities to check the usage policies/licenses
+of any RSL code, but some RSL code was devoid of any information, regarding
+authorship, and/or license. We have the utmost respect for everyone's work, and 
+we have no interest at all, in claiming as our own, the authorship of the work
+someone else did, nor to disrespect the license terms under which the respective
+work was released. So if you think that the authorship of some RSL code belongs
+to you, and it's not credited as such, or that we're using your work without
+permission, or respecting your work's license terms, please contact us as soon
+as possible, so that we can correct the situation by adding the authorship
+information missing, or remove the relevant code, whatever might suit your
+ interests the best.
+
+You can contact us directly by using the sf.net page mailing list, or the sf.net user contact.
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Final note: Every existing RSL code/headers was tweaked/changed in one way or
+another, from existing code, to better fit Shrimp's structure and needs, and
+in some cases, to add extra funcionality, while in other cases, RSL code was
+written from scratch, _but_ i'm no RSL expert by any means, so, any bugfixes &
+corrections regarding the RSL headers and RSL code in the XML blocks, are more
+than welcome.
+

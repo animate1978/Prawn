@@ -1,0 +1,10 @@
+<shrimp type="function" name="Ctransform" description="Transform to a different color space" author="rconstruct">
+	<input name="Cin" description="color to transform" type="color" type_parent="value" default="color(0)"/>
+	<input name="from_space" description="The color space to transform from" storage="uniform" type="string" default="&quot;rgb&quot;"/>
+	<input name="to_space" description="The color space to transform to" storage="uniform" type="string" default="&quot;hsv&quot;"/>
+	<output name="Cout" description="The transformed color" type="color"/>
+	<rsl_code>
+		$(Cout) = ctransform( $(from_space), $(to_space), $(Cin) );
+	</rsl_code>
+<usage>Transforms the color &quot;Cin&quot; from &quot;fromspace&quot; to &quot;tospace&quot;. If fromspace isn&apos;t passed, it&apos;s assumed to be RGB. Color spaces are &quot;rgb&quot; (red, green, and blue), &quot;hsv&quot; (hue, saturation, value), &quot;hsl&quot; (hue, saturation, lightness), &quot;xyz&quot; or &quot;XYZ&quot; (CIE XYZ coordinates), &quot;xyY&quot; or &quot;xyy&quot; (CIE xy and Y), and &quot;YIQ&quot; or &quot;yiq&quot; (NTSC coordinates).</usage>
+</shrimp>

@@ -1,0 +1,12 @@
+<shrimp type="function" name="FSmoothStep" description="Filtered smoothstep function" author="rconstruct">
+	<input name="x" description="Value to test" type="float" default="1"/>
+	<input name="minimum" description="Position of bottom of step" type="float" default="0"/>
+	<input name="maximum" description="position of top of step" type="float" default="1"/>
+	<input name="filterwidth" description="Filter value" type="float" default="1"/>
+	<output name="value" description="value of smoothstep function at x" type="float"/>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_code>
+		$(value) = filteredsmoothstep( $(minimum), $(maximum), $(x), $(filterwidth) );
+	</rsl_code>
+	<usage>Antialiased smoothstep by Larry Gritz. Returns the &quot;box&quot; filter of smoothstep(e0, e1, t) from x-dx/2 to x+dx/2.</usage>
+</shrimp>

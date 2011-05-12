@@ -1,0 +1,10 @@
+<shrimp type="function" name="Spherical2Cylindrical" description="Converts spherical coordinates to cylindrical coordinates" author="rconstruct">
+	<input name="In" description="Input normal, vector or point" type_parent="value" type="normal vector point" default="point(0)"/>
+	<output name="value" description="Converted normal, vector or point" type="normal vector point"/>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_include>rsl_shrimp_conversion.h</rsl_include>
+	<rsl_code>
+		$(value) = spherical2cylindrical( $(In) );
+	</rsl_code>
+	<usage>Converts spherical coordinates to cylindrical coordinates.</usage>
+</shrimp>

@@ -1,0 +1,10 @@
+<shrimp type="function" name="Bump" description="Bump mapping function" author="rconstruct">
+	<input name="P" description="The surface point to be bumped" storage="varying" type="point" default="P"/>
+	<input name="N" description="The surface normal" storage="varying" type="normal" type_parent="BumpedN" default="normalize(N)"/>
+	<input name="bumpscale" description="Amplitude of the bumping" type="float" default="0.5"/>
+	<output name="BumpedN" description="The new surface normal" storage="varying" type="normal"/>
+	<rsl_code>
+		$(BumpedN) = normalize( calculatenormal( $(P) + $(N) * $(bumpscale)));
+	</rsl_code>
+	<usage>This is exactly like the displace function except that the new surface position is not computed. Calculates the normal of a position &quot;P&quot; displaced by amount &quot;bumpscale&quot; in direction &quot;N&quot;.</usage>
+</shrimp>

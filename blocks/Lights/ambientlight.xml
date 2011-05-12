@@ -1,0 +1,12 @@
+<shrimp type="function" name="AmbientLight" description="Ambient light shader" author="rconstruct">
+	<input name="intensity" description="Light intensity" type="float" default="1"/>
+	<input name="lightcolor" description="Light color" type="color" default="color( 1, .93, .81 )"/>
+	<input name="category" description="Light category" storage="uniform" type="string" default="&quot;&quot;"/>
+	<output name="Cl" description="Light ray color" type="color"/>
+	<rsl_code>
+		__category = $(category);
+		$(Cl) = $(intensity) * $(lightcolor);
+		L = vector(0);
+	</rsl_code>
+	<usage>Ambient light shader.</usage>
+</shrimp>

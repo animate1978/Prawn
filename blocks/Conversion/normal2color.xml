@@ -1,0 +1,8 @@
+<shrimp type="function" name="Normal2Color" description="Normal to color conversion" author="rconstruct">
+    <input name="in" description="Input value" type="normal" default="normal(0)"/>
+    <output name="value" description="Output value" type="color"/>
+	<rsl_code>
+		$(value) = color( $(in) * normal(.5) + normal(.5) );
+	</rsl_code>
+	<usage>Sets a color with a normal rescaled to the [0,1] range (assuming the normal vector is normalized).</usage>
+</shrimp>

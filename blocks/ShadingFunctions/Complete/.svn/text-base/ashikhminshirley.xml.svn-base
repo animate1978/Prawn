@@ -1,0 +1,44 @@
+<shrimp name="AshikhminShirley" type="function" description="Ashikhmin-Shirley shading model." author="rconstruct" rolled="1">
+	<input name="Cdiff" description="Diffuse color" type="color" default="color(.3)"/>
+	<input name="Cspec" description="Specular color" type="color" default="color(1)"/>
+	<input name="Crefl" description="Reflection color" type="color" default="color(1)"/>
+    <input name="Kd" description="Diffuse light coefficient" type="float" default="0.5"/>
+    <input name="Ks" description="Specular light coefficient" type="float" default="0.5"/>
+	<input name="Kr" description="Reflection coefficient" type="float" default="0.5"/>
+	<input name="ior" description="Index of Refraction" type="float" default="2.0"/>
+    <input name="nu" description="Specularity along U direction" type="float" default="1000"/>
+    <input name="nv" description="Specularity along V direction" type="float" default="10"/>
+	<input name="samples" description="Environment samples" storage="uniform" type="float" default="0"/>
+    <input name="envmap" description="Environment map" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="envspace" description="Environment coordinate system" storage="uniform" type="string" default="&quot;world&quot;"/>
+	<input name="N" description="Surface normal" storage="varying" type="normal vector" default="normalize(N)"/>
+	<input name="I" description="Direction of viewer" storage="varying" type="vector" default="normalize(I)"/>
+	<input name="direction" description="Direction vector" storage="varying" type="vector" default="normalize(dPdu)"/>
+	<input name="category" description="Light categories accepted" storage="uniform" type="string" default="&quot;&quot;" />
+	<output name="Ci" description="Shaded color" type="color" />
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+	
+	#define $(blockname)_$(samples)
+	
+	aov_surfacecolor += $(Cdiff);
+	aov_specularcolor += $(Cspec);
+		
+		$(Ci) = LocIllumAshShir(	$(N), $(I), $(direction), $(Cdiff),
+									$(Cspec), $(Kd), $(Ks), $(nu), $(nv),
+									$(category),
+									DECLARE_AOV_PARAMETERS );
+	#ifdef $(blockname)_0
+		$(Ci) = $(Ci);
+	#else /* add environment sampling */
+		aov_reflection += $(Crefl) * EnvIllumAshShir(
+								faceforward( $(N), $(I) ), -$(I),
+								$(direction), $(Kd), $(Ks), $(nu), $(nv),
+								$(samples), $(envmap), $(envspace) );
+		$(Ci) += aov_reflection;
+	#endif /* $(blockname)_$(samples) */
+	#undef $(blockname)_$(samples)
+	
+	</rsl_code>
+	<usage>Based on Peter Stuart&apos;s implementation of the Ashikhmin-Shirley shading model. Samples the environment according to the number of ray samples. Notice that the more samples you use, the longer it takes to render. The parameters &quot;nu&quot; and &quot;nv&quot; control the specularity of the anisotropy direction along X, and Y respectively, being the parameter &quot;direction&quot;, the anisotropy direction, which defaults to &quot;dPdu&quot;. The variable &quot;samples&quot; controls the environment sampling, any value higher than 0 turning environment reflections on, which can either be an environment map as defined in &quot;envmap&quot;, or raytraced reflections if &quot;envmap&quot; is empty: the default is no environment map and 0 samples, so no reflections are considered for the resulting color. This block passes the resulting values to the &quot;aov_surfacecolor&quot;, &quot;aov_diffuse&quot;, &quot;aov_specularcolor&quot;, &quot;aov_specular&quot;, and &quot;aov_reflection&quot; AOV presets. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.</usage>
+</shrimp>

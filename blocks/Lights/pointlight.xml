@@ -1,0 +1,32 @@
+<shrimp type="function" name="PointLight" description="Point light shader" author="rconstruct">
+	<input name="intensity" description="Light intensity" type="float" default="400"/>
+	<input name="lightcolor" description="Light color" type="color" default="color( 1, .93, .81 )"/>
+	<input name="position" description="Light source position" type="point" default="point &quot;shader&quot; ( -15, 10, 5 )"/>
+	<input name="decay" description="Light decay, see help" storage="uniform" type="float" default="2"/>
+	<input name="shadowmap" description="Shadow map" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="blur" description="Shadow map blur" type="float" default="0"/>
+	<input name="width" description="Shadow map filter width" storage="uniform" type="float" default="1"/>
+	<input name="samples" description="Shadow map samples" storage="uniform" type="float" default="1"/>
+	<input name="bias" description="Shadow map bias" storage="uniform" type="float" default="0.01"/>
+	<input name="filter" description="Shadow map filter" storage="uniform" type="string" default="&quot;gaussian&quot;"/>
+	<input name="nondiffuse" description="Non-diffuse light" storage="uniform" type="float" default="0" />
+	<input name="nonspecular" description="Non-specular light" storage="uniform" type="float" default="0" />
+	<input name="category" description="Light category" storage="uniform" type="string" default="&quot;&quot;"/>
+	<output name="Cl" description="Light ray color" type="color"/>
+	<rsl_include>rsl_shrimp_lights.h</rsl_include>
+	<rsl_code>
+		/* standards declared at beginning of (preview) light shader */
+		__nondiffuse = $(nondiffuse);
+		__category = $(category);
+		/* temp storage for shadow color */
+		varying color $(blockname)_inshadow = color(0);
+		
+		__nonspecular = $(nonspecular);
+		$(Cl) = spointlight( $(position), $(intensity), $(blur),
+					$(width), $(samples), $(bias), $(decay), $(shadowmap),
+					$(filter), $(lightcolor), $(blockname)_inshadow );
+
+		__shadow = $(blockname)_inshadow;
+	</rsl_code>
+	<usage>Point light shader. The &quot;decay&quot; variable defaults to 0 - no decay, with 1 being linear decay, 2 being squared decay, 3 being cubic decay and so on.</usage>
+</shrimp>

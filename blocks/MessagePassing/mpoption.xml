@@ -1,0 +1,9 @@
+<shrimp name="MPOption" type="function" description="Returns renderer global option state data" author="rconstruct">
+    <input name="parameter" description="Renderer option state to query, see help." storage="uniform" type="string" default="&quot;&quot;"/>
+	<output name="result" description="Query value" type="float color normal vector point string"/>
+	<output name="status" description="Exit status" type="float"/>
+	<rsl_code>
+		$(status) = option( $(parameter), $(result) );
+	</rsl_code>
+    <usage>Returns the data associated with the renderer&apos;s global option state, as long as the data is known to the renderer and of correct type in which case the result will contain the associated data content, and &quot;option&quot; will exit with 1, otherwise &quot;option&quot; will exit with 0. The data accessible by the &quot;option&quot; function is listed next, as well as its respective type: &quot;Format&quot;, uniform float[3]; &quot;FrameAspectRation&quot;, uniform float; &quot;CropWindow&quot;, uniform float[4]; &quot;DepthOfField&quot;, uniform float[3]; &quot;Shutter&quot;, uniform float[2]; &quot;Clipping&quot;, uniform float[2]; &quot;Hider&quot;, uniform string; &quot;DeviceResolution&quot;, uniform float[3]; &quot;trace:maxdepth&quot;, uniform float; &quot;trace:speculartreshold&quot;, uniform float; &quot;user:useroption&quot;, user set type, for user set options. Notice that different renderer implementations of &quot;option&quot; might be able to access different data fields. Have also in mind that uniform to varying conversion is possible, however the reverse isn&apos;t, so you should pay attention to the storage class of the data you&apos;re going to query.</usage>
+</shrimp>

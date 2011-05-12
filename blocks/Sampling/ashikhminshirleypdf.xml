@@ -1,0 +1,32 @@
+<shrimp type="function" name="AshikhminShirleyPDF" description="Samples the Ashikhmin-Shirley PDF" author="rconstruct">
+	<input name="nu" description="Specular factor on X direction" type="float" default="150"/>
+	<input name="nv" description="Specular factor on Y direction" type="float" default="1500"/>
+	<input name="samples" description="Number of samples" storage="uniform" type="float" default="32"/>
+	<input name="N" description="The surface normal" type="vector normal" default="normalize(N)"/>
+	<input name="I" description="The viewer vector" type="vector" default="normalize(I)"/>
+	<input name="udir" description="Anisotropy direction" type="vector" default="normalize(dPdu)"/>
+	<input name="label" description="Ray label" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="subset" description="Geometry group for ray intersection" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="hitmode" description="Override for shading mode" storage="uniform" type="string" default="&quot;default&quot;"/>
+	<input name="bias" description="Ray bias" storage="uniform" type="float" default="0.01"/>
+	<input name="maxdist" description="Maximum ray distance" storage="uniform" type="float" default="1e+38"/>
+	<input name="envmap" description="Environment map to use with no ray hits" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="envspace" description="Environment space" storage="uniform" type="string" default="&quot;camera&quot;"/>
+	<input name="filter" description="Environment filter" storage="uniform" type="string" default="&quot;gaussian&quot;"/>
+	<input name="width" description="Environment filter width" storage="uniform" type="float" default="1"/>
+	<input name="envsamples" description="Environment lookup samples" storage="uniform" type="float" default="4"/>
+	<input name="envblur" description="Environment lookup blur" type="float" default="0"/>
+	<output name="Ci" description="The amount of diffuse light" type="color" />
+	<rsl_include>rsl_sampling.h</rsl_include>
+	<rsl_code>
+		$(Ci) = samplepdf(	1, $(samples), /* model 1 = Ashikhmin-Shirley */
+							$(nu), $(nv),
+							0,0,0, /* roughness, exponent, isotropy (unused) */
+							$(I), $(udir), $(N),
+							$(label), $(subset), $(hitmode), $(bias),
+							$(maxdist), $(envmap), $(envspace), $(filter),
+							$(width), $(envsamples), $(envblur) );
+		aov_reflection += $(Ci);
+	</rsl_code>
+<usage>This block generates a distribution of rays according to the Ashikhmin-Shirley PDF. The variable &quot;samples&quot; specifies the number of rays to generate, and since this increases the number of loop iterations, increasing the number of rays, increases also the render times (but reduces noise). The &quot;envmap&quot; variable contains the environment map to use when there are no ray intersections. The variables &quot;envspace&quot; controls the space transformation for the ray used for the environment lookup, while &quot;filter&quot;, &quot;envsamples&quot;, &quot;width&quot;, &quot;envblur&quot; control the environment lookup respectively.</usage>
+</shrimp>

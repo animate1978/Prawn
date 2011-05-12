@@ -1,0 +1,20 @@
+<shrimp name="HanrahanKrueger" type="function" description="Matt Pharr&apos;s implementation of Hanrahan-Krueger model" author="rconstruct">
+	<input name="Cs" description="Surface color" type="color" default="color( .8, .5, .5 )"/>
+    <input name="sheencolor" description="Sheen color" type="color" default="1.0"/>
+	<input name="Ka" description="Ambient coefficient" type="float" default=".1"/>
+    <input name="ior" description="Index of refraction" type="float" default="1.4"/>
+    <input name="thickness" description="Thickness" type="float" default="0.5"/>
+	<input name="N" description="Surface normal" storage="varying" type="vector normal" default="normalize(N)"/>
+	<input name="I" description="Direction of viewer" storage="varying" type="vector" default="normalize(I)"/>
+	<input name="category" description="Light categories accepted" storage="uniform" type="string" default="&quot;&quot;" />
+	<output name="Ci" description="Shaded color" type="color"/>
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+		aov_surfacecolor += $(Cs);
+		aov_ambient += $(Ka) * ambient();
+		aov_scattering += subsurfaceSkin( $(I), $(N), $(Cs), $(sheencolor),
+								1/$(ior), $(thickness), $(category) );
+        $(Ci) = aov_surfacecolor * aov_ambient + aov_scattering;
+	</rsl_code>
+	<usage>Based on Matt Pharr&apos;s skin shader, a surface shader that implements a shading model that should have a visual appearance generally similar to that of skin. Based on phenomenological information about skin reflectance from Pat Hanrahan and Wolfgang Krueger&apos;s &quot;Reflection from layered surfaces due to subsurface scattering&quot;, proceedings of SIGGRAPH 1993. The parameters are the skin base color, the oily surface sheen color, the ratio of the indices of refraction of incoming ray to transmitted ray, and the skin layer thickness. This block passes the resulting values to the &quot;aov_surfacecolor&quot;, &quot;aov_ambient&quot; and &quot;aov_scattering&quot; AOV presets. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.</usage>
+</shrimp>

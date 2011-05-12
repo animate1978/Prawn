@@ -1,0 +1,9 @@
+<shrimp type="function" name="Add" description="Addition block" author="rconstruct">
+	<input name="A" description="1st input" type="normal color point vector float" type_parent="value" default="1"/>
+	<input name="B" description="2nd or subsequent inputs" type="normal color point vector float" type_parent="value" multi="+" default="1"/>
+	<output name="value" description="val = A + B" type="normal color point vector float"/>
+	<rsl_code>
+		$(value) = $(A) + $(B);
+	</rsl_code>
+	<usage>Adds 2 or more inputs. All the input pads will inherit the type of the output pad.</usage>
+</shrimp>

@@ -1,0 +1,17 @@
+<shrimp type="function" name="CellContour" description="Generates contour lines of shaded cells" author="rconstruct">
+	<input name="position1" description="First point position" type="point" default="point(0)"/>
+	<input name="position2" description="Second point position" type="point" default="point(1)"/>
+	<input name="feature1" description="Primary feature" type="float" default="0"/>
+	<input name="feature2" description="Secondary feature" type="float" default="1"/>
+	<input name="thickness" description="Contour line thickness" type="float" default="15"/>
+	<input name="P" description="Surface point" type="point" default="P"/>
+	<output name="value" description="Output value" type="float"/>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_code>
+		$(value) = step( $(thickness) * (
+					distance( $(position1), $(position2) ) / (
+					distance( $(position1), $(P) ) + distance( $(P),
+					$(position2) ))) , $(feature2) - $(feature1) );
+	</rsl_code>
+	<usage>This function generates contour lines on shaded cells.</usage>
+</shrimp>

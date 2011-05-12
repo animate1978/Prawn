@@ -1,0 +1,19 @@
+<shrimp name="OrenNayarWolff" type="function" description="OrenNayarWolff diffuse shading model" author="rconstruct">
+	<input name="Cdiff" description="Diffuse color" type="color" default="color(.5)"/>
+    <input name="Kd" description="Diffuse light coefficient" type="float" default="0.8"/>
+	<input name="roughness" description="roughness" type="float" default="0.05"/>
+	<input name="ior" description="Index of refraction" type="float" storage="uniform" default="1.5"/>
+	<input name="N" description="Surface normal" storage="varying" type="vector normal" default="normalize(N)"/>
+	<input name="I" description="Direction of viewer" storage="varying" type="vector" default="normalize(I)"/>
+	<input name="category" description="Light categories accepted" storage="uniform" type="string" default="&quot;&quot;" />
+	<output name="Ci" description="Shaded color" type="color" />
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+		aov_surfacecolor += $(Cdiff);
+		
+		aov_diffuse += $(Kd) * OrenNayarWolff( $(roughness), $(ior),
+								$(Cdiff), $(N), $(I), $(category) );
+        $(Ci) = aov_diffuse;
+	</rsl_code>
+    <usage>Oren-Nayar-Wolff diffuse term for mildly rough dielectric surfaces, based on the paper &quot;Improved Diffuse Reflection Models for Computer Vision&quot;, by Lawrence B. Wolff, Shree K. Nayar, Michael Oren, and on Larry Gritz&apos;s implementation of the full Oren-Nayar model with inter-reflections, from The RenderMan Repository. Roughness parameter accounts for apparent surface roughness, and the IOR parameter is the index of refraction of the dielectric surface - note that most dielectric surfaces have an IOR in the [1.3,2.0] range. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.</usage>
+</shrimp>

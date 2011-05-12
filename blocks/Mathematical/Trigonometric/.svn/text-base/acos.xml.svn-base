@@ -1,0 +1,8 @@
+<shrimp type="function" name="acos" description="Arc cosine block" author="rconstruct">
+	<input name="A" description="Input value" type="float" default="1"/>
+	<output name="value" description="val = acos( a )" type="float"/>
+	<rsl_code>
+		$(value) = acos( $(A) );
+	</rsl_code>
+	<usage>Returns the arc cosine in the [0,PI] range.</usage>
+</shrimp>

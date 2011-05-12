@@ -1,0 +1,87 @@
+<shrimp name="new_scene">
+	<about/>
+	<network>
+		<block id="RTGlass" position_x="0" position_y="1" author="rconstruct">
+			<input name="Ka" type="float" storage="uniform" value="0" description="Ambient light coefficient"/>
+			<input name="Kd" type="float" storage="uniform" value="0" description="Diffuse light coefficient"/>
+			<input name="Ks" type="float" storage="uniform" value="0" description="Specular light coefficient"/>
+			<input name="Kr" type="float" storage="uniform" value="1" description="Reflection coefficient"/>
+			<input name="Kt" type="float" storage="uniform" value="1" description="Refraction coefficient"/>
+			<input name="ior" type="float" storage="uniform" value="1.54" description="Refraction index"/>
+			<input name="roughness" type="float" storage="uniform" value="0.2" description="Specular roughness"/>
+			<input name="sharpness" type="float" storage="uniform" value="0.7" description="Specular sharpness"/>
+			<input name="attencolor" type="color" storage="varying" value="0.858824 0.960784 0.952941" description="Attenuation color"/>
+			<input name="krblur" type="float" storage="varying" value="0" description="Reflection blur"/>
+			<input name="ktblur" type="float" storage="varying" value="0" description="Refraction blur"/>
+			<input name="aexp" type="float" storage="varying" value="-1" description="Attenuation exponent"/>
+			<input name="aamp" type="float" storage="varying" value="0.02" description="Attenuation scale"/>
+			<input name="samples" type="float" storage="uniform" value="4" description="Ray samples"/>
+			<input name="rmaxdist" type="float" storage="uniform" value="1e+38" description="Maximum reflection ray distance"/>
+			<input name="tmaxdist" type="float" storage="uniform" value="1e+38" description="Maximum refraction ray distance"/>
+			<input name="bias" type="float" storage="uniform" value="0.001" description="Raytracing bias"/>
+			<input name="spectype" type="string" storage="uniform" value="&quot;glossy&quot;" description="Specular type, glossy or standard specular"/>
+			<input name="rbounces" type="float" storage="uniform" value="3" description="Maximum number of reflection bounces"/>
+			<input name="usespec6" type="float" storage="uniform" value="1" description="Toggle between RGB or spec6(RYGCBV) model"/>
+			<input name="optics" type="float" storage="uniform" value="66" description="Optics model for spec6, range [0,112]"/>
+			<input name="envmap" type="string" storage="uniform" value="&quot;raytrace&quot;" description="Environment map, raytracing"/>
+			<input name="N" type="normal" storage="varying" value="normalize(N)" description="Surface normal"/>
+			<input name="I" type="vector" storage="varying" value="normalize(I)" description="Viewer vector"/>
+			<input name="category" type="string" storage="uniform" value="&quot;&quot;" description="Light categories accepted"/>
+			<output name="Ci" type="color" storage="varying" description="Shaded color"/>
+			<output name="Oi" type="color" storage="varying" description="Shaded opacity"/>
+			<rsl_code>
+		$(Ci) = color(0);
+		$(Oi) = color(0);
+		
+#if RENDERER == pixie // problems with RYGCBV dispersion (see header)
+        rtglass(	$(Ka), $(Kd), $(Ks), $(Kr), $(Kt), $(ior),
+					$(roughness), $(sharpness), $(attencolor),
+					$(krblur), $(ktblur), $(aexp), $(aamp), $(samples),
+					$(rmaxdist), $(tmaxdist), $(bias), $(spectype),
+					$(rbounces), 0, 0, $(I), $(N), $(envmap), $(Ci), $(Oi),
+					$(category),
+					DECLARE_AOV_PARAMETERS );
+#else	
+        rtglass(	$(Ka), $(Kd), $(Ks), $(Kr), $(Kt), $(ior),
+					$(roughness), $(sharpness), $(attencolor),
+					$(krblur), $(ktblur), $(aexp), $(aamp), $(samples),
+					$(rmaxdist), $(tmaxdist), $(bias), $(spectype),
+					$(rbounces), $(optics), $(usespec6), $(I), $(N),
+					$(envmap), $(Ci), $(Oi), $(category),
+					DECLARE_AOV_PARAMETERS );
+#endif // Pixie&apos;s problems with spec6 dispersion
+
+				</rsl_code>
+			<rsl_include>rsl_shrimp_shadingmodels.h			</rsl_include>
+			<usage>Raytraced glass shader, based on Larry Gritz&apos;s glass shader, Mario Marengo&apos;s VEX work and discussion at odforce.net, and Alan Warren&apos;s port of Mario Marengo&apos;s VEX shader. Refraction and reflection blur defaults to 0, ray samples default to 1, so you can increase samples to get better antialiasing, or when blur is used. Attenuation is controlled by &quot;aexp&quot; and &quot;aamp&quot; variables, the attenuation exponent and scale respectively, while &quot;attencolor&quot; is the attenuation color. Spectype defaults to &quot;glossy&quot; (Larry Gritz&apos;s glossy specular model), any other value will get you specular highlights using the standard &quot;specular&quot; function. Maximum ray distance defaults to 1e+38, set this to a lower value, otherwise you&apos;ll be raytracing everything + the kitchen sink (it might be a good idea to use trace sets as well). Note that you need to set your RIB raytracing options and attributes, and make sure the geometry is correctly oriented. This block passes the resulting values to the aov_ambient, aov_diffuse, aov_specular, aov_reflection and aov_refraction AOV presets. The &quot;usespec6&quot; variable toggles between normal RGB model (1 sample), or spec6/RYGCVC model (6 samples), in which case, the index of refraction for the 6 wavelenghts is determined by the glass model chosen in &quot;optics&quot;, the valid range being [0,112]. Note, that this is at the moment, very expensive to render. Note that Aqsis doesn&apos;s supports raytracing yet, and this wasn&apos;t tested with BMRT&apos;s rayserver, so you&apos;re on your own. Also note that there were problems with Pixie and dispersion in RYGCBV, so dispersion is bypassed for Pixie, for the time being until a solution is found. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.			</usage>
+		</block>
+		<block id="Root block" position_x="5" position_y="0" author="" root="RIB">
+			<rib_statements>Attribute &quot;visibility&quot; &quot;integer diffuse&quot; [1]
+Attribute &quot;visibility&quot; &quot;integer specular&quot; [1]
+Attribute &quot;visibility&quot; &quot;integer transmission&quot; [1]
+Attribute &quot;cull&quot; &quot;integer hidden&quot; [0]
+Attribute &quot;cull&quot; &quot;integer backfacing&quot; [0]
+Attribute &quot;dice&quot; &quot;integer rasterorient&quot; [1]
+Option &quot;trace&quot; &quot;integer maxdepth&quot; [3]
+			</rib_statements>
+			<imager_statement/>
+			<input name="Ci" type="color" storage="varying" shader_parameter="1" value="0" description="Incident ray colour">
+				<connection parent="RTGlass" output="Ci"/>
+			</input>
+			<input name="Oi" type="color" storage="varying" shader_parameter="1" value="1" description="Incident ray opacity">
+				<connection parent="RTGlass" output="Oi"/>
+			</input>
+			<input name="P" type="point" storage="varying" shader_parameter="1" value="P" description="Displaced surface position"/>
+			<input name="N" type="normal" storage="varying" shader_parameter="1" value="N" description="Displaced surface shading normal"/>
+			<input name="Cl" type="color" storage="varying" shader_parameter="1" value="0" description="Outgoing light ray colour"/>
+			<input name="Cv" type="color" storage="varying" shader_parameter="1" value="0" description="Attenuated ray colour"/>
+			<input name="Ov" type="color" storage="varying" shader_parameter="1" value="1" description="Attenuated ray opacity"/>
+			<input name="Cm" type="color" storage="varying" shader_parameter="1" value="0" description="Output pixel colour"/>
+			<input name="Om" type="color" storage="varying" shader_parameter="1" value="1" description="Output pixel opacity"/>
+			<input name="AOV" type="color" storage="varying" shader_parameter="1" value="1" description="AOV preview output"/>
+			<rsl_code/>
+			<rsl_include/>
+			<usage/>
+		</block>
+	</network>
+</shrimp>

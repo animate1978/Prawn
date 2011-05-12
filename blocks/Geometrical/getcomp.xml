@@ -1,0 +1,12 @@
+<shrimp type="function" name="GetComp" description="Get the components of a point, vector or normal" author="rconstruct">
+	<input name="In" description="point, vector or normal to split into components" type="normal vector point" default="point(0)"/>
+	<output name="x" description="x component" type="float"/>
+	<output name="y" description="y component" type="float"/>
+	<output name="z" description="z component" type="float"/>
+	<rsl_code>
+		$(x) = xcomp( $(In:type) $(In) );
+		$(y) = ycomp( $(In:type) $(In) );
+		$(z) = zcomp( $(In:type) $(In) );
+	</rsl_code>
+	<usage>Gets the components of a point, vector, or normal.</usage>
+</shrimp>

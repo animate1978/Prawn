@@ -1,0 +1,31 @@
+<shrimp type="function" name="UConst" description="Useful constants" author="rconstruct">
+	<output name="PI" description="PI value" type="float"/>
+	<output name="PIover2" description="PI/2 value" type="float"/>
+	<output name="2PI" description="2PI value" type="float"/>
+	<output name="1overPI" description="1/PI value" type="float"/>
+	<output name="E" description="Euler&apos;s number" type="float"/>
+	<output name="Phi" description="The golden ratio" type="float"/>
+	<output name="Sin36" description="sin(radians(36))" type="float"/>
+	<output name="Sin72" description="sin(radians(72))" type="float"/>
+	<output name="Cos36" description="cos(radians(36))" type="float"/>
+	<output name="Cos72" description="cos(radians(72))" type="float"/>
+	<output name="Sqrt2" description="sqrt(2)" type="float"/>
+	<output name="Sqrt3" description="sqrt(3)" type="float"/>
+	<rsl_include>shrimp_helpers.h</rsl_include>
+	<rsl_code>
+		$(Pi) = S_PI;
+		$(Piover2) = S_PI_2;
+		$(2Pi) = S_2PI;
+		$(1overPi) = S_1_PI;
+		$(E) = S_E;
+		$(Phi) = S_PHI;
+		$(Sin36) = S_SIN36;
+		$(Sin72) = S_SIN72;
+		$(Cos36) = S_COS36;
+		$(Cos72) = S_COS72;
+		$(Sqrt2) = S_SQRT2;
+		$(Sqrt3) = S_SQRT3;
+	</rsl_code>
+	<usage>Useful constants: Euler&apos;s number, PI, PI/2, 2PI, 1/PI, the Golden ratio, sin and cosines of 32 and 72 degrees, and the square root of 2 and 3.</usage>
+</shrimp>
+

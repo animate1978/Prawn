@@ -1,0 +1,8 @@
+<shrimp type="function" name="Depth" description="Depth of point p." author="rconstruct">
+	<input name = "P" description="point to test" storage="varying" type="point" default="P"/>
+	<output name="value" description="The depth of point p in Camera co-ordinates" type="float"/>
+	<rsl_code>
+		$(value) = depth( $(P) );
+	</rsl_code>
+<usage>Returns the depth of the point P in &quot;camera&quot; space. The depth is normalized so that 0 is at the near clipping plane, and 1 at the far clipping plane.</usage>
+</shrimp>

@@ -1,0 +1,17 @@
+<shrimp type="function" name="Ring" description="Returns 1 if in the Ring, otherwise 0" author="rconstruct">
+	<input name="s" description="X coordinate of point to test" storage="varying" type="float" default="s"/>
+	<input name="t" description="Y coordinate of point to test" storage="varying" type="float" default="t"/>
+	<input name="xcenter" description="ox,oy give the centre of the ring" type="float" default="0.5"/>
+	<input name="ycenter" description="ox,oy give the centre of the ring" type="float" default="0.5"/>
+	<input name="radius" description="The radius of the disc" type="float" default="0.3"/>
+	<input name="thickness" description="The thickness of the ring" type="float" default="0.1"/>
+	<input name="blur" description="The amount the edge is to be blurred" type="float" default="0.001"/>
+	<output name="value" description="returns 1 if x,y lies within the ring" type="float"/>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_include>rsl_shrimp_shapes.h</rsl_include>
+	<rsl_code>
+		$(value) = shRing(	$(xcenter), $(ycenter), $(s), $(t),
+							$(radius), $(thickness), $(blur) );
+	</rsl_code>
+	<usage>This function tests whether a 2D point lies inside a 2D torus shape. Blur can be used to control the antialiasing. The output varies smoothly between 0 and 1 in the blurred regions.</usage>
+</shrimp>

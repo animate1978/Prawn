@@ -1,0 +1,35 @@
+<shrimp type="function" name="ShadowMaps" description="Access a shadow map" author="rconstruct">
+	<input name="texmap" description="Texture map name" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="P" description="Surface point" storage="varying" type="point" default="P"/>
+    <input name="sblur" description="Blur along S" storage="varying" type="float" default="0"/>
+    <input name="tblur" description="Blur along T" storage="varying" type="float" default="0"/>
+    <input name="swidth" description="Blur filter width along S" storage="uniform" type="float" default="0"/>
+    <input name="twidth" description="Blur filter width along T" storage="uniform" type="float" default="0"/>
+    <input name="samples" description="Sampling rate" type="float" default="16"/>
+	<input name="bias" description="Shadow bias" storage="uniform" type="float" default="0.225"/>
+    <input name="filter" description="Filter type" storage="uniform" type="string" default="&quot;gaussian&quot;"/>
+    <input name="channel" description="Channel, in color textures" type="float" default="0"/>
+	<output name="value" description="Output color" type="float color"/>
+	<rsl_code>
+	
+    #if RENDERER==pixie
+        $(value) = $(value:type) shadow( $(texmap), $(P),
+								"blur", $(sblur),
+								"width", $(swidth),
+								"samples", $(samples),
+								"bias", $(bias),
+                                "filter", $(filter) ) ;
+    #else
+        $(value) = $(value:type) shadow( $(texmap)[$(channel)], $(P),
+								"sblur", $(sblur),
+								"tblur", $(tblur),
+								"swidth", $(swidth),
+								"twidth", $(twidth),
+								"samples", $(samples),
+								"bias", $(bias),
+                                "filter", $(filter) ) ;
+    #endif /* RENDERER */
+
+	</rsl_code>
+	<usage>Shadow maps compare a point in space with a depth image from the light source viewpoint, to determine if the surface is in shadow or illuminated by the light source. If the texture filename is &quot;raytrace&quot; then raytracing is used to calculate the shadows. Uses a point as texture coordinate, with sblur and tblur, used to control blur in the S and T directions respectively, swidth and twidth used to control the filter width in the S and T directions respectively, with filter defaulting to &quot;box&quot;. Samples controls the sampling rate, and bias is used to control self-shadowing, defaulting to 0, while channel controls the starting channel in shadow maps with multiple channels.</usage>
+</shrimp>

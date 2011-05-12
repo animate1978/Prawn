@@ -1,0 +1,12 @@
+<shrimp type="function" name="Cartesian2Polar2D" description="Converts 2D Cartesian coordinates to polar coordinates" author="rconstruct">
+	<input name="x" description="X coordinate of point to convert" type="float" default="s"/>
+	<input name="y" description="Y coordinate of point to convert" type="float" default="t"/>
+	<output name="rho" description="The converted X coordinate" type="float"/>
+	<output name="theta" description="The converted Y coordinate" type="float"/>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_include>rsl_shrimp_conversion.h</rsl_include>
+	<rsl_code>
+		cartesian2polar2d(	$(x), $(y), $(rho), $(theta) );
+	</rsl_code>
+	<usage>Converts 2D Cartesian coordinates to polar coordinates.</usage>
+</shrimp>

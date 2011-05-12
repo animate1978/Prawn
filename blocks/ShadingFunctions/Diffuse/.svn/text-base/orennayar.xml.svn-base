@@ -1,0 +1,34 @@
+<shrimp name="OrenNayar" type="function" description="OrenNayar diffuse shading model" author="rconstruct">
+	<input name="Cdiff" description="Diffuse color" type="color" default="color(.5)"/>
+    <input name="Kd" description="Diffuse light coefficient" type="float" default="0.8"/>
+	<input name="roughness" description="roughness" type="float" default="0.05"/>
+	<input name="qualitative" description="Toggle qualitative or full model" type="float" storage="uniform" default="1"/>
+	<input name="N" description="Surface normal" storage="varying" type="vector normal" default="normalize(N)"/>
+	<input name="I" description="Direction of viewer" storage="varying" type="vector" default="normalize(I)"/>
+	<input name="category" description="Light categories accepted" storage="uniform" type="string" default="&quot;&quot;" />
+	<output name="Ci" description="Shaded color" type="color" />
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+	#define use_qualitative_$(qualitative)
+		aov_surfacecolor += $(Cdiff);
+	
+	#ifdef use_qualitative_1
+		/* Air&apos;s diffuse can take a roughness parameter, in which */
+		/* case behaves as the Oren-Nayar (qualitative?) model */
+		#if RENDERER == air
+			aov_diffuse += $(Kd) * diffuse( $(N), $(roughness) );
+		#else
+			aov_diffuse += $(Kd) * OrenNayar(	$(roughness), $(N), $(I),
+												$(category) );
+		#endif /* RENDERER */
+        $(Ci) = aov_surfacecolor * aov_diffuse;
+	#else
+		aov_diffuse += $(Kd) * LG_OrenNayar( $(Cdiff), $(roughness), $(N),
+												$(I), $(category) );
+		$(Ci) = aov_diffuse;
+	#endif /* use_qualitative_$(qualitative) */
+	#undef use_qualitative_$(qualitative)
+	
+	</rsl_code>
+    <usage>Oren-Nayar diffuse term. This block has both the &quot;qualitative&quot; model based on Szymon Rusinkiewicz's implementation, and the full model with inter-reflections, based on Larry Gritz's implementation, depending on the content of the qualitative variable in the block. The roughness parameter controls the standard deviation of angle orientations of the surface grooves, so when roughness = 0, the term is Lambertian. The diffuse color value is passed to the aov_surfacecolor, and the diffuse value to the aov_diffuse AOV presets, only for the qualitative model (see the header for the C3 coefficient and L1 and L2 variables). The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.</usage>
+</shrimp>

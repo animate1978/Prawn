@@ -1,0 +1,10 @@
+<shrimp type="function" name="Gain" description="Adjust gain." author="rconstruct">
+	<input name="input" description="Input to be adjusted" type_parent="value" type="float color" default="color(1)"/>
+	<input name="gain" description="Gain value" type="float" default="0.5"/>
+	<output name="value" description="Adjusted value." type="float color"/>
+	<rsl_include>rsl_helpers.h</rsl_include>
+	<rsl_code>
+	$(value) = $(value:type) gain( $(input), $(gain) );
+	</rsl_code>
+	<usage>The gain function operates on both float and color types, and it&apos;s similar to a contrast adjustment.</usage>
+</shrimp>

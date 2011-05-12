@@ -1,0 +1,36 @@
+<shrimp name="HairOcclusion" type="function" description="Hair Occlusion" author="rconstruct">
+	<input name="rootPos" description="Hair root position primvar" storage="uniform" type="point" default="P" />
+	<input name="rootNormal" description="Hair root normal primvar" storage="uniform" type="normal" default="N" />
+	<input name="maxHeight" description="Hair maximum height" storage="varying" type="float" default="1" />
+	<input name="samples" description="Occlusion samples" storage="uniform" type="float" default="8" />
+	<input name="coneangle" description="Cone angle in radians" storage="uniform" type="float" default="PI/2" />
+	<input name="density" description="Material density" storage="varying" type="float" default="1" />
+	<input name="In" description="Viewer vector" type="vector" default="normalize(I)" />
+	<output name="occlusion" description="Ambient occlusion" storage="varying" type="float" />
+	<output name="shadowing" description="Shadowing amount" storage="varying" type="float" />
+	<rsl_include>rsl_helpers.h</rsl_include>
+	<rsl_code>
+		vector $(blockname)_Vf = -$(In);
+		extern normal Ng;
+		extern point P;
+		normal $(blockname)_Ngn = normalize(Ng);
+		
+		// rootPos,rootNormal,maxHeight should be via RIB primitive variables
+		point $(blockname)_Proot = $(rootPos);
+		normal $(blockname)_Ngl = normalize( $(rootNormal) );
+		float $(blockname)_currHeight = $(blockname)_Ngl.(P-$(blockname)_Proot);
+		float $(blockname)_dgl = 1 - $(blockname)_currHeight / $(maxHeight);
+		
+		// calculate the ambient occlusion
+		$(occlusion) = calculateNeulanderVanDePanneOcclusion(
+							$(blockname)_Ngl, $(blockname)_dgl, $(density),
+							vector( $(blockname)_Ngn ), $(samples),
+							$(coneangle) );
+		
+		// calculate the shadow term from a light with direction L
+		$(shadowing) = calculateNeulanderVanDePanneOcclusion(
+							$(blockname)_Ngl, $(blockname)_dgl, $(density),
+							vector( $(blockname)_Ngn), 1, 0 );
+	</rsl_code>
+    <usage>Luke Emrose&apos;s implementation of the Ivan Neulander and Michiel van de Panne&apos;s paper, &quot;Rendering Generalized Cylinders with Paintstrokes&quot;. The variables &quot;rootPos&quot;, &quot;rootNormal&quot; and &quot;maxHeight&quot;, for the hair&apos;s root position, root normal, and maximum height respectively, should be passed via primitive variables from the geometry. The variables &quot;samples&quot;, &quot;coneangle&quot; are the number of occlusion samples used and the cone angle in radians respectively (which defaults to PI/2), while &quot;density&quot; is the material density. This block outputs the hair ambient occlusion and a shadowing term.</usage>
+</shrimp>

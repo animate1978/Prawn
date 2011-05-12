@@ -1,0 +1,12 @@
+<shrimp type="function" name="Wood" description="Wood rings pattern" author="rconstruct">
+	<input name="ringscale" description="Ring scale factor" type="float" default="15"/>
+	<input name="texscale" description="Texture scale" type="float" default="1"/>
+	<input name="graininess" description="graininessness" type="float" default="1"/>
+	<input name="P" description="Surface point" storage="varying" type="point" default="P"/>
+	<output name="value" description="Output color" type="float"/>
+	<rsl_include>rsl_shrimp_extrapatterns.h</rsl_include>
+	<rsl_code>
+        $(value) = wood2( $(ringscale), $(texscale), $(graininess), $(P) );
+	</rsl_code>
+	<usage>Wood pattern block, based on wood2.sl shader by Larry Gritz. &quot;Texscale&quot; controls the overall scaling for the texture; &quot;ringscale&quot; controls the scaling for the wood rings spacing; &quot;graininess&quot; controls the relative graininess with 0 having no fine grain. The supplied surface point &quot;pp&quot; is transformed to &quot;shader&quot; space in this function, see header for more details.</usage>
+</shrimp>

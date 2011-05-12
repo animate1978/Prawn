@@ -1,0 +1,10 @@
+<shrimp type="function" name="XOR" description="Boolean exclusive or" author="rconstruct">
+	<input name = "A" description="1st value" type="float" default="1"/>
+	<input name = "B" description="2nd value" type="float" default="1"/>
+	<output name="value" description="Performs the logical operation A XOR B" type="float"/>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_code>
+		$(value) = exclusiveor( $(A), $(B) );
+	</rsl_code>
+	<usage>This block computes the logical operation A XOR B.</usage>
+</shrimp>

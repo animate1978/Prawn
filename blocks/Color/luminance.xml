@@ -1,0 +1,9 @@
+<shrimp type="function" name="Luminance" description="Gets the luminance value of a color" author="rconstruct">
+	<input name="Cin" description="The input color" type="color" default="color(.6, .2, .1)"/>
+	<output name="value" description="The luminance value" type="float"/>
+	<rsl_include>rsl_helpers.h</rsl_include>
+	<rsl_code>
+		$(value) = luminance( $(Cin) );
+	</rsl_code>
+<usage>This blocks returns the luminance value of a color.</usage>
+</shrimp>

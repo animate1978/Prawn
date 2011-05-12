@@ -1,0 +1,57 @@
+<shrimp name="GranierHeidrich" type="function" description="Granier-Heidrich Thin-film interference BRDF" author="rconstruct">
+	<input name="Cdiff" description="Diffuse color" type="color" default="color(.5)"/>
+    <input name="Kd" description="Diffuse light coefficient" type="float" default="0.7"/>
+    <input name="Ks" description="Specular light coefficient" type="float" default="0.9"/>
+    <input name="ior" description="IOR for RGB components" type="vector" default="vector(1.4, 1.7, 2.0)"/>
+    <input name="densitymin" description="density range minimum" type="float" default="65"/>
+    <input name="densitymax" description="density range maximum" type="float" default="67"/>
+    <input name="specmin" description="specmin" type="float" default="70"/>
+    <input name="specmax" description="specmax" type="float" default="230"/>
+    <input name="freqmin" description="frequency minimum" type="float" default="60"/>
+    <input name="freqmax" description="frequency maximum" type="float" default="70"/>
+    <input name="deviation" description="deviation" type="float" default="0.2"/>
+    <input name="seed" description="noise seed" type="float" default="1234"/>
+	<input name="s" description="noise X coordinates" storage="varying" type="float" default="s"/>
+	<input name="t" description="noise Y coordinates" storage="varying" type="float" default="t"/>
+	<input name="N" description="Surface normal" storage="varying" type="vector normal" default="normalize(N)"/>
+	<input name="I" description="Direction of viewer" storage="varying" type="vector" default="normalize(I)"/>
+	<input name="category" description="Light categories accepted" storage="uniform" type="string" default="&quot;&quot;" />
+	<output name="Ci" description="Shaded color" type="color" />
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_include>rsl_shrimp_fractal.h</rsl_include>
+	<rsl_code>
+
+        normal $(blockname)_Nf = faceforward( $(N) , $(I) );
+        vector $(blockname)_Vf = -$(I);
+
+		float $(blockname)_drange[2] = { $(densitymin), $(densitymax) };
+		float $(blockname)_iorrgb[3] = {	xcomp( $(ior) ),
+											ycomp( $(ior) ),
+											zcomp( $(ior) ) };
+		float $(blockname)_spec[2] = { $(specmin), $(specmax) };
+		float $(blockname)_freq[2] = { $(freqmin), $(freqmax) };
+
+		float $(blockname)_lambda[3] = { 645, 525, 445 }; /* wavelenght */
+		
+		float $(blockname)_d = blend( $(blockname)_drange[0],
+						$(blockname)_drange[1], noise( $(s)
+						* $(blockname)_freq[0] + $(seed) + 1998122 ));
+
+		normal $(blockname)_Nl = normalize( normal( $(blockname)_Nf
+						+ $(deviation) * snoise2( $(s) * $(blockname)_freq[1]
+						+ $(seed) + 19928, $(t) * $(blockname)_freq[1]
+						/ 2 + $(seed) + 1998122 )));
+
+		aov_surfacecolor += $(Cdiff);
+
+		$(Ci) = LocIllumGranier( $(blockname)_Nf, $(blockname)_Nl,
+							$(blockname)_Vf, $(blockname)_spec[0],
+							$(blockname)_spec[1], $(blockname)_d,
+							$(blockname)_iorrgb, $(blockname)_lambda,
+							$(Cdiff), $(Kd), $(Ks), $(category),
+							DECLARE_AOV_PARAMETERS );
+
+	</rsl_code>
+    <usage>Peter Stuart&apos;s implementation of the Granier-Heidrich thin-film interference BRDF, as described in &quot;A Simple Layered RGB BRDF Model&quot;, by Xavier Granier and Wolfgang Heidrich. The parameter &quot;densitymin&quot; and &quot;densitymax&quot; control both the minimum and maximum substrate thickness respectivly, with &quot;ior&quot;, the index of refraction for the R, G, and B wavelengths encoded in a vector. The parameter &quot;specmin&quot; and &quot;specmax&quot; control the minimum and maximum specular exponent of the rays reflected on the substrate, with &quot;freqmin&quot; and &quot;freqmax&quot; as the minimum and maximum frequency of the perlin noise, and &quot;deviation&quot;, the deviation of the normals in the range [0,1]. This block passes the resulting values to the &quot;aov_surfacecolor&quot;, &quot;aov_diffuse&quot; and &quot;aov_specular&quot; AOV presets. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.</usage>
+</shrimp>

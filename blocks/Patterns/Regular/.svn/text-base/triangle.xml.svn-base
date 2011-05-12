@@ -1,0 +1,9 @@
+<shrimp type="function" name="Triangle" description="Generates a Triangle wave" author="rconstruct">
+	<input name = "x" description="Value to sample the wave at" storage="varying" type="float" default="s"/>
+	<input name = "amplitude" description="Amplitude of the wave" type="float" default="1"/>
+	<output name="value" description="Value of the wave at x" type="float"/>
+	<rsl_code>
+		$(value) = $(amplitude) * 2*abs( 0.5 - mod( $(x), 1 ) );
+	</rsl_code>
+	<usage>This function generates a triangle wave.</usage>
+</shrimp>

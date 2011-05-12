@@ -1,0 +1,20 @@
+<shrimp name="SchlickAniso" type="function" description="Schlick anisotropic specular term." author="rconstruct">
+	<input name="Cspec" description="Specular color" type="color" default="color(1)"/>
+    <input name="Ks" description="Specular light coefficient" type="float" default="1"/>
+    <input name="roughness" description="The apparent surface roughness." type="float" default="0.2"/>
+	<input name="isotropy" description="Surface isotropy" type="float" default="0.1"/>
+	<input name="ior" description="Index of refraction" type="float" default="2.0"/>
+	<input name="direction" description="Anisotropy direction" storage="varying" type="vector" default="normalize(dPdu)"/>
+	<input name="N" description="Surface normal" storage="varying" type="vector normal" default="normalize(N)"/>
+	<input name="I" description="Direction of viewer" storage="varying" type="vector" default="normalize(I)"/>
+	<input name="category" description="Light categories accepted" storage="uniform" type="string" default="&quot;&quot;" />
+	<output name="Ci" description="Shaded color" type="color" />
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+		aov_specularcolor += $(Cspec);
+		aov_specular += $(Ks) * aschlick( $(roughness), $(isotropy),
+						$(ior), $(N), $(I), $(direction), $(category) );
+        $(Ci) = aov_specularcolor * aov_specular;
+	</rsl_code>
+    <usage>Christope Schlick&apos;s anisotropic specular term. &quot;isotropy&quot; controls surface isotropy, 0 being anisotropic, 1 being isotropic; &quot;roughness&quot; controls apparent surface roughness, 0 being smooth, 1 being rough; &quot;ior&quot;, the index of refraction controls the reflection coefficient contribution from the Fresnel term; &quot;direction&quot; is the anisotropy direction, defaults to &quot;dPdu&quot;. The specular color value is passed to &quot;aov_specularcolor&quot;, while the specular value, to the &quot;aov_specular&quot; AOV presets. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.</usage>
+</shrimp>

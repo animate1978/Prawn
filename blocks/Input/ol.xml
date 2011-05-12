@@ -1,0 +1,8 @@
+<shrimp type="function" name="Ol" description="Incoming light ray opacity" author="rconstruct">
+	<output name="Ol" description="Incoming light ray opacity" type="color"/>
+	<rsl_code>
+	$(Ol) = Ol;
+	</rsl_code>
+	<usage>The incoming light ray opacity. Note that you can only access the light opacity Ol inside &quot;illuminance&quot; statements.</usage>
+</shrimp>
+

@@ -1,0 +1,12 @@
+<shrimp type="function" name="GetCol" description="Get the components of a color" author="rconstruct">
+	<input name="Cin" description="Color to split into components" type="color" default="color(0)"/>
+	<output name="x" description="1st component" type="float"/>
+	<output name="y" description="2nd component" type="float"/>
+	<output name="z" description="3rd component" type="float"/>
+	<rsl_code>
+		$(x) = comp( $(Cin), 0 );
+		$(y) = comp( $(Cin), 1 );
+		$(z) = comp( $(Cin), 2 );
+	</rsl_code>
+	<usage>Gets the components of a color type variable.</usage>
+</shrimp>

@@ -1,0 +1,8 @@
+<shrimp type="function" name="Vector2Color" description="Vector to color conversion" author="rconstruct">
+    <input name="in" description="Input value" type="vector" default="vector(0)"/>
+    <output name="value" description="Output value" type="color"/>
+	<rsl_code>
+	    $(value) = color( $(in) * vector(.5) + vector(.5) );
+	</rsl_code>
+	<usage>Sets a color with a vector rescaled to the [0,1] range (assuming the vector is normalized).</usage>
+</shrimp>

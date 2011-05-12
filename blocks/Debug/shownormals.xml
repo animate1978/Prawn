@@ -1,0 +1,15 @@
+<shrimp type="function" name="ShowNormals" description="Show surface normals" author="rconstruct">
+	<input name="cspace" description="Coordinate space" storage="uniform" type="string" default="&quot;object&quot;"/>
+	<input name="crange" description="Mapping to range [0,1] on/off" storage="uniform" type="float" default="1"/>
+	<output name="Ci" description="Output value" type="color"/>
+	<rsl_code>
+	#define $(blockname)_$(crange)
+	#ifdef $(blockname)_1
+        $(Ci) = color( normalize( ntransform( $(cspace), N )) * 0.5 + 0.5 );
+	#else
+		$(Ci) = color( normalize( ntransform( $(cspace), N)) );
+	#endif
+	#undef $(blockname)_$(crange)
+	</rsl_code>
+	<usage>Displays surface normals in RGB color. CSpace allows you to choose the coordinate space, which defaults to &quot;object&quot;, and crange if set to 1 remaps the output into the [0,1] range, otherwise the output is in [-1,1] range.</usage>
+</shrimp>

@@ -1,0 +1,13 @@
+<shrimp type="function" name="Stripe" description="Repeating stripe pattern" author="rconstruct">
+	<input name="x" description="x is the value to be tested" storage="varying" type="float" default="s"/>
+	<input name="frequency" description="The frequency of the stripe" type="float" default="1"/>
+	<input name="width" description="The width of the stripe" type="float" default="0.5"/>
+	<input name="blur" description="The amount of blur" type="float" default="0.001"/>
+	<output name="value" description="1 if x is in the stripe, 0 if in between stripes" type="float"/>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_include>rsl_shrimp_shapes.h</rsl_include>
+	<rsl_code>
+		$(value) = shStripe( $(width), $(frequency), $(x), $(blur) );
+	</rsl_code>
+	<usage>This function generates stripes of width &quot;width&quot; at the given frequency &quot;frequency&quot; for the &quot;x&quot; value to be tested, with &quot;blur&quot; controlling the antialiasing of the stripe edges.</usage>
+</shrimp>

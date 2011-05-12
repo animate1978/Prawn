@@ -1,0 +1,16 @@
+<shrimp type="function" name="Log" description="Logarithm" author="rconstruct">
+	<input name="x" description="Input value" type="float" default="1"/>
+	<input name="base" description="Base of log" type="float" default="UND"/>
+	<output name="value" description="val = log(x) with base base" type="float"/>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_code>
+	#define base_$(base)
+	#ifdef base_UND
+		$(value) = log( $(x) );
+	#else
+		$(value) = log( $(x), $(base) );
+	#endif
+	#undef base_$(base)
+	</rsl_code>
+<usage>Returns the natural logarithm of &quot;x&quot; in its single argument form. If the &quot;base&quot; is specified (default is &quot;UNDefined&quot;), then it returns the logarithm of &quot;x&quot; in &quot;base&quot;.</usage>
+</shrimp>

@@ -1,0 +1,9 @@
+<shrimp name="RendererInfo" type="function" description="Returns information about the renderer" author="rconstruct">
+    <input name="parameter" description="Renderer data to query, see usage" storage="uniform" type="string" default="&quot;&quot;"/>
+	<output name="result" description="Query value" type="color normal vector point string float"/>
+	<output name="status" description="Exit status" type="float"/>
+	<rsl_code>
+		$(status) = rendererinfo( $(parameter), $(result) );
+	</rsl_code>
+    <usage>Returns information about the renderer, as long as the data queried is known to the renderer and of correct type in which case the result will contain the associated data content, and &quot;rendererinfo&quot; will exit with 1, otherwise &quot;rendererinfo&quot; will exit with 0. The data accessible by the &quot;rendererinfo&quot; function is listed next, as well as its type: &quot;renderer&quot;, uniform string; &quot;version&quot;, uniform float[4]; &quot;versionstring&quot;, uniform string. Notice that different renderer implementations of &quot;rendererinfo&quot; might be able to access different data fields. Have in mind that uniform to varying conversion is possible, however the reverse isn&apos;t, so you should consider the storage class of the variable you&apos;re going to query.</usage>
+</shrimp>

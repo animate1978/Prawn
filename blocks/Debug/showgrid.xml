@@ -1,0 +1,10 @@
+<shrimp type="function" name="ShowGrid" description="Show micropolygon grid" author="rconstruct">
+	<output name="Ci" description="Output value" storage="varying" type="color"/>
+	<rsl_code>
+		uniform color $(blockname)_gridcolor = color(	random(), random(),
+														random() );
+		$(Ci) = ( (0.8 * abs( faceforward( normalize(N), normalize(I)).
+					normalize(I))) + 0.2) * $(blockname)_gridcolor;
+	</rsl_code>
+	<usage>Shows a random color on each micropolygon grid. It&apos;s multiplied by a facing ratio factor for increased visibility.</usage>
+</shrimp>

@@ -1,0 +1,10 @@
+<shrimp type="function" name="Gamma" description="Gamma adjustement function" author="rconstruct">
+	<input name="input" description="Input to be adjusted" type_parent="value" type="float color" default="color(1)"/>
+	<input name="gamma" description="Range lower point" type="float" default="1"/>
+	<output name="value" description="Remapped value." type="float color"/>
+	<rsl_include>rsl_helpers.h</rsl_include>
+	<rsl_code>
+	$(value) = $(value:type) gamma( $(input), $(gamma) );
+	</rsl_code>
+	<usage>A gamma adjustment function, that operates on float and color types.</usage>
+</shrimp>

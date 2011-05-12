@@ -1,0 +1,20 @@
+<shrimp type="function" name="ColorSubtract" description="Subtract color blending" author="rconstruct">
+	<input name="BkgColor" description="1st color" type="color" default="color(1,0,0)" />
+	<input name="FrgColor" description="2nd color" type="color" default="color(0,0,1)" />
+	<input name="weight" description="Blending weight" type="float" default="0.5" />
+	<input name="invert" description="Invert weight mask on/off" type="float" storage="uniform" default="0" />
+	<output name="OutC" description="Blended color" type="color"/>
+	<rsl_include>rsl_layering.h</rsl_include>
+	<rsl_code>
+	#define invertmask_$(invert)
+	#ifdef invertmask_0
+		$(OutC) = color_sub( $(BkgColor), $(FrgColor),
+					clamp( $(weight), 0, 1) );
+	#else
+		$(OutC) = color_sub( $(BkgColor), $(FrgColor),
+					1 - clamp( $(weight), 0, 1) );
+	#endif // invertmask
+	#undef invertmask_$(invert)
+	</rsl_code>
+	<usage>Blends background color &quot;BkgColor&quot; and foreground color &quot;FrgColor&quot; with the &quot;Subtract&quot; blending mode, using blending amount &quot;weight&quot;. The variable &quot;invert&quot; can only be 0 or 1 with no middle values, if it&quot;apos&quot;s set to 0, the weight mask is used as it is, if set to 1, it&quot;apos&quot;s inverted.</usage>
+</shrimp>

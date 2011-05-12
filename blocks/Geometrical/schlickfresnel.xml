@@ -1,0 +1,11 @@
+<shrimp name="Schlick_Fresnel" type="function" description="Shlick fresnel approximation" author="rconstruct">
+	<input name="ior" description="Index of refraction" type="float" default="1.5"/>
+	<input name="N" description="Surface normal" storage="varying" type="normal" default="normalize(N)"/>
+	<input name="V" description="Direction of viewer" storage="varying" type="vector" default="-normalize(I)"/>
+	<output name="Kr" description="Reflection amount" type="float"/>
+	<rsl_include>rsl_helpers.h</rsl_include>
+	<rsl_code>
+		$(Kr) = schlickfresnel( $(N), $(V), $(ior) );
+	</rsl_code>
+	<usage>Christophe Schlick&apos;s fast Fresnel approximation function. This function fails to model the reflectance when the ior of the medium in which the ray travels is higher than the ior of the medium the ray is about to refract into, and doesn't takes into account total internal reflection.</usage>
+</shrimp>

@@ -1,0 +1,8 @@
+<shrimp type="function" name="Round" description="Return the integer closest to x" author="rconstruct">
+	<input name="x" description="Input value" type="float" default="1"/>
+	<output name="value" description="The integer closest to x" type="float"/>
+	<rsl_code>
+		$(value) = round( $(x) );
+	</rsl_code>
+	<usage>Returns the closest integer to the supplied parameter &quot;x&quot;.</usage>
+</shrimp>

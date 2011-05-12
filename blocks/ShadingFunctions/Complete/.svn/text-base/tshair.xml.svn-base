@@ -1,0 +1,27 @@
+<shrimp name="TSHair" type="function" description="Hair shader, based on Thorsten Scheuermann&apos;s work for Ati&apos;s 3d application research group." author="rconstruct">
+    <input name="Ka" description="Ambient light coefficient" type="float" default="0.05"/>
+    <input name="Kd" description="Diffuse light coefficient" type="float" default="0.4"/>
+    <input name="Ks" description="Specular light coefficient" type="float" default="1.0"/>
+    <input name="shift1" description="Primary specular shift" type="float" default="0.1"/>
+    <input name="shift2" description="Secondary specular shift" type="float" default="0.25"/>
+    <input name="exponent1" description="Primary specular exponent" type="float" default="15"/>
+    <input name="exponent2" description="Secondary specular exponent" type="float" default="25"/>
+    <input name="specmask" description="Specular mask" type="float" default="0.5"/>
+    <input name="N" description="Surface normal" storage="varying" type="vector normal" default="normalize(N)"/>
+    <input name="I" description="Viewer vector" storage="varying" type="vector" default="normalize(I)"/>
+	<input name="surfacecolor" description="Surface color" type="color" default="Cs"/>
+	<input name="rootcolor" description="Hair base color" type="color" default="color( .3, .12, .05)"/>
+	<input name="tipcolor" description="Hair tip color" type="color" default="color( .89, .82, .54)"/>
+    <input name="speccolor1" description="Primary highlights color" type="color" default="color(1, 1, 1)"/>
+    <input name="speccolor2" description="Secondary highlights color" type="color" default="color( .96, .56, .26)"/>
+	<input name="category" description="Light categories accepted" storage="uniform" type="string" default="&quot;&quot;" />
+    <output name="Ci" description="Shaded color" type="color"/>
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+        $(Ci) = tshair( $(Ka), $(Kd), $(Ks), $(shift1), $(shift2),
+                    $(exponent1), $(exponent2), $(specmask), $(surfacecolor),
+                    $(rootcolor), $(tipcolor), $(speccolor1), $(speccolor2),
+					$(N), $(I), $(category), DECLARE_AOV_PARAMETERS );
+	</rsl_code>
+    <usage>Hair shader, based on Thorsten Scheuermann work for the 3d application research group of Ati Inc. The technique described in the paper was meant to be used for polygonal hair models, instead of multiple line/tube approach, being a mix of Kajiya-Kay hair shading model, and Marschner&apos;s model, presented at Siggraph2003. &quot;Ka&quot;, &quot;Kd&quot;, &quot;Ks&quot; have the usual meanings. &quot;Shift1&quot; and &quot;shift2&quot; are the primary and secondary specular highlight shifts, to give some strand specular variation. The primary specular highlight is usually white, the secondary, having some hair color, being these &quot;Cspec1&quot; and &quot;Cspec2&quot;. &quot;Exponent1&quot; and &quot;Exponent2&quot; are the primary and secondary specular exponents, and &quot;specmask&quot; is the specular mask used to give some variation. This block passes the resulting values to the &quot;aov_surfacecolor&quot;, &quot;aov_ambient&quot;, &quot;aov_diffuse&quot; and &quot;aov_specular&quot; AOV presets. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.</usage>
+</shrimp>

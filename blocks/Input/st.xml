@@ -1,0 +1,10 @@
+<shrimp type="function" name="st" description="Surface texture coordinates" author="rconstruct">
+    <output name="s" description="S texture coordinate" storage="varying" type="float"/>
+    <output name="t" description="T texture coordinate" storage="varying" type="float"/>
+    <rsl_code>
+    $(s) = s;
+    $(t) = t;
+    </rsl_code>
+	<usage>The surface texturing coordinates. The availability of these global variables in the different shading contexts is renderer specific.</usage>
+</shrimp>
+

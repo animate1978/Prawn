@@ -1,0 +1,23 @@
+<shrimp type="function" name="fBm4D" description="4 dimensional fractional Brownian motion." author="rconstruct">
+	<input name="P" description="Point to sample fBm at" storage="varying" type="point" default="P"/>
+	<input name="w" description="4th dimension value" storage="uniform" type="float" default="time"/>
+	<input name="filterwidth" description="Filter width for antialiasing" type="float" default="0"/>
+	<input name="octaves" description="Maximum octaves of noise" storage="uniform" type="float" default="5"/>
+	<input name="lacunarity" description="Controls the smoothness of the fBm" type="float" default="2.17"/>
+	<input name="gain" description="Controls the contrast of the fBm" type="float" default="0.5"/>
+	<input name="amplitude" description="Amplitude of fBm" type="float" default="1"/>
+	<output name="value" description="fBm value at (p,t)" type="color point vector normal float"/>
+	<rsl_include>rsl_shrimp_fractal.h</rsl_include>
+	<rsl_code>
+	#define $(blockname)_$(value:type)
+	#ifdef $(blockname)_float
+		$(value) = $(amplitude) * fBm( $(P), $(w), $(filterwidth), $(octaves),
+					$(lacunarity),$(gain) );
+	#else
+		$(value) = $(amplitude) * $(value:type) (vector vfBm( $(P), $(w),
+					$(filterwidth), $(octaves), $(lacunarity),$(gain) ) );
+	#endif
+	#undef $(blockname)_$(value:type)
+	</rsl_code>
+	<usage>4 dimensional fractional Brownian motion is a sumation of noises at different frequencies. Note that the output is not clamped and may exceed +1 or -1. The 4th dimension parameter defaults to the global variable &quot;time&quot;, the current shutter time as defined by RiShutter. Note that &quot;time&quot;&apos;s storage class is uniform.</usage>
+</shrimp>

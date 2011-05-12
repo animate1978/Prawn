@@ -1,0 +1,25 @@
+<shrimp type="function" name="Oak" description="Larry Gritz&apos;s Oak pattern" author="rconstruct">
+	<input name="ringfreq" description="Mean frequency of ring spacing" type="float" default="0.14"/>
+    <input name="unevenness" description="Uneveness of rings distribution" type="float" default="0.65"/>
+    <input name="grainfreq" description="Frequency of wood fine grain" type="float" default="0.9"/>
+    <input name="ringnoise" description="General warping of the domain" type="float" default="3"/>
+    <input name="noisefreq" description="Ring noise frequency" type="float" default="0.5"/>
+    <input name="trunkwobble" description="Trunk axis wobble control" type="float" default="2"/>
+    <input name="wobblefreq" description="Trunk axis wobble frequency" type="float" default="0.23"/>
+    <input name="angularwobble" description="Warping by angle about Z axis" type="float" default="0.35"/>
+    <input name="angularfreq" description="Z axis warping frequency" type="float" default="0.9"/>
+    <input name="ringweight" description="Rings weight scale" type="float" default="1"/>
+    <input name="grainweight" description="Grain weight scale" type="float" default="1"/>
+    <input name="P" description="Surface point to be evaluated" type="point" default="P"/>
+	<output name="value" description="Output color" type="color"/>
+	<rsl_include>rsl_shrimp_extrapatterns.h</rsl_include>
+	<rsl_code>
+        $(value) = oaktexture(	$(P), $(ringfreq), $(unevenness),
+								$(grainfreq), $(ringnoise),
+								$(noisefreq), $(trunkwobble),
+								$(wobblefreq), $(angularwobble),
+								$(angularfreq), $(ringweight),
+								$(grainweight) );
+	</rsl_code>
+	<usage>Larry Gritz&apos;s oak pattern function. &quot;ringfreq&quot; controls the frequency of ring spacing. &quot;unevenness&quot; controls the rings distribution, 0 being equally spaced rings, and higher values unequally spaced rings. &quot;Grainfreq&quot;, controls the frequency of the wood fine grain. &quot;Ringnoise&quot; and &quot;noisefreq&quot;, control the warping of the domain. &quot;Trunkwobble&quot; and &quot;wobblefreq&quot;, controls the noise that wobbles the axis of the trunk, so that it isn&apos;t perfectly aligned on the z axis. &quot;Angularwobble&quot; and &quot;angularfreq&quot;, control the warping indexed by angle about the z axis. &quot;ringweight&quot; and &quot;grainweight&quot;, control the overall scale to which rings and grain are weighted, 0 being a null effect, and 1 being a full effect. This block returns 0 when in the background light wood, and 1 when in the darkest part of a ring or grain.</usage>
+</shrimp>

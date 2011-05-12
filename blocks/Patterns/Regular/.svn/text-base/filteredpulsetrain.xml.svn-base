@@ -1,0 +1,12 @@
+<shrimp type="function" name="FPulsetrain" description="Larry Gritz&apos;s filtered pulsetrain" author="rconstruct">
+	<input name="x" description="Value to test" storage="varying" type="float" default="s"/>
+	<input name="edge" description="Edge" type="float" default="0.2"/>
+	<input name="period" description="Period" type="float" default="1"/>
+	<input name="filterwidth" description="Filter width" type="float" default="0.1"/>
+	<output name="value" description="Value of the wave at x" type="float"/>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_code>
+		$(value) = filteredpulsetrain( $(edge), $(period), $(x), $(filterwidth) );
+	</rsl_code>
+	<usage>An antialiased version of the &quot;pulsetrain&quot; function, which generates a signal that repeats with a given period, and is 0 when 0 &lt;=mod(x,period)&lt;edge, and 1 when mod(x,period)&gt;edge. The antialiased version takes into account that the filter may cover multiple pulses in the train.</usage>
+</shrimp>

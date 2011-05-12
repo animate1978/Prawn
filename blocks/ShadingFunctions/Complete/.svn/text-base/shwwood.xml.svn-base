@@ -1,0 +1,25 @@
+<shrimp name="SHWWood" type="function" description="Stephen H. Westins wood shader." author="rconstruct">
+    <input name="Ka" description="Ambient coefficient" type="float" default="0.1"/>
+    <input name="Kd" description="Diffuse coefficient" type="float" default="0.8"/>
+    <input name="Ks" description="Specular highlight fudge" type="float" default="1.0"/>
+    <input name="ior" description="Index of refraction" type="float" default="1.5"/>
+    <input name="width" description="Specular width" type="float" default="0.1745"/>
+    <input name="roughness" description="Specular roughness" type="float" default="0.2"/>
+    <input name="fiberAxis" description="Fiber axis" type="vector" default="vector( 1, 0, 0)"/>
+    <input name="I" description="Viewer vector" storage="varying" type="vector" default="normalize(I)"/>
+    <input name="N" description="Surface normal" storage="varying" type="vector normal" default="normalize(N)"/>
+    <input name="surfacecolor" description="Diffuse color" type="color" default="color( .45, .3, .12)"/>
+    <input name="fibercolor" description="Fiber color" type="color" default="color(1, .6, .4)"/>
+	<input name="category" description="Light categories accepted" storage="uniform" type="string" default="&quot;&quot;" />
+    <output name="Ci" description="Shaded color" type="color"/>
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+        $(Ci) = woodreflectance(	$(ior), $(width), $(roughness),
+									$(Ka), $(Kd), $(Ks),
+									$(fiberAxis), $(I), $(N),
+									$(surfacecolor), $(fibercolor),
+									$(category),
+									DECLARE_AOV_PARAMETERS );
+	</rsl_code>
+    <usage>Based on Stephen H. Westin&apos;s wood shader, from &quot;Measuring and Modeling the Appearance of Finished Wood&quot;, SIGGRAPH2005, by Stephen R. Marschner, Stephen H. Westin, Adam Arbree, and Jonathan T. Moon. &quot;Ka&quot;, &quot;Kd&quot;, are the ambient and diffuse coefficients, and &quot;Ks&quot; is a fudge factor for the surface highlight. &quot;FiberAxis&quot;, controls the local fiber orientation in local coordinates; &quot;width&quot; controls the width of the specular highlight, in radians; &quot;Cfiber&quot; controls the anisotropic highlight color, &quot;Cdiff&quot; controls the surface color; &quot;ior&quot; controls the index of refraction, &quot;roughness&quot; controls the specular roughness. This block passes the resulting values to the &quot;aov_surfacecolor&quot;, &quot;aov_ambient&quot;, &quot;aov_diffuse&quot; and &quot;aov_specular&quot; AOV presets. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.</usage>
+</shrimp>

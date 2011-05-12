@@ -1,0 +1,69 @@
+<shrimp name="Trace" type="function" description="Returns light reaching point P from direction R" author="rconstruct">
+    <input name="P" description="Surface point" storage="varying" type="point" default="P"/>
+	<input name="direction" description="Direction" storage="varying" type="vector" default="reflect(I, normalize(N))"/>
+    <input name="bias" description="Ray bias" storage="uniform" type="float" default="-1"/>
+    <input name="maxdist" description="Maximum distance" storage="uniform" type="float" default="1e38"/>
+	<input name="samples" description="Ray samples" type="float" default="1"/>
+	<input name="coneangle" description="Cone angle" storage="varying" type="float" default="0"/>
+	<input name="blur" description="Amount of blur" type="float" default="0.001"/>
+	<input name="label" description="Label associated to the ray" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="subset" description="Set of objects available for ray computations" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="hitmode" description="Ray hit mode" storage="uniform" type="string" default="&quot;default&quot;"/>
+	<input name="hitsides" description="Hit sides" storage="uniform" type="string" default="&quot;front&quot;"/>
+	<input name="majoraxis" description="Anisotropy axis" type="vector" default="dPdu"/>
+	<input name="majorblur" description="Anisotropy blur" type="float" default="0.01"/>
+	<input name="weight" description="Weight for importance sampling" type="float" default="1"/>
+	<output name="value" description="Trace value" type="float color"/>
+	<output name="maxdist" description="Optional ray distance" storage="varying" type="float"/>
+	<output name="transmission" description="Option transmission value" storage="varying" type="color"/>
+	<output name="alpha" description="Unoccluded fraction of trace" type="float"/>
+	<rsl_code>
+	
+	/* make sure options are clear */
+	/* and set them according to shadeop and renderer */
+	#ifdef SHADEOP_ARGUMENTS
+	#undef SHADEOP_ARGUMENTS
+	#endif /* SHADEOP_ARGUMENTS */
+
+	/* initialize output */
+	$(maxdist) = 0; $(alpha) = 0; $(transmission) = color(0);
+
+	#if RENDERER == pixie
+	#define SHADEOP_ARGUMENTS	"bias", $(bias), "samples", \
+								$(samples), "samplecone", $(coneangle)			
+	#elif RENDERER == _3delight
+	#define SHADEOP_ARGUMENTS	$(maxdist), "label", $(label), \
+								"subset", $(subset), \
+								"bias", $(bias), "hitmode", $(hitmode), \
+								"maxdist", $(maxdist), \
+								"samplecone", $(coneangle), \
+								"samples", $(samples), "transmission", $(transmission)
+	#elif RENDERER == prman
+	#define SHADEOP_ARGUMENTS	"samplecone", $(coneangle), \
+								"bias", $(bias), "label", $(label), \
+								"subset", $(subset), "hitmode", $(hitmode), \
+								"hitsides", $(hitsides)
+	#elif RENDERER == air
+	#define SHADEOP_ARGUMENTS	"bias", $(bias), "blur", $(blur), \
+								"label", $(label), "maxdist", $(maxdist), \
+								"samples", $(samples), "subset", $(subset), \
+								"majoraxis", $(majoraxis), \
+								"majorblur", $(majorblur), \
+								"weight", $(weight), "alpha", $(alpha)
+	/* Aqsis has a trace shadeop but returns 0, it can(could?) use */
+	/* BMRT's rayserver though. */
+	#else
+	#define SHADEOP_ARGUMENTS	"bias", $(bias)
+	#endif /* RENDERER */
+	
+	#define $(blockname)_$(value:type)
+	#ifdef $(blockname)_float
+		$(value) = $(value:type) trace( $(P), $(direction) );
+	#else
+		$(value) = $(value:type) trace( $(P), $(direction), SHADEOP_ARGUMENTS );
+	#endif /* $(blockname)_$(value:type) */
+	#undef $(blockname)_$(value:type)
+
+	</rsl_code>
+    <usage>Returns the incident light reaching a point &quot;P&quot; from a given direction &quot;R&quot;. If raytracing isn&apos;t supported, trace will return 0. Bias specifies the bias for the ray starting point, and defaults to -1. Maxdist specifies the distance after which no intersections are checked. If the float version is used, then the distance to the nearest ray intersection is returned instead. Note also that the parameters passed are dependent on the &quot;trace&quot; implementation, so check your renderer&apos;s documentation regarding the specifics of the &quot;trace&quot; function, which will surely vary considerably from renderer to renderer.</usage>
+</shrimp>

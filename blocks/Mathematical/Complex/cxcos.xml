@@ -1,0 +1,9 @@
+<shrimp type="function" name="CxCos" description="Complex Cosine block" author="rconstruct">
+	<input name="A" description="1st input" type="float vector" default="vector(1,1,1)"/>
+	<output name="value" description="Complex result" type="vector"/>
+	<rsl_include>rsl_odwikicomplex.h</rsl_include>
+	<rsl_code>
+		$(value) = cx_cos( $(A) );
+	</rsl_code>
+	<usage>Complex cosine, for a complex or a real number. Based on Odforce&apos;s odwiki complex.h.</usage>
+</shrimp>

@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Specular
+END
+glossy.xml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Specular/glossy.xml
+END
+shwbrushedmetal.xml
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Specular/shwbrushedmetal.xml
+END
+wardaniso.xml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Specular/wardaniso.xml
+END
+wardiso.xml
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Specular/wardiso.xml
+END
+cooktorrance.xml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Specular/cooktorrance.xml
+END
+schlickaniso.xml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Specular/schlickaniso.xml
+END
+phong.xml
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Specular/phong.xml
+END
+schlickiso.xml
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Specular/schlickiso.xml
+END
+ashikspecular.xml
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Specular/ashikspecular.xml
+END
+phongblinn.xml
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Specular/phongblinn.xml
+END
+specular.xml
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Specular/specular.xml
+END

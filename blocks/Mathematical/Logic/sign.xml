@@ -1,0 +1,8 @@
+<shrimp type="function" name="Sign" description="Test the sign of a" author="rconstruct">
+	<input name="A" description="Input value" type="float" default="0"/>
+	<output name="value" description="-1 if a&lt;0, 0 if a=0, 1 if a&gt;0" type="float"/>
+	<rsl_code>
+	$(value) = sign( $(A) );
+	</rsl_code>
+	<usage>Returns 1 if the value being tested is positive or zero, otherwise returns -1.</usage>
+</shrimp>

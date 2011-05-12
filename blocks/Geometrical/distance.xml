@@ -1,0 +1,9 @@
+<shrimp type="function" name="Distance" description="Distance between 2 points" author="rconstruct">
+	<input name = "Point1" description="1st point" type="point" default="P"/>
+	<input name = "Point2" description="2nd point" type="point" default="point(1)"/>
+	<output name="value" description="The distance between P1 and P2" type="float"/>
+	<rsl_code>
+		$(value) = distance( $(Point1), $(Point2) );
+	</rsl_code>
+	<usage>Returns the distance between two points (length(Point1-Point2)).</usage>
+</shrimp>

@@ -1,0 +1,39 @@
+<shrimp type="function" name="ShadowSpotLight" description="Shadow Spotlight shader block" author="rconstruct">
+	<input name="intensity" description="Light intensity" type="float" default="5000"/>
+	<input name="lightcolor" description="Light color" type="color" default="color( 1, .93, .81 )"/>
+	<input name="position" description="Light source position" type="point" default="point &quot;shader&quot; ( -15, 10, 5 )"/>
+	<input name="target" description="Light source target position" type="point" default="point &quot;shader&quot; ( 0, 0, 0 )"/>
+	<input name="coneangle" description="Cone angle" storage="uniform" type="float" default="30"/>
+	<input name="conedelta" description="Cone delta angle" storage="uniform" type="float" default="5"/>
+	<input name="beam" description="Beam distribution" storage="uniform" type="float" default="2"/>
+	<input name="shadowmap" description="Shadow map name" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="filter" description="Filter type" storage="uniform" type="string" default="&quot;gaussian&quot;"/>
+	<input name="samples" description="Shadow map samples" storage="uniform" type="float" default="16"/>
+	<input name="blur" description="Shadow map blur" type="float" default="0"/>
+	<input name="width" description="Shadow map filter width" storage="uniform" type="float" default="1"/>
+	<input name="bias" description="Shadow map bias" storage="uniform" type="float" default="0.01"/>
+	<input name="attenuation" description="Attenuation" type="float" default="1e6"/>
+	<input name="nondiffuse" description="Non-diffuse light" storage="uniform" type="float" default="0" />
+	<input name="nonspecular" description="Non-specular light" storage="uniform" type="float" default="0" />
+	<input name="category" description="Light category" storage="uniform" type="string" default="&quot;&quot;"/>
+	<output name="Cl" description="Light ray color" type="color"/>
+	<rsl_include>rsl_shrimp_lights.h</rsl_include>
+	<rsl_code>
+		__nondiffuse = $(nondiffuse);
+		__nonspecular = $(nonspecular);
+		__category = $(category);
+		/* tmp storage for shadows */
+		color $(blockname)_inshadow = color(0);
+		
+		$(Cl) = sig2kshadowspot(	$(intensity), $(lightcolor), $(position),
+									$(target), radians( $(coneangle) ),
+									radians( $(conedelta)), $(beam), $(samples),
+									$(bias), $(width), $(shadowmap), $(filter),
+									$(blur), $(attenuation),
+									$(blockname)_inshadow );
+
+		__shadow = $(blockname)_inshadow;
+
+	</rsl_code>
+	<usage>Modified shadow spotlight shader, by Tal Lancaster, from The RenderMan repository ( www.renderman.org ). Modified to better handle atenuation. Bias overrides the global shadow bias value, with -1 being the global default, and blur, the amount to soften the shadow edges. Shadow map filter type defaults to &quot;gaussian&quot;, with &quot;triangle&quot; and &quot;box&quot; as optional.</usage>
+</shrimp>

@@ -1,0 +1,24 @@
+<shrimp name="MKGooch" type="function" description="Gooch Non-PhotoRealistic shader" author="rconstruct">
+	<input name="Ka" description="Ambient light coefficient" type="float" default="0.1"/>
+	<input name="Kd" description="Diffuse light coefficient" type="float" default=".5"/>
+    <input name="Ks" description="Specular light coefficient" type="float" default="0.5"/>
+    <input name="alpha" description="Gooch cool color factor" type="float" default="0.25"/>
+	<input name="beta" description="Gooch warm color factor" type="float" default="0.5"/>
+	<input name="B" description="Used to construct the cool color" type="float" default="0.55"/>
+	<input name="Y" description="Used to contruct the warm color" type="float" default="0.3"/>
+	<input name="roughness" description="Specular roughness" type="float" default=".1"/>
+	<input name="Cdiff" description="Surface color" type="color" default="color(.2)"/>
+	<input name="Cspec" description="Specular color" type="color" default="color(1)"/>
+    <input name="N" description="Surface normal" storage="varying" type="vector normal" default="normalize(N)"/>
+    <input name="I" description="Viewer vector" storage="varying" type="vector" default="normalize(I)"/>
+	<input name="category" description="Light categories accepted" storage="uniform" type="string" default="&quot;&quot;" />
+    <output name="Ci" description="Shaded color" type="color"/>
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+        $(Ci) = MKgooch(	$(N), $(I), $(Ka), $(Kd), $(Ks), $(alpha),
+							$(beta), $(roughness), $(B), $(Y),
+							$(Cdiff), $(Cspec), $(category),
+							DECLARE_AOV_PARAMETERS );
+	</rsl_code>
+    <usage>Gooch non photorealistic shading model, by Mike King, as described in an &quot;A Non-Photorealistic Lighting Model for Automatic Technical Illustration&quot;, in the Siggraph 1998 proceedings. &quot;Ka&quot;, &quot;Kd&quot;, &quot;Ks&quot;, are the ambient, diffuse, and specular coefficients respectively, with &quot;alpha&quot; and &quot;beta&quot;, the Gooch cool and warm color factors. &quot;B&quot; and &quot;Y&quot; are used to contruct the cool and warm color, and &quot;roughness&quot; and &quot;Cspec&quot;, to control the apparent specular roughness and specular color respectively. This block passes the resulting values to the &quot;aov_surfacecolor&quot;, &quot;aov_ambient&quot;, &quot;aov_diffuse&quot;, &quot;aov_specularcolor&quot; and &quot;aov_specular&quot; AOV presets. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.</usage>
+</shrimp>

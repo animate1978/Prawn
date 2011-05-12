@@ -1,0 +1,24 @@
+<shrimp type="function" name="Ridged4D" description="4 dimensional Ridged multi-fractal." author="rconstruct">
+	<input name="P" description="point to sample fractal at" storage="varying" type="point" default="P"/>
+	<input name="w" description="4th dimension value" storage="uniform" type="float" default="time"/>
+	<input name="filterwidth" description="Filter width for antialiasing" type="float" default="0"/>
+	<input name="octaves" description="Maximum octaves of noise" storage="uniform" type="float" default="5"/>
+	<input name="lacunarity" description="Gap between successive frequencies" type="float" default="2.17"/>
+	<input name="gain" description="Controls the contrast of the fractal" type="float" default="0.5"/>
+	<input name="offset" description="Controls the multifractality" type="float" default="0.7"/>
+	<input name="amplitude" description="Amplitude of fractal" type="float" default="1"/>
+	<output name="value" description="fractal value at (p,t)" type="color vector point float"/>
+	<rsl_include>rsl_shrimp_fractal.h</rsl_include>
+	<rsl_code>
+	#define $(blockname)_$(value:type)
+	#ifdef $(blockname)_float
+		$(value) = $(amplitude) * Ridged( $(P), $(w), $(filterwidth),
+				$(octaves), $(lacunarity), $(offset), $(gain) );
+	#else
+		$(value) = $(amplitude) * $(value:type) (vector vRidged( $(P), $(w),
+				$(filterwidth), $(octaves), $(lacunarity), $(offset), $(gain)));
+	#endif
+	#undef $(blockname)_$(value:type)
+	</rsl_code>
+	<usage>Ken Musgrave&apos;s 4 dimensional Ridged Multifractal function. Note that offset can change the scale of the output drastically. The 4th dimension parameter defaults to the global variable &quot;time&quot;, the current shutter time as defined by RiShutter. Note that &quot;time&quot;&apos;s storage class is uniform.</usage> 
+</shrimp>

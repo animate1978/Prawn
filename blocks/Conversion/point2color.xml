@@ -1,0 +1,8 @@
+<shrimp type="function" name="Point2Color" description="Point to color conversion" author="rconstruct">
+    <input name="in" description="Input value" type="point" default="point(0)"/>
+    <output name="value" description="Output value" type="color"/>
+	<rsl_code>
+		$(value) = color( normalize(vector( $(in) ) ) * vector(.5)+vector(.5));
+	</rsl_code>
+	<usage>Sets a color with a point&apos;s components, after remapping the point to the [0,1] range. Point space is whatever the space of the point being passed as argument.</usage>
+</shrimp>

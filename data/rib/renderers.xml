@@ -1,0 +1,161 @@
+<renderers>
+	<_3delight name="3Delight">
+		<shader_compiler>shaderdl -DRENDERER=%r -w2 -O3 -I%i -d $HOME/.shrimp/temp %s</shader_compiler>
+		<compiled_shader_extension>sdl</compiled_shader_extension>
+		<renderer_command>renderdl -p 2 -id %s</renderer_command>
+		<displays>framebuffer bmp cineon dsm eps exr ghost idisplay iff maya_render_view null pic png psd radiance shadowmap tiff zfile</displays>
+		<texture command="tdlmake" default="%s %i %o" extension="tdl">
+			<formats>tiff jpeg gif iff sgi pic psd tga bake hdr exr zfile</formats>
+			<texture_switches>
+				<compression default="lzw">lzw deflate packbits logluv c-</compression>
+				<access switch="mode smode tmode" default="black">black clamp periodic</access>
+				<filter>
+					<filter_type switch="filter" default="sinc">box triangle gaussian catmull-rom bessel sinc</filter_type>
+					<filter_width switch="filterwidth sfilterwidth tfilterwidth" default="8"/>
+				</filter>
+				<blur switch="blur sblur tblur" default="1.0"/>
+				<resize switch="none"></resize>
+				<data_output>ubyte sbyte ushort sshort float</data_output>
+				<shadow switch="shadow" compression="c-">zfile</shadow>
+				<shadow_options></shadow_options>
+				<bake switch="bakeres" default="512">bake</bake>
+				<bake_options></bake_options>
+				<bake_defaults></bake_defaults>
+				<environment switch="envlatl envcube twofish lightprobe" envcube_fov_switch="fov" envcube_fov="90">1 6 2 1</environment>
+				<extra_switches>
+					<mipmap switch="quality" default="medium">low medium high</mipmap>
+					<extra>nomipmap newer flips flipt flipst separateplanes dirtex forcecolor</extra>
+				</extra_switches>
+			</texture_switches>
+		</texture>
+	</_3delight>
+	<air name="Air">
+		<shader_compiler>shaded -DRENDERER=%r -I%i %s -o %o</shader_compiler>
+		<compiled_shader_extension>slb</compiled_shader_extension>
+		<renderer_command>air -d %s</renderer_command>
+		<displays>tiff png jpeg bmp sgi tga zfile framebuffer airshow shadow rpf texture hdr psd exr</displays>
+	</air>
+	<aqsis name="Aqsis">
+		<shader_compiler>aqsl -DRENDERER=%r -I%i %s -o %o</shader_compiler>
+		<compiled_shader_extension>slx</compiled_shader_extension>
+		<renderer_command>aqsis %s -shaders=%i</renderer_command>
+		<displays>legacyframebuffer file zfile framebuffer zframebuffer shadow tiff xpm exr bmp debugdd</displays>
+		<texture command="teqser" default="%s %i %o" extension="tex">
+			<formats>tiff jpg png exr bake zfile</formats>
+			<texture_switches>
+				<compression default="lzw">lzw deflate packbits none</compression>
+				<access switch="wrap swrap twrap" default="black">black clamp periodic</access>
+				<filter>
+					<filter_type switch="filter" default="box">box bessel catmull-rom disk gaussian sinc triangle mitchell</filter_type>
+					<filter_width switch="width swidth twidth" default="1.0"/>
+				</filter>
+				<blur switch="none" default="-1"/>
+				<resize switch="resize">up down round up- down- round-</resize>
+				<data_output></data_output>
+				<shadow switch="shadow" compression="none">zfile</shadow>
+				<shadow_options></shadow_options>
+				<bake switch="bake" default="128">bake</bake>
+				<bake_options></bake_options>
+				<bake_defaults></bake_defaults>
+				<environment switch="envlatl envcube" envcube_fov_switch="fov" envcube_fov="90.0">1 6</environment>
+				<extra_switches>
+					<mipmap switch="quality" default="70.0"></mipmap>
+					<extra></extra>
+				</extra_switches>
+			</texture_switches>
+		</texture>
+	</aqsis>
+	<entropy name="Entropy">
+		<shader_compiler>sle -DRENDERER=%r -v -I%i %s -o %o</shader_compiler>
+		<compiled_shader_extension>sle</compiled_shader_extension>
+		<renderer_command>entropy -d %s</renderer_command>
+		<displays>framebuffer file tiff shadow zfile iv</displays>
+		<texture command="mkmip" default="%s %i %o" extension="tex">
+			<formats>tiff zfile</formats>
+			<texture_switches>
+				<compression default="none"></compression>
+				<access switch="mode smode tmode" default="black">black clamp periodic mirror</access>
+				<filter>
+					<filter_type switch="none" default="none"></filter_type>
+					<filter_width switch="none" default="none"/>
+				</filter>
+				<blur switch="none" default="none"/>
+				<resize switch="resize">up down round up- down- round-</resize>
+				<data_output></data_output>
+				<shadow switch="shadow" compression="none">zfile</shadow>
+				<bake switch="none" default="none"></bake>
+				<environment switch="envlatl envcube lightprobe twofish" envcube_fov_switch="fov" envcube_fov="90.0">1 6 1 2</environment>
+				<extra_switches>
+					<mipmap switch="none" default="none"></mipmap>
+					<extra></extra>
+				</extra_switches>
+			</texture_switches>
+		</texture>
+	</entropy>
+	<pixie name="Pixie">
+		<shader_compiler>sdrc -DRENDERER=%r -I%i %s -o %o</shader_compiler>
+		<compiled_shader_extension>sdr</compiled_shader_extension>
+		<renderer_command>rndr -d %s</renderer_command>
+		<displays>framebuffer file tiff shadow rgbe tsm OpenEXR</displays>
+		<texture command="teqser" default="%s %i %o" extension="tex">
+			<formats>tiff bake zfile ptc</formats>
+			<texture_switches>
+				<compression default="none"></compression>
+				<access switch="smode tmode" default="black">black clamp periodic</access>
+				<filter>
+					<filter_type switch="filter" default="box">box triangle gaussian catmull-rom sinc</filter_type>
+					<filter_width switch="filterwidth sfilterwidth tfilterwidth" default="1.0"/>
+				</filter>
+				<blur switch="none" default="none"/>
+				<resize switch="resize">up down round up- down- round-</resize>
+				<data_output></data_output>
+				<shadow switch="shadow" compression="none">zfile</shadow>
+				<shadow_options></shadow_options>
+				<bake switch="texture3d" default="none">bake ptc</bake>
+				<bake_options>maxerror radiusscale maxdepth</bake_options>
+				<bake_defaults>0.002 1.0 10</bake_defaults>
+				<environment switch="envlatl envcube" envcube_fov_switch="fov" envcube_fov="90.0">1 6</environment>
+				<extra_switches>
+					<mipmap switch="none" default="none"></mipmap>
+					<extra>tilesize</extra>
+				</extra_switches>
+			</texture_switches>
+		</texture>
+	</pixie>
+	<prman name="Photorealistic RenderMan">
+		<shader_compiler>shader -DRENDERER=%r -O2 -nolint -I%i %s</shader_compiler>
+		<compiled_shader_extension>slo</compiled_shader_extension>
+		<renderer_command>prman %s</renderer_command>
+		<displays>x11 framebuffer windows tiff sgif alias targa cineon softimage mayaiff shadow zfile deepshad openexr texture pointcloud rib wavefrontobj</displays>
+		<texture command="txmake" default="%s %i %o" extension="tx">
+			<formats>tiff iff zfile</formats>
+			<texture_switches>
+				<compression default="lossless">none lossless lossy</compression>
+				<access switch="mode smode tmode" default="black">black clamp periodic</access>
+				<filter>
+					<filter_type switch="filter" default="catmull-rom">box triangle gaussian catmull-rom sinc bessel</filter_type>
+					<filter_width switch="width swidth twidth" default="3.0"/>
+				</filter>
+				<blur switch="blur sblur tblur" default="0.0"/>
+				<resize switch="resize">up down round up- down- round-</resize>
+				<data_output>byte short word float</data_output>
+				<shadow switch="shadow" compression="none">zfile</shadow>
+				<shadow_options>minmaxshadow pyramidshadow</shadow_options>
+				<bake switch="none" default="none"></bake>
+				<bake_options></bake_options>
+				<bake_defaults></bake_defaults>
+				<environment switch="envlatl envcube" envcube_fov_switch="fov" envcube_fov="90.0">1 6</environment>
+				<extra_switches>
+					<mipmap switch="quality" default="70.0"></mipmap>
+					<extra>srgb newer</extra>
+				</extra_switches>
+			</texture_switches>
+		</texture>
+	</prman>
+	<renderdotc name="RenderDotC">
+		<shader_compiler>shaderdc -DRENDERER=%r -I%i %s</shader_compiler>
+		<compiled_shader_extension>so</compiled_shader_extension>
+		<renderer_command>renderdc %s</renderer_command>
+		<displays>framebuffer</displays>
+	</renderdotc>
+</renderers>

@@ -1,0 +1,20 @@
+<shrimp type="function" name="VoronoiKM2D2F" description="2D Voronoi noise, 2 features, Karlsruhe (Moscow) metric" author="rconstruct">
+	<input name="s" description="X coordinate" storage="varying" type="float" default="s"/>
+    <input name="t" description="Y coordinate" storage="varying" type="float" default="t"/>
+	<input name="jittering" description="Jitter" type="float" default="1"/>
+    <output name="feature1" description="feature 1" type="float"/>
+    <output name="s1" description="s position 1" type="float"/>
+    <output name="t1" description="t position 1" type="float"/>
+    <output name="feature2" description="feature 2" type="float"/>
+    <output name="s2" description="s position 2" type="float"/>
+    <output name="t2" description="t position 2" type="float"/>
+	<rsl_include>rsl_shrimp_extrapatterns.h</rsl_include>
+	<rsl_code>
+		/* initialize */
+		$(feature1) = 0; $(s1) = 0; $(t1) = 0;
+		$(feature2) = 0; $(s2) = 0; $(t2) = 0;
+	    voronoi_km_f1f2_2d( $(s), $(t), $(jittering), $(feature1),
+							$(s1), $(t1), $(feature2), $(s2), $(t2));
+	</rsl_code>
+	<usage>2D Voronoi cell noise, 2 feature version, using Karlsruhe (Moscow) distance metric.</usage> 
+</shrimp>

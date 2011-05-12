@@ -1,0 +1,8 @@
+<shrimp type="function" name="Constant" description="Passes input to output unchanged" author="rconstruct">
+	<input name="in" description="Input" type_parent="value" type="float point vector normal string color" default="color(0)" />
+	<output name="value" description="Output = Input" type="float point vector normal string color"/>
+	<rsl_code>
+		$(value) = $(in);
+	</rsl_code>
+	<usage>Useful for supplying multiple inputs with the same value.</usage>
+</shrimp>

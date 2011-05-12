@@ -1,0 +1,40 @@
+<shrimp type="function" name="Voronoi" description="Voronoi example" author="rconstruct">
+	<input name="P" description="point to sample Voronoi at" type="point" default="P"/>
+	<input name="jittering" description="Jitter" type="float" default="1"/>
+	<input name="metric" description="Distance metric, see usage" storage="uniform" type="float" default="2"/>
+    <input name="squiggliness" description="Squiggliness" type="float" default="2"/>
+    <input name="frequency" description="Frequency" type="float" default="10"/>
+    <input name="scale" description="Scale" type="float" default="2"/>
+    <input name="thickness" description="Line thickness" type="float" default="0.02"/>
+    <input name="filterwidth" description="fBm filter width" type="float" default="4"/>
+    <input name="octaves" description="fBm octaves" storage="uniform" type="float" default="2"/>
+    <input name="lacunarity" description="fBm lacunarity" storage="uniform" type="float" default="0.05"/>
+    <input name="gain" description="fBm gain" storage="uniform" type="float" default="0.5"/>
+    <input name="coordsystem" description="Coordinate space" storage="uniform" type="string" default="&quot;shader&quot;"/>
+    <output name="Ci" description="Output color" type="color"/>
+    <output name="feature1" description="1st feature" storage="varying" type="float"/>
+    <output name="feature2" description="2nd feature" storage="varying" type="float" />
+    <output name="position1" description="1st position" storage="varying" type="point" />
+    <output name="position2" description="2nd position" storage="varying" type="point" />	
+    <output name="scalefactor" description="scale factor" type="float" />
+	<rsl_include>rsl_shrimp_fractal.h</rsl_include>
+	<rsl_code>
+		point po_$(blockname) = transform( $(coordsystem), $(P) );
+		point pp_$(blockname) = po_$(blockname) / $(scale) + $(squiggliness)
+							* vfBm(	po_$(blockname) / $(scale) * $(frequency),
+								$(filterwidth), $(octaves), $(lacunarity), $(gain) );
+
+		voronoi_f1f2_3d(	pp_$(blockname), $(jittering), $(metric), $(feature1),
+							$(feature2), $(position1), $(position2) );
+
+		color cc_$(blockname) = color cellnoise( vector(10,0,0) + $(position1) );
+		$(scalefactor) = distance( $(position1), $(position2) ) /
+							distance( $(position1), pp_$(blockname)) +
+							distance( pp_$(blockname), $(position2) );
+
+		cc_$(blockname) *= step( $(thickness) * $(scalefactor), $(feature2) - $(feature1) );
+
+		$(Ci) = cc_$(blockname);
+	</rsl_code>
+	<usage>Voronoi example shader. Can be constructed with the cell noise and Voronoi blocks, as can be seen in an example scene, but it&apos;ll be provided in a block form for convenience as well. When &quot;metric&quot; = 0, distance metric is Tchebychev, when different than 0, then the distance metric = Minkowski, being &quot;metric&quot;, Minkowski&apos;s P parameter, with P = 1 as the Manhattan metric, P = 2, the Euclidian metric, and allowing higher orders of P, as P increases, towards Tchebychev results. The &quot;coordsystem&quot; variable defaults to &quot;shader&quot; space, so the supplied points are transformed from &quot;current&quot; to &quot;shader&quot; space by default.</usage> 
+</shrimp>

@@ -1,0 +1,25 @@
+<shrimp name="Lafortune" type="function" description="Lafortune BRDF" author="rconstruct">
+    <input name="Ka" description="Ambient light coefficient" type="float" default="0.05"/>
+    <input name="Kd" description="Diffuse light coefficient" type="float" default="0.2"/>
+    <input name="Ks" description="Specular coefficient" type="float" default="1"/>
+	<input name="p" description="Correction for each lobe" type="vector" default="vector(0)"/>
+    <input name="model" description="Lobe data, range [0,28]" storage="uniform" type="float" default="21"/>
+    <input name="colormatrix" description="Color matrix metal/skin, range [1,2]" storage="uniform" type="float" default="0"/>
+	<input name="N" description="Surface normal" storage="varying" type="vector normal" default="normalize(N)"/>
+	<input name="I" description="Direction of viewer" storage="varying" type="vector" default="normalize(I)"/>
+    <input name="direction" description="Surface direction tangent" storage="varying" type="vector" default="dPdu"/>
+    <input name="Cs" description="Surface color" type="color" default="color(.3094, .39667, .70837)"/>
+	<input name="category" description="Light categories accepted" storage="uniform" type="string" default="&quot;&quot;" />
+	<output name="Ci" description="Shaded color" type="color"/>
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+        $(Ci) = lafortunersl(	$(Ka), $(Kd), $(Ks), $(p),
+								$(Cs), clamp( $(model), 0, 28),
+								$(colormatrix), $(N), $(I),
+								$(direction), $(category),
+								DECLARE_AOV_PARAMETERS );
+	</rsl_code>
+	<usage>Based on Stephen H. Westin&apos;s implementation of the Lafortune model, on Ryan Heniser&apos;s DSO version, and extended to use the &quot;pump-up&quot; factor suggested by Attila Neumann in his dissertation:&quot;Constructions of Bidirectional Reflectance Distribution Functions&quot;, as well as with coefficient data from Ryan Heniser&apos;s DSO version, the paper &quot;Stochastic Local Search for BRDF Parameterization&quot; by Jonathan Backer, Fred Kimberley, Iryna Skrypnyk, &quot;A Comparison of Four BRDF Models&quot; by Stephen H.Westin, Hongsong Li, Kenneth E.Torrance, and Tek2Shoot&apos;s T2SFilePack for Tek2Shoot&apos;s implementation of the Lafortune model for SoftimageXSI and T2SMaterial shader. The variable &quot;model&quot; controls which material coefficients to use, and is on the [0,28] range - please see the data header for more information on these materials&apos;s coefficients. The variable &quot;p&quot; is a vector for the Neumann &quot;pump-up&quot; factor, in which the first element is the exponent correction for the first lobe, the second element the exponent correction for the second lobe, and the third element, the exponent correction for the third lobe. Note that when &quot;p&quot; is 0, the result is the original Lafortune model. The variable &quot;colormatrix&quot; is a toggle switch, 0 or 1 - when enabled, the resulting color is multiplied with a supplied color matrix to perform color correction from the camera&apos;s space. Defaults to disabled, but should be enabled for some material data, please see the original paper: &quot;Non-Linear Approximaation of Reflectance Functions&quot;, by Eric P.F.Lafortune, Sing-Choong Foo, Kenneth E.Torrance, and Donald P.Greenberg for more informations, as well as the Cornell&apos;s University Program of Computer Graphics website dedicated to this topic and measurements check the link . This block passes the resulting values to the &quot;aov_surfacecolor&quot;, &quot;aov_ambient&quot;, &quot;aov_diffuse&quot; and &quot;aov-specular&quot; AOV presets. It'll be extended later to allow full user specification of lobes via material blocks.
+		<rsl_link>http://www.graphics.cornell.edu/online/measurements/reflectance/index.html</rsl_link>
+	</usage>
+	</shrimp>

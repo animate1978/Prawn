@@ -1,0 +1,29 @@
+<shrimp type="function" name="ThinFilm" description="Thin film interference" author="rconstruct">
+	<input name="Ko" description="Opacity factor" type="float" default="1"/>
+	<input name="depth" description="Surface depth in nanometers" type="float" default="1896" />
+	<input name="I" description="Viewer vector" type="vector" default="normalize(I)" />
+	<input name="N" description="Surface normal" type="normal" default="normalize(N)" />
+	<input name="iorryg" description="IOR for RYG wavelengths" storage="uniform" type="vector" default="vector(1.2, 1.3, 1.4)"/>
+	<input name="iorcbv" description="IOR for CBV wavelengths" storage="uniform" type="vector" default="vector(1.5, 1.6, 1.7)"/>
+	<input name="Cs" description="Base surface color" type="color" default="color(.3, .6, .9)" />
+	<output name="Ci" description="Surface color" storage="varying" type="color" />
+	<output name="Oi" description="Surface opacity" storage="varying" type="color" />
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+		$(Ci) = color(0);
+		$(Oi) = color(1);
+		// build RYGCBV IORs from RYG, CBV vectors
+		uniform float $(blockname)_ior[6] = {
+			xcomp($(iorryg)), ycomp($(iorryg)), zcomp($(iorryg)),
+			xcomp($(iorcbv)), ycomp($(iorcbv)), zcomp($(iorcbv)) };
+
+		thinfilm(	$(depth), $(I), $(N), $(blockname)_ior, $(Cs),
+					$(Ci), $(Oi), DECLARE_AOV_PARAMETERS );
+		
+		$(Oi) *= $(Ko);
+		aov_surfacecolor += $(Ci);
+		aov_opacity += $(Oi);
+		$(Ci) *= $(Oi);
+	</rsl_code>
+	<usage>Thin film interference block, based on Jens&apos;s VEX shader. The variable &quot;depth&quot; controls the thickness of the coating, measured in nanometers; &quot;Ko&quot; the intensity of the opacity factor; &quot;Cs&quot; controls the base surface color, and &quot;iorryg&quot; and &quot;iorcbv&quot; are two vectors that contain the index of refractions for the R, Y, G, and for the C, B, V wavelengths.</usage>
+</shrimp>

@@ -1,0 +1,46 @@
+<shrimp type="function" name="Texture" description="Access a texture map" author="rconstruct">
+	<input name="texmap" description="Texture map name" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="s" description="Horizontal texture coordinate" storage="varying" type="float" default="s"/>
+	<input name="t" description="Vertical texture coordinate" storage="varying" type="float" default="t"/>
+    <input name="sblur" description="Blur along S" storage="varying" type="float" default="0"/>
+    <input name="tblur" description="Blur along T" storage="varying" type="float" default="0"/>
+    <input name="swidth" description="Blur filter width along S" storage="uniform" type="float" default="0"/>
+    <input name="twidth" description="Blur filter width along T" storage="uniform" type="float" default="0"/>
+    <input name="fill" description="Fill value on empty channel" storage="uniform" type="float" default="0"/>
+    <input name="filter" description="Filter type" storage="uniform" type="string" default="&quot;gaussian&quot;"/>
+	<input name="samples" description="Filter samples, see info" storage="uniform" type="float" default="1"/>
+    <input name="channel" description="Channel, in color textures" type="float" default="0"/>
+	<output name="value" description="Output color" type="float color"/>
+	<rsl_code>
+
+	/* make sure options are clear */
+	/* and set them according to shadeop and renderer */
+	#ifdef SHADEOP_ARGUMENTS
+	#undef SHADEOP_ARGUMENTS
+	#endif
+	
+    #if RENDERER==pixie
+	#define SHADEOP_ARGUMENTS	/* no s/tblur */ "blur", $(sblur), \
+								"swidth", $(swidth), "twidth", $(twidth), \
+                                "filter", $(filter), "fill", $(fill) \
+								"samples", $(samples)
+    #elif RENDERER==_3delight
+	#define SHADEOP_ARGUMENTS	"sblur", $(sblur), "tblur", $(tblur), \
+								"swidth", $(swidth), "twidth", $(twidth), \
+								"filter", $(filter), "fill", $(fill), \
+								"samples", $(samples)
+	#else
+	#define SHADEOP_ARGUMENTS	"sblur", $(sblur), "tblur", $(tblur), \
+								"swidth", $(swidth), "twidth", $(twidth), \
+                                "filter", $(filter), "fill", $(fill)
+    #endif /* RENDERER */
+
+		$(value) = $(value:type) texture(	$(texmap)[$(channel)],
+										$(s), $(t),
+										SHADEOP_ARGUMENTS );
+
+	#undef SHADEOP_ARGUMENTS
+	
+	</rsl_code>
+<usage>The texture shadeop accesses at texture map at 2D coordinates, being able to return either a float or a color value. The default coordinates are &quot;S&quot; and &quot;T&quot;. The variables &quot;sblur&quot; and &quot;tblur&quot; specifies the blur in the &quot;S&quot; and &quot;T&quot; directions respectively, and &quot;swidth&quot; and &quot;twidth&quot; specifying the filter width in &quot;S&quot; and &quot;T&quot; respectively. The variable &quot;filter&quot; can be one of &quot;triangle&quot;, &quot;box&quot;, or &quot;gaussian&quot;. &quot;Fill&quot; controls the value being output if a certain channel isn&apos;t available in the texture, alpha for instance. &quot;Samples&quot; is used only in 3delight when the &quot;box&quot; filter is being used. Pixie has a &quot;blur&quot; parameter, that specifies the blur of the texture, but since you can&apos;t specify blur along &quot;S&quot; or &quot;T&quot; specifically, this value is the value of &quot;sblur&quot;. The &quot;samples&quot; value is used as well, for the &quot;box&quot; filter only. Since a texture map can contain several channels, &quot;channel&quot; allows the user to choose the starting channel, defaults to 0.</usage>
+</shrimp>

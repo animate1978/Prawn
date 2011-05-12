@@ -1,0 +1,8 @@
+<shrimp type="function" name="Point2Normal" description="Point to normal conversion">
+    <input name="in" description="Input value" type="point" default="point(0)"/>
+    <output name="value" description="Output value" type="normal"/>
+	<rsl_code>
+	    $(value) = normal( comp( $(in), 0), comp( $(in), 1), comp( $(in), 2) );
+	</rsl_code>
+	<usage>Sets a normal with a point&apos;s components.</usage>
+</shrimp>

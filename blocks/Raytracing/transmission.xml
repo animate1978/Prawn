@@ -1,0 +1,56 @@
+<shrimp name="Transmission" type="function" description="Determines visibility between point 1 and point 2" author="rconstruct">
+    <input name="frompoint" description="From point" storage="varying" type="point" default="point &quot;shader&quot; (0,0,0)"/>
+	<input name="topoint" description="To point" storage="varying" type="point" default="point &quot;shader&quot; (1,1,1)"/>
+	<input name="samples" description="Samples" type="float" default="1"/>
+	<input name="minsamples" description="Minimum samples" type="float" default="1"/>
+	<input name="samplecone" description="Sample cone" storage="varying" type="float" default="0"/>
+	<input name="samplebase" description="Sample base" storage="varying" type="float" default="1"/>
+    <input name="bias" description="Ray bias" storage="uniform" type="float" default="-1"/>
+	<input name="hitsides" description="Which sides to hit" storage="uniform" type="string" default="&quot;front&quot;"/>
+	<input name="hitmode" description="Transmission hit mode" storage="uniform" type="string" default="&quot;default&quot;"/>
+	<input name="label" description="Labels to associate the rays with" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="subset" description="Set of objects to consider for ray tracing" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="maxdist" description="Maximum ray distance" storage="uniform" type="float" default="1e38"/>
+	<output name="Ci" description="Shaded color" type="color"/>
+	<rsl_code>
+
+	/* make sure options are clear */
+	/* and set them according to shadeop and renderer */
+	#ifdef SHADEOP_ARGUMENTS
+	#undef SHADEOP_ARGUMENTS
+	#endif /* SHADEOP_ARGUMENTS */
+
+	#if RENDERER == _3delight
+	#define SHADEOP_ARGUMENTS	"label", $(label), "subset", $(subset), \
+								"bias", $(bias), "hitmode", $(hitmode), \
+								"samplecone", $(samplecone), \
+								"samples", $(samples)
+	#elif RENDERER == pixie
+	#define SHADEOP_ARGUMENTS	"samples", $(samples), "bias", $(bias), \
+								"samplecone", $(samplecone), \
+								"sampleBase", $(samplebase), \
+								"maxdist", $(maximumdist), "label", $(label)
+	#elif RENDERER == prman
+	#define SHADEOP_ARGUMENTS	"samples", $(samples), \
+								"minsamples", $(minsamples), \
+								"samplecone", $(samplecone), \
+								"samplebase", $(samplebase), "bias", $(bias), \
+								"label", $(label), "subset", $(subset), \
+								"hitmode", $(hitmode)
+	#else /* no transmission() available */
+	#define NOSHADEOP
+	#endif /* RENDERER */
+
+	/* Seems only 3delight, prman, and pixie have transmission() shadeop */
+	#ifdef NOSHADEOP
+		$(Ci) = color(1);
+	#else
+		$(Ci) = transmission( $(frompoint), $(topoint), SHADEOP_ARGUMENTS );
+	#endif /* NOSHADEOP */
+	
+	#undef SHADEOP_ARGUMENTS
+	#undef NOSHADEOP
+
+	</rsl_code>
+    <usage>This function returns the color that travels from &quot;pointfrom&quot; to point &quot;pointto&quot;. If this function isn&apos;t implemented, or if raytracing is not available, then the result should be 1. Check your renderer&apos;s documentation, since this function varies considerably with each renderer implementation. Note however that this is typically used to get the amount of transmitted light between &quot;pointfrom&quot; point, to &quot;pointto&quot; point.</usage>
+</shrimp>

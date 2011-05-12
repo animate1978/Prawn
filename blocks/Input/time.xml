@@ -1,0 +1,8 @@
+<shrimp type="function" name="Time" description="Current shutter time" author="rconstruct">
+	<output name="time" description="Current shutter time" storage="uniform" type="float"/>
+	<rsl_code>
+	$(time) = time;
+	</rsl_code>
+	<usage>Current shutter time as specified by RiShutter. It&apos;s available in all shading contexts.</usage>
+</shrimp>
+

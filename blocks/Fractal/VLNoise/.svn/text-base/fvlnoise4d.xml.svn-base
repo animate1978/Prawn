@@ -1,0 +1,23 @@
+<shrimp type="function" name="FVLNoise4D" description="Filtered 4D VLNoise" author="rconstruct">
+	<input name="P" description="Point to sample noise at" storage="varying" type="point" default="P"/>
+	<input name="w" description="4d value" storage="uniform" type="float" default="time"/>
+	<input name="scale" description="Scale" type="float" default="1"/>
+	<input name="filterwidth" description="Filter width" type="float" default="0"/>
+	<input name="amplitude" description="Amplitude of noise" type="float" default="1"/>
+	<output name="value" description="Noise value at p" type="color vector point float"/>
+	<rsl_include>rsl_shrimp_fractal.h</rsl_include>
+	<rsl_code>
+	#define $(blockname)_$(value:type)
+	#ifdef $(blockname)_float
+		$(value) = $(amplitude) * filteredVLNoisexy( $(P), $(w),
+											$(filterwidth), $(scale) );
+	#else
+		$(value) = $(amplitude) * $(value:type) filteredvsnoisexy(
+				filteredsnoise( $(P), $(filterwidth) ) * $(scale) + $(P),
+				filteredsnoise( $(w), $(filterwidth) ) * $(scale) + $(w),
+				$(filterwidth) );
+	#endif
+	#undef $(blockname)_$(value:type)
+	</rsl_code>
+	<usage>Ken Musgrave&apos;s filtered 4 dimensional Variable Lacunarity noise function. The 4th dimension parameter defaults to the global variable &quot;time&quot;, the current shutter time as defined by RiShutter. Note that &quot;time&quot;&apos;s storage class is uniform.</usage>
+</shrimp>

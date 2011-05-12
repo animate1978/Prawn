@@ -1,0 +1,21 @@
+<shrimp type="function" name="Coordsys" description="Predefined oordinate systems" author="rconstruct">
+	<output name="current" description="Current coordinate system, see help." storage="uniform" type="string"/>
+	<output name="object" description="Object coordinate system, see help." storage="uniform" type="string"/>
+	<output name="shader" description="Shader coordinate system, see help." storage="uniform" type="string"/>
+	<output name="world" description="World coordinate system, see help." storage="uniform" type="string"/>
+	<output name="camera" description="Camera coordinate system, see help." storage="uniform" type="string"/>
+	<output name="screen" description="Screen coordinate system, see help." storage="uniform" type="string"/>
+	<output name="raster" description="Raster coordinate system, see help." storage="uniform" type="string"/>
+	<output name="NDC" description="NDC coordinate system, see help." storage="uniform" type="string"/>
+	<rsl_code>
+	$(current) = "current";
+	$(object) = "object";
+	$(shader) = "shader";
+	$(world) = "world";
+	$(camera) = "camera";
+	$(screen) = "screen";
+	$(raster) = "raster";
+	$(NDC) = "NDC";
+	</rsl_code>
+	<usage>A simple reference block that outputs all predefined coordinate systems: &quot;current&quot;, the default coordinate system; &quot;object&quot; , the coordinate system in which the primitive is declared; &quot;shader&quot;, the coordinate system in which the shader is declared; &quot;world&quot;, the coordinate system active at RiWorldBegin; &quot;camera&quot;, the coordinate system of the camera with the positive z pointing forward, positive x pointing to the right, and positive y pointing up; &quot;screen&quot;, a perspective corrected coordinate system of the camera&apos;s image plane, with range defined by RiScreenWindow; &quot;raster&quot;, the 2D projected space of the image, with upper-left corner of the image as 0,0, and xy increasing towards their maximum values as specified by RiFormat; &quot;NDC&quot;, the Normalized Device Coordinates. Like &quot;raster&quot; space, but x and y goes from 0 to 1 across the whole image, in other words: NDC(x) = raster(x) / Xres and NDC(y) = raster(y) / Yres.</usage>
+</shrimp>

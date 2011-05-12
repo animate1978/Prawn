@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Diffuse
+END
+ashikdiffuse.xml
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Diffuse/ashikdiffuse.xml
+END
+diffuse.xml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Diffuse/diffuse.xml
+END
+lommelseeliger.xml
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Diffuse/lommelseeliger.xml
+END
+hapke.xml
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Diffuse/hapke.xml
+END
+wrappeddiffuse.xml
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Diffuse/wrappeddiffuse.xml
+END
+buratti.xml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Diffuse/buratti.xml
+END
+orennayarwolff.xml
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Diffuse/orennayarwolff.xml
+END
+minnaert.xml
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Diffuse/minnaert.xml
+END
+rimlighting.xml
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Diffuse/rimlighting.xml
+END
+wolff.xml
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Diffuse/wolff.xml
+END
+orennayar.xml
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Diffuse/orennayar.xml
+END
+diffusefalloff.xml
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/ShadingFunctions/Diffuse/diffusefalloff.xml
+END

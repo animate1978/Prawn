@@ -1,0 +1,24 @@
+<shrimp type="function" name="SmoothStep" description="Smooth step function" author="rconstruct">
+	<input name="x" description="value to test" type_parent="value" type="color float" default="0"/>
+	<input name="minimum" description="position of bottom of step" type_parent="value" type="color float" default="0"/>
+	<input name="maximum" description="position of top of step" type_parent="value" type="color float" default="1"/>
+	<output name="value" description="value of smoothstep function at x" type="color float"/>
+	<rsl_code>
+	#define stype_$(minimum:type) 1
+	#if RENDERER == prman
+		$(value) = smoothstep( $(minimum), $(maximum), $(x) );
+	#else
+		#ifdef stype_float
+			$(value) = smoothstep( $(minimum), $(maximum), $(x) );
+		#else
+			$(value) = color(
+			smoothstep(comp( $(minimum),0),comp( $(maximum),0),comp( $(x), 0)),
+			smoothstep(comp( $(minimum),1),comp( $(maximum),1),comp( $(x), 1)),
+			smoothstep(comp( $(minimum),2),comp( $(maximum),2),comp( $(x), 2)));
+		#endif /* stype_$(minimum:type) */
+	#endif /* RENDERER */
+	#undef stype_$(minimum:type)
+		
+	</rsl_code>
+	<usage>Result is zero if &quot;x&quot; is less than &quot;minimum&quot;, one if &quot;x&quot; is greater than &quot;maximum&quot;, otherwise it is interpolated between zero and one with a smooth Hermite curve. If the type is color, then it operates on a component basis.</usage>
+</shrimp>

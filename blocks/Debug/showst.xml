@@ -1,0 +1,7 @@
+<shrimp type="function" name="ShowST" description="Show ST coordinates" author="rconstruct">
+	<output name="Ci" description="Output value" storage="varying" type="color"/>
+	<rsl_code>
+        $(Ci) = color( s, t, .1 );
+	</rsl_code>
+	<usage>Shows the surface&apos;s ST texture coordinates as a color, with the resulting color components being R=S, G=T, and B=0.1.</usage>
+</shrimp>

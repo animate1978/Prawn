@@ -1,0 +1,8 @@
+<shrimp type="function" name="Color2Float" description="Averages color to float" author="rconstruct">
+    <input name="in" description="Input color" type="color" default="color(1)"/>
+    <output name="value" description="Output value" type="float"/>
+	<rsl_code>
+	    $(value) = (comp( $(in),0)+comp( $(in),1)+comp( $(in),2)) / 3;
+	</rsl_code>
+	<usage>Averages a color input into a float output.</usage>
+</shrimp>

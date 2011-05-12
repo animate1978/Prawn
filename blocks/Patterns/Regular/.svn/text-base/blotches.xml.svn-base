@@ -1,0 +1,15 @@
+<shrimp type="function" name="Blotches" description="Generates blotches" author="rconstruct">
+	<input name="P" description="Surface point to evaluate" storage="varying" type="point" default="P"/>
+	<input name="radius" description="Blotch radius" type="float" default="0.15"/>
+	<input name="frequency" description="Frequency" type="float" default="1"/>
+	<input name="offset" description="Offset" type="float" default="0.35"/>
+	<input name="jittering" description="Jittering" type="float" default="0.65"/>
+	<input name="metric" description="Voronoi distance metric" storage="uniform" type="float" default="2"/>
+	<output name="value" description="Output value" type="float"/>
+	<rsl_include>rsl_shrimp_extrapatterns.h</rsl_include>
+	<rsl_code>
+		$(value) = blotches(	$(radius), $(frequency), $(offset), $(jittering),
+								$(metric), $(P) );
+	</rsl_code>
+	<usage>Generates random blotches, based on single feature Voronoi cell noise. &quot;Jittering&quot; controls the Voronoi cell noise jittering, generating a less or more evenly distribution of blotches. &quot;Offset&quot; controls the center offset, a value of 0 generating a hollow blotch, and 1.0 an solid blotch. &quot;Radius&quot; controls the radius, and &quot;frequency&quot;, the frequency of the blotches. &quot;Metric&quot; controls the distance metric used for the Voronoi noise, when different than 0 the metric being the Minkowski metric, with &quot;metric&quot; as Minkowski&apos;s P parameter, being P = 1, the Manhattan metric, P = 2 the Euclidian metric, and allowing higher orders of P tending towards Tchebychev results.</usage>
+</shrimp>

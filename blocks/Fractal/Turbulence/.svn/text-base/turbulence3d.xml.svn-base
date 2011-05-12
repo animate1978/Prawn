@@ -1,0 +1,22 @@
+<shrimp type="function" name="Turbulence3D" description="3 dimensional turbulence function." author="rconstruct">
+	<input name="P" description="Point to sample turbulence at" storage="varying" type="point" default="P"/>
+	<input name="filterwidth" description="Filter width for antialiasing" type="float" default="0"/>
+	<input name="octaves" description="Maximum octaves of noise" storage="uniform" type="float" default="5"/>
+	<input name="lacunarity" description="Gap in successive frequencies" type="float" default="2.17"/>
+	<input name="gain" description="Controls the contrast of the turbulence" type="float" default="0.5"/>
+	<input name="amplitude" description="Amplitude of turbulence" type="float" default="1"/>
+	<output name="value" description="Turbulence value at p" type="color vector point float"/>
+	<rsl_include>rsl_shrimp_fractal.h</rsl_include>
+	<rsl_code>
+	#define $(blockname)_$(value:type)
+	#ifdef $(blockname)_float
+		$(value) = $(amplitude) * turbulence( $(P), $(filterwidth), $(octaves),
+					$(lacunarity), $(gain) );
+	#else
+		$(value) = $(amplitude) * $(value:type) ( vector vturbulence( $(P),
+					$(filterwidth), $(octaves), $(lacunarity), $(gain) ) );
+	#endif
+	#undef $(blockname)_$(value:type)
+	</rsl_code>
+	<usage>3 dimensional turbulence fractal function with Perlin noise basis. Returns a result in the [0,1] range by default.</usage>
+</shrimp>

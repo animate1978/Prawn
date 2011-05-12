@@ -1,0 +1,10 @@
+<shrimp type="function" name="dudv" description="Change in surface parameters" author="rconstruct">
+	<output name="du" description="Change in u direction" type="float"/>
+	<output name="dv" description="Change in v direction" type="float"/>
+	<rsl_code>
+	$(du) = du;
+	$(dv) = dv;
+	</rsl_code>
+	<usage>The global variables &quot;du&quot; and &quot;dv&quot;, with &quot;du&quot; being the change in surface parameter &quot;u&quot; between adjacent samples being shaded, and &quot;dv&quot; the change in surface parameter &quot;v&quot; between adjacent samples being shaded. Note that the availability of these global variables in the different shading contexts is renderer specific.</usage>
+</shrimp>
+

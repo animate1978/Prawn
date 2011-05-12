@@ -1,0 +1,40 @@
+##RenderMan RIB-Structure 1.0
+version 3.03
+
+#Created with K-3D Version 0.6.7.0, http://www.k-3d.org
+
+FrameBegin 1
+$(imager_shader)
+
+Projection "perspective" "fov" 60
+Rotate -90 0 0 1
+Rotate 2.92407e-10 1 0 0
+Rotate -109.444 0 1 0
+Translate 7.74643 -0 -4.70146
+
+WorldBegin
+	Color [1 1 1]
+	Opacity [1 1 1]
+
+	# there's still the area lights, interior/exterior/atmosphere issue
+	$(light_shaders)
+	$(volume_shaders)
+
+	# Stanford Dragon
+	AttributeBegin
+		Attribute "identifier" "string name" ["StanfordDragon"]
+		$(surface_shaders)
+		$(displacement_shaders)
+		ReadArchive "archives/DragonArchive.rib.gz"
+	AttributeEnd
+
+	# Background Box
+	AttributeBegin
+		Attribute "identifier" "string name" ["BackgroundBox"]
+		Surface "grid" "float hfreq" [ 3 ] "float vfreq" [ 3 ] "float hblur" [ 0.01 ] "float vblur" [ 0.01 ]
+		ReadArchive "archives/Box.rib.gz"
+	AttributeEnd
+WorldEnd
+
+FrameEnd
+

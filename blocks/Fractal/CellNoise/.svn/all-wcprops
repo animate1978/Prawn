@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Fractal/CellNoise
+END
+cellnoise1d.xml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Fractal/CellNoise/cellnoise1d.xml
+END
+cellnoise2d.xml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Fractal/CellNoise/cellnoise2d.xml
+END
+cellnoise3d.xml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Fractal/CellNoise/cellnoise3d.xml
+END
+cellnoise4d.xml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Fractal/CellNoise/cellnoise4d.xml
+END

@@ -1,0 +1,8 @@
+<shrimp type="function" name="Os" description="Surface opacity" author="rconstruct">
+	<output name="Os" description="Surface opacity" type="color"/>
+	<rsl_code>
+	$(Os) = Os;
+	</rsl_code>
+	<usage>Surface opacity global variable. Only available in surface shaders.</usage>
+</shrimp>
+

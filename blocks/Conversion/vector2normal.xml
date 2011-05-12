@@ -1,0 +1,8 @@
+<shrimp type="function" name="Vector2Normal" description="Vector to normal conversion" author="rconstruct">
+    <input name="in" description="Input value" type="vector" default="vector(0)"/>
+    <output name="value" description="Output value" type="normal"/>
+	<rsl_code>
+	    $(value) = normal( comp( $(in), 0), comp( $(in), 1), comp( $(in), 2) );
+	</rsl_code>
+	<usage>Sets a normal with a vector&apos;s components.</usage>
+</shrimp>

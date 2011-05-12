@@ -1,0 +1,17 @@
+<shrimp name="AshikminDiff" type="function" description="Ashikmin-Shirley diffuse term" author="rconstruct">
+	<input name="Cdiff" description="Diffuse color" type="color" default="color(1)"/>
+    <input name="Kd" description="Diffuse light coefficient" type="float" default="0.9"/>
+    <input name="Ks" description="Specular light coefficient" type="float" default="0.1"/>
+	<input name="ior" description="Index of Refraction" type="float" default="3.0"/>
+	<input name="N" description="Surface normal" storage="varying" type="vector normal" default="normalize(N)"/>
+	<input name="I" description="Direction of viewer" storage="varying" type="vector" default="normalize(I)"/>
+	<input name="category" description="Light categories accepted" storage="uniform" type="string" default="&quot;&quot;" />
+	<output name="Ci" description="Shaded color" type="color" />
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+		aov_surfacecolor += $(Cdiff);
+		aov_diffuse += anisophongdiff( $(N), $(I), $(Kd), $(Ks), $(category));
+        $(Ci) = aov_surfacecolor * aov_diffuse;
+	</rsl_code>
+	<usage>Based on Peter Stuart&apos;s implementation of the Ashikhmin-Shirley model, diffuse term only. The diffuse color value is passed to &quot;aov_surfacecolor&quot;, and the diffuse value, to the &quot;aov_diffuse&quot; AOV presets. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.</usage>
+</shrimp>

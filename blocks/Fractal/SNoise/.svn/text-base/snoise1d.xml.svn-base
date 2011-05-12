@@ -1,0 +1,16 @@
+<shrimp type="function" name="SNoise1D" description="1D signed Perlin noise" author="rconstruct">
+	<input name="x" description="Value to sample noise at" storage="varying" type="float" default="s"/>
+	<input name="amplitude" description="Amplitude of noise" type="float" default="1"/>
+	<output name="value" description="Noise value at x" type="color point vector float"/>
+	<rsl_include>rsl_shrimp_fractal.h</rsl_include>
+	<rsl_code>
+	#define $(blockname)_$(value:type)
+	#ifdef $(blockname)_float
+		$(value) = $(amplitude) * snoise( $(x) );
+	#else
+		$(value) = $(amplitude) * $(value:type) vsnoise( $(x) );
+	#endif
+	#undef $(blockname)_$(value:type)
+	</rsl_code>
+	<usage>1 dimensional signed noise. SNoise is exactly like Noise, except that the result defaults to the range [-&quot;amplitude&quot;,&quot;amplitude&quot;], rather than [0,&quot;amplitude&quot;]. The average value is therefore zero. The parameter &quot;amplitude&quot; defaults to 1, so the noise range defaults to [-1,1].</usage>
+</shrimp>

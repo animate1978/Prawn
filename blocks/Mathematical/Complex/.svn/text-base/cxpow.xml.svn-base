@@ -1,0 +1,10 @@
+<shrimp type="function" name="CxPow" description="Complex Power block" author="rconstruct">
+	<input name="A" description="1st input" type="float vector" default="vector(1,1,1)"/>
+	<input name="B" description="2nd input" type="float vector" default="vector(0,0,0)"/>
+	<output name="value" description="Complex result" type="vector"/>
+	<rsl_include>rsl_odwikicomplex.h</rsl_include>
+	<rsl_code>
+		$(value) = cx_pow( $(A), $(B) );
+	</rsl_code>
+	<usage>Complex power block, raises complex to complex or real power, or real to complex power. Based on Odforce&apos;s odwiki complex.h.</usage>
+</shrimp>

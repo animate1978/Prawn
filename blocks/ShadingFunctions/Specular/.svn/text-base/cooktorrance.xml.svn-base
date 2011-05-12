@@ -1,0 +1,23 @@
+<shrimp name="CookTorrance" type="function" description="Cook-Torrance shading model." author="rconstruct">
+	<input name="Cspec" description="Specular color" type="color" default="color(1)"/>
+    <input name="Ks" description="Specular light coefficient" type="float" default="1.0"/>
+    <input name="roughness" description="The apparent surface roughness."  type="float" default="0.2"/>
+	<input name="distribution" description="Microfacet distributions, see help." storage="uniform" type="float" default="0"/>
+	<input name="attenuation" description="Geometric attenuation, see help." storage="uniform" type="float" default="0"/>
+    <input name="ior" description="Index of refraction" type="float" default="2"/>
+	<input name="extinction" description="Extinction coefficient" type="float" default="2"/>
+	<input name="N" description="Surface normal" storage="varying" type="vector normal" default="normalize(N)"/>
+	<input name="I" description="Direction of viewer" storage="varying" type="vector" default="I"/>
+	<input name="direction" description="Anisotropy direction" storage="varying" type="vector" default="dPdv"/>
+	<input name="category" description="Light categories accepted" storage="uniform" type="string" default="&quot;&quot;" />
+	<output name="Ci" description="Shaded color" type="color" />
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+		aov_specularcolor += $(Cspec);
+		aov_specular += $(Ks) * cooktorrance( $(N), $(I), $(direction),
+						$(ior), $(extinction), $(roughness),
+						$(distribution), $(attenuation), $(category));
+		$(Ci) = aov_specularcolor * aov_specular;
+	</rsl_code>
+    <usage>Cook-Torrance specular term. The &quot;distribution&quot; variable controls the microfacet distribution function being used, being 0 = Beckmann (default), 1 = Ward, 2 = Trowbridge-Reitz, 3 = Heidrich-Seidel (anisotropic). The &quot;attenuation&quot; variable controls the geometric attenuation function being used, being 0 = the default shadowing/masking function proposed by Blinn for the Torrance-Sparrow model, 1 = the approximation suggested by Christophe Schlick for the first Smith shadowing/masking equation for a known microfacet normal, 2 = full Smith second equation for an averaged microfacet normal (as used in the He-Torrance model). In the case of the Heidrich-Seidel anisotropic distribution, some literature mentions adding an isotropic specular term, which is added here via &quot;specularbrdf&quot;, but the user might want to override this in the respective header - this distribution uses the anisotropy direction defined by &quot;direction&quot;, which defaults to the global variable &quot;dPdv&quot;. The specular color value is passed to &quot;aov_specularcolor&quot;, while the specular value is passed to the &quot;aov_specular&quot; AOV presets. The Fresnel term used is the complex Fresnel function, from the Odforce.net Odwiki, courtesy of Mario Marengo and the Odforce community, using the &quot;ior&quot; index of refraction, and the &quot;extinction&quot; extinction coefficient. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.</usage>
+</shrimp>

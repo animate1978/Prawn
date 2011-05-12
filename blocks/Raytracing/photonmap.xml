@@ -1,0 +1,27 @@
+<shrimp type="function" name="PhotonMap" description="Photon map lookup" author="rconstruct">
+	<input name="P" description="Surface point" storage="varying" type="point" default="P"/>
+	<input name="N" description="Surface normal" storage="varying" type="normal" default="normalize(N)"/>
+	<input name="photonmap" description="Photon map filename" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="lookuptype" description="Lookup type" storage="uniform" type="string" default="&quot;irradiance&quot;"/>
+	<input name="estimator" description="Number of photons" storage="uniform" type="float" default="100"/>
+	<input name="mindepth" description="Number of photon bounces" type="float" default="1"/>
+	<output name="Ci" description="Output value" type="color"/>
+	<rsl_code>
+	
+	#if RENDERER == _3delight
+		$(Ci) = photonmap( $(photonmap), $(P), $(N), "lookuptype", $(lookuptype),
+							"estimator", $(estimator), "mindepth", $(mindepth) );
+	#elif RENDERER == pixie
+		$(Ci) = photonmap( $(photonmap), $(P), $(N), "estimator", $(estimator) );
+	#elif RENDERER == aqsis
+		$(Ci) = color(0);
+	#elif RENDERER == prman
+		$(Ci) = photonmap( $(photonmap), $(P), $(N), "lookuptype", "irradiance",
+							"estimator", $(estimator) );
+	#else /* Air has no photonmap()? */
+		$(Ci) = color(0);
+	#endif /* RENDERER */
+
+	</rsl_code>
+	<usage>This function performs a photon map lookup of a surface point &quot;P&quot; with a surface normal &quot;N&quot;. The lookup type can be &quot;irradiance&quot;, or &quot;radiance&quot;, in which case the lookup is performed before the BRDF calculation, and after the BRDF calculation respectively. The &quot;estimator&quot; specifies the number of photons used, and &quot;mindepth&quot; the depth at which to consider the photons. This varies with renderer implementation, check your renderer documentation for more details.</usage>
+</shrimp>

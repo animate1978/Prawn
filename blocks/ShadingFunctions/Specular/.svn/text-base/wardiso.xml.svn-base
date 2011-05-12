@@ -1,0 +1,17 @@
+<shrimp name="WardIso" type="function" description="Ward isotropic specular term." author="rconstruct">
+	<input name="Cspec" description="Specular color" type="color" default="color(1)"/>
+    <input name="Ks" description="Specular light coefficient" type="float" default="0.8"/>
+    <input name="roughness" description="The surface roughness." type="float" default="0.2"/>
+	<input name="N" description="Surface normal" type="vector normal" default="normalize(N)"/>
+	<input name="I" description="Direction of viewer" type="vector" default="normalize(I)"/>
+	<input name="category" description="Light categories accepted" storage="uniform" type="string" default="&quot;&quot;" />
+	<output name="Ci" description="Shaded color" type="color" />
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+		aov_specularcolor += $(Cspec);
+		aov_specular += $(Ks) * Wardisotropy( $(N), $(I), $(roughness),
+									$(category) );
+        $(Ci) = aov_specularcolor * aov_specular;
+	</rsl_code>
+    <usage>Simplified isotropic version of Greg Ward's anisotropic specular term. Note that you can get equivalent results with the anisotropic shader, by passing identical values to the surface roughness along the anisotropy direction, and anisotropy perpendicular direction. Roughness controls the apparent surface roughness. The specular color value is passed to aov_specularcolor, while the specular value, to the aov_specular AOV presets. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.</usage>
+</shrimp>

@@ -1,0 +1,9 @@
+<shrimp type="function" name="Concat" description="Concatenates two or more strings" author="rconstruct">
+	<input name="string1" description="First string" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="string2" description="Second and subsequent strings" storage="uniform" type="string" default="&quot;&quot;" multi=","/>
+	<output name="newstring" description="Concatenated string" storage="uniform" type="string"/>
+	<rsl_code>
+		$(newstring) = concat( $(string1), $(string2) );
+	</rsl_code>
+	<usage>Concatenates two or more strings into a single string.</usage>
+</shrimp>

@@ -1,0 +1,8 @@
+<shrimp name="Shadername" type="function" description="Name of the shader" author="rconstruct">
+    <input name="shadertype" description="Shader type" storage="uniform" type="string" default="&quot;&quot;"/>
+	<output name="result" description="Query value" storage="uniform" type="string"/>
+	<rsl_code>
+		$(result) = shadername( $(shadertype) );
+	</rsl_code>
+    <usage>Returns the name of the shader being evaluated, with possible shader type values being: &quot;displacement&quot;, &quot;lightsource&quot;, &quot;surface&quot;, &quot;atmosphere&quot;, &quot;interior&quot; and &quot;exterior&quot;. Returns an empty string if no shader of the specified shader type is assigned to the primitive being shaded.</usage>
+</shrimp>

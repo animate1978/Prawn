@@ -1,0 +1,10 @@
+<shrimp name="TextureInfo" type="function" description="Returns information about the texture" author="rconstruct">
+	<input name="texturemap" description="Texture name" storage="uniform" type="string" default="&quot;&quot;"/>
+    <input name="parameter" description="Texture data to query, see usage" type="string" default="&quot;&quot;"/>
+	<output name="result" description="Query value" type="string matrix float"/>
+	<output name="status" description="Exit status" type="float"/>
+	<rsl_code>
+		$(status) = textureinfo( $(texturemap), $(parameter), $(result) );
+	</rsl_code>
+    <usage>Returns information about the supplied texture, if the data type being queried exists and is of the correct type, in which case status returns 1, otherwise status returns 0. The possible data fields and their respective types are: &quot;resolution&quot;, uniform float [2] - which returns the texture resolution; &quot;type&quot;, uniform string - which returns the type of the texture supplied (&quot;texture&quot;, &quot;shadow&quot;, &quot;environment&quot;); &quot;channels&quot;, uniform float - which returns the number of channels in the supplied texture; &quot;viewingmatrix&quot;, uniform matrix - returns a matrix, with the current to camera space transform used in the texture creation; &quot;projectionmatrix&quot;, uniform matrix - which returns a matrix with the current space to a 2d coordinate system in the [-1,1] range. Have in mind taht uniform to varying conversion is possible, however the reverse isn&apos;t, so you should consider the storage class of the variable you&apos;re going to query.</usage>
+</shrimp>

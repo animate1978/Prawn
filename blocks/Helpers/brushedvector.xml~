@@ -1,0 +1,15 @@
+<shrimp name="BrushedVector" type="function" description="Get vector for brushed metal" author="rconstruct">
+	<input name="swirls" description="Multiples of swirls per unit" type="float" default="3"/>
+	<input name="noisescale" description="Scale of noise" type="float" default="1.5"/>
+	<input name="twist" description="Anisotropy rotation in radians" type="float" default="0"/>
+	<input name="s" description="S texture coordinate" storage="varying" type="float" default="s"/>
+	<input name="t" description="T texture coordinate" storage="varying" type="float" default="t"/>
+	<input name="N" description="Normalized surface normal" type="normal" default="normalize(N)"/>
+	<output name="bvector" description="Brushed vector" storage="varying" type="vector"/>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_code>
+        $(bvector) = getbrushedvec( $(swirls), $(noisescale), $(twist),
+									$(s), $(t), $(N) );
+	</rsl_code>
+    <usage>This block returns a brushed vector, to create anisotropic brushed metal like effects. Its parameters are &quot;swirls&quot; which controls the multiples of swirls per unit; &quot;noisescale&quot; which controls the scale of the noise that randomizes the location of the swirls, with 0 being a perfect grid; &quot;twist&quot; being the anisotropy rotation angle in radians; &quot;s&quot; and &quot;t&quot; the ST texture coordinates. This block was based on the tooledsteel.sl shader by Ivan DeWolff, from The RenderMan Repository.</usage>
+</shrimp>

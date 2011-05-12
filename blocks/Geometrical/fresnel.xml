@@ -1,0 +1,15 @@
+<shrimp type="function" name="Fresnel" description="Fresnel function" author="rconstruct">
+	<input name="I" description="Incident vector" storage="varying" type="vector" default="normalize(I)"/>
+	<input name="N" description="Surface normal" storage="varying" type="vector normal" default="normalize(N)"/>
+	<input name="eta" description="The relative index of refraction" type="float" default="0.75"/>
+	<output name="R" description="The reflected vector" type="vector"/>
+	<output name="T" description="The refracted vector" type="vector"/>
+	<output name="Kr" description="The reflected coefficient" type="float"/>
+	<output name="Kt" description="The refracted coefficient" type="float"/>
+	<rsl_code>
+		/* initialize */
+		$(Kr) = 0; $(Kt) = 0; $(R) = vector(0); $(T) = vector(0);
+        fresnel( $(I), $(N), $(eta), $(Kr), $(Kt), $(R), $(T) );
+	</rsl_code>
+<usage>Return the reflection coefficient Kr and the refraction (or transmission) coefficient &quot;Kt&quot;, given an incident direction &quot;I&quot;, the surface normal &quot;N&quot;, and the relative index of refraction &quot;eta&quot;. Eta is the ratio of the index of refraction in the volume containing the incident vector, to that of the volume being entered. These coefficients are computed using the Fresnel formula. This function also returns the reflected &quot;R&quot; and transmitted &quot;T&quot; vectors.</usage>
+</shrimp>

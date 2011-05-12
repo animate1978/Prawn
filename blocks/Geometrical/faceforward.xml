@@ -1,0 +1,10 @@
+<shrimp type="function" name="FaceForward" description="Flip a vector&apos;s direction" author="rconstruct">
+	<input name="N" description="Vector or Normal to flip" storage="varying" type="vector normal" type_parent="NN" default="normalize(N)"/>
+	<input name="I" description="Vector to face away from" storage="varying" type="vector" default="normalize(I)"/>
+	<input name="Nref" description="Optional reference vector" type="vector normal" type_parent="NN" default="Ng"/>
+	<output name="NewN" description="A vector pointing in the direction oposite to I" type="vector normal"/>
+	<rsl_code>
+		$(NewN) = faceforward( $(N), $(I), $(Nref) );
+	</rsl_code>
+	<usage>This function will flip the direction of N so that it faces a direction oposite to that of I, with respect to Nref.</usage>
+</shrimp>

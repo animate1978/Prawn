@@ -1,0 +1,41 @@
+<shrimp type="function" name="MatrixSetcomp" description="Set the components of a matrix M" author="rconstruct">
+	<input name="row1col1" description="row 1, component 1" type="float" default="0"/>
+	<input name="row1col2" description="row 1, component 2" type="float" default="0"/>
+	<input name="row1col3" description="row 1, component 3" type="float" default="0"/>
+    <input name="row1col4" description="row 1, component 4" type="float" default="0"/>
+	<input name="row2col1" description="row 2, component 1" type="float" default="0"/>
+	<input name="row2col2" description="row 2, component 2" type="float" default="0"/>
+	<input name="row2col3" description="row 2, component 3" type="float" default="0"/>
+    <input name="row2col4" description="row 2, component 4" type="float" default="0"/>
+	<input name="row3col1" description="row 3, component 1" type="float" default="0"/>
+	<input name="row3col2" description="row 3, component 2" type="float" default="0"/>
+	<input name="row3col3" description="row 3, component 3" type="float" default="0"/>
+    <input name="row3col4" description="row 3, component 4" type="float" default="0"/>
+	<input name="row4col1" description="row 4, component 1" type="float" default="0"/>
+	<input name="row4col2" description="row 4, component 2" type="float" default="0"/>
+	<input name="row4col3" description="row 4, component 3" type="float" default="0"/>
+    <input name="row4col4" description="row 4, component 4" type="float" default="0"/>
+	<input name="usespace" description="Use named space reference" type="float" default="0"/>
+    <input name="spacename" description="Reference named space" type="string" default="&quot;world&quot;"/>
+    <output name="newmatrix" description="Matrix" type="matrix"/>
+	<output name="spacename" description="Optional space name string" type="string"/>
+    <rsl_code>
+    #define usespace_$(usespace)
+    #ifdef usespace_0
+        $(mout) = matrix(	$(row1col1), $(row1col2), $(row1col3), $(row1col4),
+							$(row2col1), $(row2col2), $(row2col3), $(row2col4),
+							$(row3col1), $(row3col2), $(row3col3), $(row3col4),
+							$(row4col1), $(row4col2), $(row4col3), $(row4col4));
+     #else
+        $(mout) = matrix $(spacename) (
+							$(row1col1), $(row1col2), $(row1col3), $(row1col4),
+							$(row2col1), $(row2col2), $(row2col3), $(row2col4),
+							$(row3col1), $(row3col2), $(row3col3), $(row3col4),
+							$(row4col1), $(row4col2), $(row4col3), $(row4col4));
+    #endif /* usespace_$(usespace) */
+	#undef usespace_$(usespace)
+	
+	$(mstr) = $(spacename);    
+	</rsl_code>
+	<usage>Assigns components to a (4x4 homogeneous transformation) matrix. Defaults to a zero matrix. A matrix can be constructed in reference to an existing named space, that can later be used for the transform, vtransform, ntransform functions. If &quot;usespace&quot; value is 1, then the matrix is built in reference to &quot;spacename&quot;. Please check your renderer&apos;s documentation for details regarding the matrix type and transformations.</usage>
+</shrimp>

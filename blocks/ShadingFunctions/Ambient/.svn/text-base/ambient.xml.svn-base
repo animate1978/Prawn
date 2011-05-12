@@ -1,0 +1,11 @@
+<shrimp name="Ambient" type="function" description="Ambient term." author="rconstruct">
+    <input name="Ka" description="Ambient light coefficient" type="float" default="0.1"/>
+	<input name="Camb" description="Ambient color" type="color" default="color(.2)"/>
+	<output name="Ci" description="Shaded color" type="color"  />
+	<rsl_code>
+		aov_surfacecolor += $(Camb);
+		aov_ambient += $(Ka) * ambient();
+		$(Ci) = aov_surfacecolor * aov_ambient;
+	</rsl_code>
+    <usage>Ambient term. The surface color value is passed to &quot;aov_surfacecolor&quot;, and ambient value, to the &quot;aov_ambient&quot; AOV presets.</usage>
+</shrimp>

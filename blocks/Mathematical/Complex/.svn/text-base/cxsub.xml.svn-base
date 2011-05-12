@@ -1,0 +1,10 @@
+<shrimp type="function" name="CxSub" description="Complex Subtraction block" author="rconstruct">
+	<input name="A" description="1st input" type="float vector" default="vector(1,1,1)"/>
+	<input name="B" description="2nd input" type="float vector" default="vector(0,0,0)"/>
+	<output name="value" description="Complex result" type="vector"/>
+	<rsl_include>rsl_odwikicomplex.h</rsl_include>
+	<rsl_code>
+		$(value) = cx_sub( $(A), $(B) );
+	</rsl_code>
+	<usage>Complex subtraction, subtracts two complex numbers, a complex and a real, or a real and a complex. Based on Odforce&apos;s odwiki complex.h.</usage>
+</shrimp>

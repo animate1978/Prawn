@@ -1,0 +1,10 @@
+<shrimp type="function" name="Bias" description="Adjust bias." author="rconstruct">
+	<input name="input" description="Input to be adjusted" type_parent="value" type="float color" default="color(1)"/>
+	<input name="bias" description="Bias value" type="float" default="0.5"/>
+	<output name="value" description="Adjusted value." type="float color"/>
+	<rsl_include>rsl_helpers.h</rsl_include>
+	<rsl_code>
+	$(value) = $(value:type) bias( $(input), $(bias) );
+	</rsl_code>
+	<usage>Bias function, operates on float or color types, it&apos;s similar to a brighness adjustement.</usage>
+</shrimp>

@@ -1,0 +1,152 @@
+<shrimp type="function" name="BlendMode" description="Blends two color in user set mode" author="rconstruct">
+	<input name="BkgColor" description="1st color" type="color" default="color(1,0,0)" />
+	<input name="FrgColor" description="2nd color" type="color" default="color(0,0,1)" />
+	<input name="weight" description="Blending weight" type="float" default="0.5" />
+	<input name="invert" description="Invert weight mask on/off" storage="uniform" type="float" default="0"/>
+	<input name="blendmode" description="Blending mode, see info" storage="uniform" type="float" default="0"/>
+	<output name="OutC" description="Blended color" type="color" />
+	<rsl_include>rsl_layering.h</rsl_include>
+	<rsl_code>
+		// valid range = [0,25], outside this range, 25 assumed
+		uniform float bmode_$(blockname) = $(blendmode);
+	#define invertmask_$(invert)
+	#ifdef invertmask_0
+		// choose appropriate blending mode
+		if ( bmode_$(blockname) == 0) // Over
+			$(OutC) = color_over( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 1) // Average
+			$(OutC) = color_avg( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 2) // Add
+			$(OutC) = color_add( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 3) // Subtract
+			$(OutC) = color_sub( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 4) // Multiply
+			$(OutC) = color_multiply( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 5) // Divide
+			$(OutC) = color_divide( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 6) // Lighten
+			$(OutC) = color_lighten( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 7) // Darken
+			$(OutC) = color_darken( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 8) // Screen
+			$(OutC) = color_screen( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 9) // Overlay
+			$(OutC) = color_overlay( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 10) // Softlight
+			$(OutC) = color_softlight( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 11) // SoftlightPS
+			$(OutC) = color_softlightps( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 12) // Hardlight
+			$(OutC) = color_hardlight( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 13) // Vividlight
+			$(OutC) = color_vividlight( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 14) // Linearlight
+			$(OutC) = color_linearlight( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 15) // Pinlight
+			$(OutC) = color_pinlight( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 16) // Dodge
+			$(OutC) = color_dodge( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 17) // Burn
+			$(OutC) = color_burn( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 18) // Lineardodge
+			$(OutC) = color_lineardodge( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 19) // Linearburn
+			$(OutC) = color_linearburn( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 20) // Difference
+			$(OutC) = color_difference( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 21) // Exclusion
+			$(OutC) = color_exclusion( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 22) // Saturate
+			$(OutC) = color_saturate( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 23) // Desaturate
+			$(OutC) = color_desaturate( $(BkgColor), $(FrgColor), $(weight) );
+		else if ( bmode_$(blockname) == 24) // Illuminate
+			$(OutC) = color_illuminate( $(BkgColor), $(FrgColor), $(weight) );
+		else // Reflect
+			$(OutC) = color_reflect( $(BkgColor), $(FrgColor), $(weight) );
+	#else // invert weight mask
+		if ( bmode_$(blockname) == 0) // Over
+			$(OutC) = color_over( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 1) // Average
+			$(OutC) = color_avg( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 2) // Add
+			$(OutC) = color_add( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 3) // Subtract
+			$(OutC) = color_sub( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 4) // Multiply
+			$(OutC) = color_multiply( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 5) // Divide
+			$(OutC) = color_divide( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 6) // Lighten
+			$(OutC) = color_lighten( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 7) // Darken
+			$(OutC) = color_darken( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 8) // Screen
+			$(OutC) = color_screen( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 9) // Overlay
+			$(OutC) = color_overlay( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 10) // Softlight
+			$(OutC) = color_softlight( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 11) // SoftlightPS
+			$(OutC) = color_softlightps( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 12) // Hardlight
+			$(OutC) = color_hardlight( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 13) // Vividlight
+			$(OutC) = color_vividlight( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 14) // Linearlight
+			$(OutC) = color_linearlight( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 15) // Pinlight
+			$(OutC) = color_pinlight( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 16) // Dodge
+			$(OutC) = color_dodge( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 17) // Burn
+			$(OutC) = color_burn( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 18) // Lineardodge
+			$(OutC) = color_lineardodge( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 19) // Linearburn
+			$(OutC) = color_linearburn( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 20) // Difference
+			$(OutC) = color_difference( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 21) // Exclusion
+			$(OutC) = color_exclusion( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 22) // Saturate
+			$(OutC) = color_saturate( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 23) // Desaturate
+			$(OutC) = color_desaturate( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else if ( bmode_$(blockname) == 24) // Illuminate
+			$(OutC) = color_illuminate( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+		else // Reflect
+			$(OutC) = color_reflect( $(BkgColor), $(FrgColor),
+			1 - clamp( $(weight), 0, 1) );
+	#endif // invert mask check
+	#undef invertmask_$(invert)
+	</rsl_code>
+	<usage>Returns a blended color between &quot;BkgColor&quot; and &quot;FrgColor&quot; with weighting factor &quot;weight&quot;, using one of the available blending modes set by &quot;blendmode&quot;. This &quot;blendmode&quot; variable should be in [0,25] range, any value outside this range is assumed to be 25.
+	The blending modes follow: 0) Over; 1) Average; 2) Add; 3) Subtract; 4) Multiply; 5) Divide; 6) Lighten; 7) Darken; 8) Screen; 9) Overlay; 10) SoftLight; 11) SoftLightPS (equivalent of Photoshop&amp;s &quot;SoftLight&quot; mode); 12) Hardlight; 13) VividLight; 14) LinearLight; 15) PinLight; 16) Dodge; 17) Burn; 18) LinearDodge; 19) LinearBurn; 20) Difference; 21) Exclusion; 22) Saturate; 23) Desaturate; 24) Illuminate; 25) Reflect.
+	Note that some blending modes are commutative, the order of the inputs can be swapped, but other blend modes, such as &quot;Hardlight&quot;, &quot;Overlay&quot;, &quot;VividLight&quot;, &quot;LinearLight&quot;, &quot;PinLight&quot;, &quot;SoftLight&quot; and &quot;SoftLightPS&quot; are non-commutative - swapping the order of the inputs results in a different blending function being used, i.e., the &quot;HardLight&quot; results are the same as &quot;Overlay&quot; commuted. For more details, see also:<rsl_link>http://www.pegtop.net/delphi/articles/blendmodes/index.htm</rsl_link>, <rsl_link>http://dunnbypaul.net/blends/</rsl_link>, <rsl_link>http://www.nathanm.com/photoshop-blending-math/</rsl_link>, or check the &quot;rsl_shrimp_layering.h&quot; header.</usage>
+</shrimp>

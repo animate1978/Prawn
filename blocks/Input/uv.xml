@@ -1,0 +1,10 @@
+<shrimp type="function" name="uv" description="Parametric surface coordinates" author="rconstruct">
+    <output name="u" description="U surface coordinate" storage="varying" type="float"/>
+    <output name="v" description="V surface coordinate" storage="varying" type="float"/>
+    <rsl_code>
+    $(u) = u;
+    $(v) = v;
+    </rsl_code>
+	<usage>The parametric surface coordinates. The availability of these global variables in the different shading contexts is renderer specific.</usage>
+</shrimp>
+

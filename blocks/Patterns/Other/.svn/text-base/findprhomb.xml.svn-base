@@ -1,0 +1,13 @@
+<shrimp type="function" name="FindPRhomb" description="Find Penrose rhomb" author="rconstruct">
+	<input name="s" description="X value to sample" storage="varying" type="float" default="s"/>
+	<input name="t" description="Y value to sample" storage="varying" type="float" default="t"/>
+	<output name="tiled_s" description="out tile X" type="float"/>
+	<output name="tiled_t" description="out tile Y" type="float"/>
+	<output name="tiletype" description="Tile type" type="float"/>
+	<rsl_include>rsl_shrimp_extrapatterns.h</rsl_include>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_code>
+		find_penrose_rhomb( $(tiled_s), $(tiled_t), $(tiletype), $(s), $(t) );
+	</rsl_code>
+	<usage>Penrose rhomb tile, by Derek Ledbetter, based on the projection method described in N. G. de Bruijn, &quot;Algebraic theory of Penrose&apos;s non-periodic tilings of the plane&quot;, in &quot;Proceedings of the Koninklijke Nederlandse Akademie van Wetenschappen&quot;, Series A, 84, 1981. This function returns Penrose rhomb tile values, and tile types, being 0 = skinny, and 1 = fat.</usage> 
+</shrimp>

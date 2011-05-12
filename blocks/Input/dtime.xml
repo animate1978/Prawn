@@ -1,0 +1,8 @@
+<shrimp type="function" name="dTime" description="The amount of time covered by this shading sample" author="rconstruct">
+	<output name="dtime" description="The amount of time covered by this shading sample" storage="uniform" type="float"/>
+	<rsl_code>
+	$(dtime) = dtime;
+	</rsl_code>
+	<usage>The amount of time covered by this shading sample. It&apos;s available in all shading contexts.</usage>
+</shrimp>
+

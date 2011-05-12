@@ -1,0 +1,251 @@
+<shrimp name="new_scene">
+	<about/>
+	<network>
+		<block id="Add" position_x="2" position_y="-3" author="rconstruct">
+			<input name="A" type="point" storage="varying" value="1" description="1st input" type_parent="val">
+				<connection parent="p" output="P"/>
+			</input>
+			<input name="B" type="point" storage="varying" multi="+" value="1" description="2nd or subsequent inputs" type_parent="val">
+				<connection parent="Normal2Point" output="out"/>
+			</input>
+			<output name="val" type="point" storage="varying" description="val = A + B"/>
+			<rsl_code>
+		$(val) = $(A) + $(B);
+				</rsl_code>
+			<rsl_include/>
+			<usage>Adds 2 or more inputs. All the input pads will inherit the type of the output pad.			</usage>
+		</block>
+		<block id="CalcNormal" position_x="4" position_y="-3" author="rconstruct">
+			<input name="p" type="point" storage="varying" value="P" description="Point to calculate normal at">
+				<connection parent="Add" output="val"/>
+			</input>
+			<output name="NN" type="normal" storage="varying" description="NN is normal at p"/>
+			<rsl_code>
+		$(NN) = calculatenormal( $(p) );
+				</rsl_code>
+			<rsl_include/>
+			<usage>Returns the surface normal of the given point on the surface. You should always recalculate the normals after a displacement.			</usage>
+		</block>
+		<block id="Diffuse" position_x="4" position_y="1" author="rconstruct">
+			<input name="Cdiff" type="color" storage="varying" value="color(.5)" description="Diffuse color"/>
+			<input name="Kd" type="float" storage="varying" value="1" description="The diffuse coefficient"/>
+			<input name="norm" type="normal" storage="varying" value="normalize(N)" description="The surface normal"/>
+			<input name="PP" type="point" storage="varying" value="P" description="Surface position, see usage"/>
+			<input name="angle" type="float" storage="varying" value="PI/2" description="Cone angle, see usage"/>
+			<input name="dtoggle" type="float" storage="uniform" value="0" description="Toggle 1 or 3 argument diffuse, see usage"/>
+			<output name="Ci" type="color" storage="varying" description="The amount of diffuse light"/>
+			<rsl_code>
+		aov_surfacecolor += $(Cdiff);
+
+		/* Pixie&apos;s diffuse() has 2 forms */
+		#define $(blockname)_$(dtoggle)
+		#if RENDERER == pixie &amp;&amp; defined $(blockname)_1
+			aov_diffuse += $(Kd) * diffuse( $(PP), $(norm), $(angle) );
+		#else
+			aov_diffuse += $(Kd) * diffuse( $(norm) );
+		#endif /* RENDERER */
+		#undef $(blockname)_$(dtoggle)
+
+		$(Ci) = aov_surfacecolor * aov_diffuse;
+				</rsl_code>
+			<rsl_include/>
+			<usage>Lambertian Diffuse term. The diffuse color value is passed to the &quot;aov_surfacecolor&quot;, and the diffuse value to the &quot;aov_diffuse&quot; AOV presets. Pixie&apos;s diffuse shadeop has 2 forms, the first one with a single argument, with the surface normal &quot;N&quot;, the second form, with 3 arguments, allowing the surface position and angle (in radians) to be specified as well. The default cone angle is PI/2. The variable &quot;dtoggle&quot; toggles between the single argument &quot;diffuse&quot; (0), and the 3 arguments &quot;diffuse&quot; (1).			</usage>
+		</block>
+		<block id="Divide" position_x="0" position_y="-2" author="rconstruct">
+			<input name="A" type="float" storage="varying" value="1" description="1st input" type_parent="val">
+				<connection parent="Ridged3D" output="val"/>
+			</input>
+			<input name="B" type="float" storage="varying" value="1" description="2nd input" type_parent="val">
+				<connection parent="Length" output="val"/>
+			</input>
+			<output name="val" type="float" storage="varying" description="val = A / B"/>
+			<rsl_code>
+		$(val) = $(A) / $(B);
+				</rsl_code>
+			<rsl_include/>
+			<usage>Divides input A by input B.			</usage>
+		</block>
+		<block id="Length" position_x="-2" position_y="-1" author="rconstruct">
+			<input name="A" type="normal" storage="varying" value="vector(1)" description="Input vector">
+				<connection parent="Transform" output="pp"/>
+			</input>
+			<output name="val" type="float" storage="varying" description="The lenght of the vector"/>
+			<rsl_code>
+		$(val) = length( $(A) );
+				</rsl_code>
+			<rsl_include/>
+			<usage>Returns the length of a vector ( sqrt(V.V) ).			</usage>
+		</block>
+		<block id="Multiply" position_x="2" position_y="0" author="rconstruct">
+			<input name="A" type="normal" storage="varying" value="1" description="1st input" type_parent="val">
+				<connection parent="Normalize" output="val"/>
+			</input>
+			<input name="B" type="normal" storage="varying" multi="*" value="1" description="2nd or subsequent inputs" type_parent="val">
+				<connection parent="Divide" output="val"/>
+			</input>
+			<output name="val" type="normal" storage="varying" description="val = A * B"/>
+			<rsl_code>
+		$(val) = $(A) * $(B);
+				</rsl_code>
+			<rsl_include/>
+			<usage>All inputs must be of the same type. The operation is done in parallel for each component.			</usage>
+		</block>
+		<block id="N" position_x="-4" position_y="1" author="rconstruct">
+			<output name="N" type="normal" storage="varying" description="Surface shading normal"/>
+			<rsl_code>
+    $(N) = N;
+    			</rsl_code>
+			<rsl_include/>
+			<usage>Surface shading normal. The availability of this global variable in the different shading contexts is renderer specific. It&apos;s not available in imager shaders.			</usage>
+		</block>
+		<block id="Normal2Point" position_x="2" position_y="-2" author="rconstruct">
+			<input name="in" type="normal" storage="varying" value="normal(0)" description="Input value">
+				<connection parent="Multiply" output="val"/>
+			</input>
+			<output name="out" type="point" storage="varying" description="Output value"/>
+			<rsl_code>
+	    $(out) = point( comp( $(in), 0), comp( $(in), 1), comp( $(in), 2) );
+				</rsl_code>
+			<rsl_include/>
+			<usage>Sets a point with a normal&apos;s components.			</usage>
+		</block>
+		<block id="Normalize" position_x="-4" position_y="-0" author="rconstruct">
+			<input name="A" type="normal" storage="varying" value="N" description="Input vector" type_parent="val">
+				<connection parent="N" output="N"/>
+			</input>
+			<output name="val" type="normal" storage="varying" description="Output unit length vector"/>
+			<rsl_code>
+		$(val) = normalize( $(A) );
+				</rsl_code>
+			<rsl_include/>
+			<usage>Returns a unit vector in the direction of input vector (V/length(V)).			</usage>
+		</block>
+		<block id="Ridged3D" position_x="-2" position_y="-2" author="rconstruct">
+			<input name="p" type="point" storage="varying" value="P" description="point to sample fractal at">
+				<connection parent="Transform_2" output="pp"/>
+			</input>
+			<input name="fwidth" type="float" storage="varying" value="0" description="Filter width for antialiasing"/>
+			<input name="octaves" type="float" storage="uniform" value="5" description="Maximum octaves of noise"/>
+			<input name="lacunarity" type="float" storage="uniform" value="2.17" description="Gap between successive frequencies"/>
+			<input name="gain" type="float" storage="uniform" value="0.5" description="Controls the contrast of the fractal"/>
+			<input name="offset" type="float" storage="uniform" value="0.7" description="Controls the multifractality"/>
+			<input name="amplitude" type="float" storage="varying" shader_parameter="1" value=".15" description="Amplitude of fractal"/>
+			<output name="val" type="float" storage="varying" description="fractal value at p"/>
+			<rsl_code>
+	#define $(blockname)_$(val:type)
+	#ifdef $(blockname)_float
+		$(val) = $(amplitude) * Ridged( $(p), $(fwidth), $(octaves),
+						$(lacunarity), $(offset), $(gain) );
+	#else
+		$(val) = $(amplitude) * $(val:type) (vector vRidged( $(p), $(fwidth),
+					$(octaves), $(lacunarity), $(offset), $(gain) ) );
+	#endif
+	#undef $(blockname)_$(val:type)
+				</rsl_code>
+			<rsl_include>rsl_shrimp_fractal.h			</rsl_include>
+			<usage>Ken Musgrave&apos;s 3 dimensional Ridged Multifractal function. Note that offset can change the scale of the output drastically.			</usage>
+		</block>
+		<block id="Root block" position_x="7" position_y="-0" author="" root="RIB" AOV_preview="1">
+			<rib_statements/>
+			<imager_statement/>
+			<input name="Ci" type="color" storage="varying" shader_parameter="1" value="0" description="Incident ray colour">
+				<connection parent="Diffuse" output="Ci"/>
+			</input>
+			<input name="Oi" type="color" storage="varying" shader_parameter="1" value="1" description="Incident ray opacity"/>
+			<input name="P" type="point" storage="varying" shader_parameter="1" value="P" description="Displaced surface position"/>
+			<input name="N" type="normal" storage="varying" shader_parameter="1" value="N" description="Displaced surface shading normal">
+				<connection parent="CalcNormal" output="NN"/>
+			</input>
+			<input name="Cl" type="color" storage="varying" shader_parameter="1" value="0" description="Outgoing light ray colour"/>
+			<input name="Ol" type="color" storage="varying" shader_parameter="1" value="1" description="Outgoing light ray opacity"/>
+			<input name="Cv" type="color" storage="varying" shader_parameter="1" value="0" description="Attenuated ray colour"/>
+			<input name="Ov" type="color" storage="varying" shader_parameter="1" value="1" description="Attenuated ray opacity"/>
+			<input name="Cm" type="color" storage="varying" shader_parameter="1" value="0" description="Output pixel colour"/>
+			<input name="Om" type="color" storage="varying" shader_parameter="1" value="1" description="Output pixel opacity"/>
+			<input name="AOV" type="color" storage="varying" shader_parameter="1" value="1" description="AOV preview output"/>
+			<rsl_code/>
+			<rsl_include/>
+			<usage/>
+		</block>
+		<block id="Transform" position_x="-4" position_y="-1" author="rconstruct">
+			<input name="p" type="normal" storage="varying" value="P" description="Point, vector or normal to transform" type_parent="pp">
+				<connection parent="Normalize" output="val"/>
+			</input>
+			<input name="from_space" type="string" storage="uniform" value="&quot;camera&quot;" description="The coordinate system to transform from"/>
+			<input name="to_space" type="string" storage="uniform" value="&quot;shader&quot;" description="The coordinate system to transform into"/>
+			<input name="mmat" type="matrix" storage="varying" value="UND" description="Use this matrix instead of a predefined coordinate system"/>
+			<output name="pp" type="normal" storage="varying" description="The transformed point, vector or normal"/>
+			<rsl_code>
+	#ifdef TRANSFORM_ARGUMENTS
+	#undef TRANSFORM_ARGUMENTS
+	#endif
+
+	#define mmat_$(mmat)
+	#ifdef mmat_UND
+		#define TRANSFORM_ARGUMENTS $(to_space)
+	#else
+		#define TRANSFORM_ARGUMENTS	$(mmat)
+	#endif /* mmat_UND */
+
+	#define $(blockname)_$(p:type) 1
+	#ifdef $(blockname)_point
+		$(pp) = transform( $(from_space), TRANSFORM_ARGUMENTS , $(p) );
+	#elif $(blockname)_vector
+		$(pp) = vtransform( $(from_space), TRANSFORM_ARGUMENTS , $(p) );
+	#elif $(blockname)_normal
+		$(pp) = ntransform( $(from_space), TRANSFORM_ARGUMENTS , $(p) );
+	#endif /* $(blockname)_$(p:type) */
+	#undef $(blockname)_$(p:type)
+	
+	#undef mmat_$(mmat)
+	#undef TRANSFORM_ARGUMENTS
+				</rsl_code>
+			<rsl_include>rsl_shrimp_helpers.h			</rsl_include>
+			<usage>A block for the &quot;transform&quot;, &quot;vtransform&quot; and &quot;ntransform&quot; functions, to transform the supplied point &quot;P&quot;, vector &quot;V&quot; or normal &quot;N&quot; respectively, from the coordinate system &quot;fromspace&quot; to the coordinate system &quot;tospace&quot;, with &quot;fromspace&quot; defaulting to &quot;current&quot;. Note that &quot;current&quot; is implementation specific. Predefined coordinate systems are: &quot;current&quot;, &quot;object&quot;, &quot;shader&quot;, &quot;world&quot;, &quot;camera&quot;, &quot;screen&quot;, &quot;raster&quot; and &quot;NDC&quot;. A transformation matrix might be given instead of a &quot;tospace&quot; coordinate system. User defined coordinate systems can also be refered to.			</usage>
+		</block>
+		<block id="Transform_2" position_x="-4" position_y="-3" author="rconstruct">
+			<input name="p" type="point" storage="varying" value="P" description="Point, vector or normal to transform" type_parent="pp">
+				<connection parent="p" output="P"/>
+			</input>
+			<input name="from_space" type="string" storage="uniform" value="&quot;camera&quot;" description="The coordinate system to transform from"/>
+			<input name="to_space" type="string" storage="uniform" value="&quot;shader&quot;" description="The coordinate system to transform into"/>
+			<input name="mmat" type="matrix" storage="varying" value="UND" description="Use this matrix instead of a predefined coordinate system"/>
+			<output name="pp" type="point" storage="varying" description="The transformed point, vector or normal"/>
+			<rsl_code>
+	#ifdef TRANSFORM_ARGUMENTS
+	#undef TRANSFORM_ARGUMENTS
+	#endif
+
+	#define mmat_$(mmat)
+	#ifdef mmat_UND
+		#define TRANSFORM_ARGUMENTS $(to_space)
+	#else
+		#define TRANSFORM_ARGUMENTS	$(mmat)
+	#endif /* mmat_UND */
+
+	#define $(blockname)_$(p:type) 1
+	#ifdef $(blockname)_point
+		$(pp) = transform( $(from_space), TRANSFORM_ARGUMENTS , $(p) );
+	#elif $(blockname)_vector
+		$(pp) = vtransform( $(from_space), TRANSFORM_ARGUMENTS , $(p) );
+	#elif $(blockname)_normal
+		$(pp) = ntransform( $(from_space), TRANSFORM_ARGUMENTS , $(p) );
+	#endif /* $(blockname)_$(p:type) */
+	#undef $(blockname)_$(p:type)
+	
+	#undef mmat_$(mmat)
+	#undef TRANSFORM_ARGUMENTS
+				</rsl_code>
+			<rsl_include>rsl_shrimp_helpers.h			</rsl_include>
+			<usage>A block for the &quot;transform&quot;, &quot;vtransform&quot; and &quot;ntransform&quot; functions, to transform the supplied point &quot;P&quot;, vector &quot;V&quot; or normal &quot;N&quot; respectively, from the coordinate system &quot;fromspace&quot; to the coordinate system &quot;tospace&quot;, with &quot;fromspace&quot; defaulting to &quot;current&quot;. Note that &quot;current&quot; is implementation specific. Predefined coordinate systems are: &quot;current&quot;, &quot;object&quot;, &quot;shader&quot;, &quot;world&quot;, &quot;camera&quot;, &quot;screen&quot;, &quot;raster&quot; and &quot;NDC&quot;. A transformation matrix might be given instead of a &quot;tospace&quot; coordinate system. User defined coordinate systems can also be refered to.			</usage>
+		</block>
+		<block id="p" position_x="-4" position_y="-5" author="rconstruct">
+			<output name="P" type="point" storage="varying" description="Surface position"/>
+			<rsl_code>
+    $(P) = P;
+    			</rsl_code>
+			<rsl_include/>
+			<usage>Note that in all shading contexts, &quot;P&quot; is the surface position, the only exception being volume shaders, in which &quot;P&quot; is the light ray origin. Also note that in imager shaders, &quot;P&quot; is the position of the pixel center in raster space, with the z coordinate being 0.			</usage>
+		</block>
+	</network>
+</shrimp>

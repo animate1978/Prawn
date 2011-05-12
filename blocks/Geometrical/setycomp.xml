@@ -1,0 +1,10 @@
+<shrimp type="function" name="SetYcomp" description="Sets the Y component of a point, vector or normal" author="rconstruct">
+	<input name="y" description="Y component value" type="float" default="0"/>
+	<input name="Vin" description="Point, vector or normal" type_parent="value" type="normal point vector" default="vector(0)"/>
+	<output name="value" description="Resulting point, vector or normal" type="normal point vector"/>
+	<rsl_code>
+		setycomp( $(Vin:type) $(Vin), $(y) );
+		$(value) = $(Vin);
+	</rsl_code>
+	<usage>Sets the Y component of a point, vector, or normal.</usage>
+</shrimp>

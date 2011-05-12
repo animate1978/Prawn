@@ -1,0 +1,8 @@
+<shrimp type="function" name="Sqrt" description="Square root" author="rconstruct">
+	<input name="x" description="Input value" type="float" default="1"/>
+	<output name="value" description="val = sqrt(x)" type="float"/>
+	<rsl_code>
+		$(value) = sqrt( $(x) );
+	</rsl_code>
+	<usage>Returns the square root of the argument</usage>
+</shrimp>

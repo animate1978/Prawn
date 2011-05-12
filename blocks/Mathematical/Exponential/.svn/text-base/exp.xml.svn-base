@@ -1,0 +1,8 @@
+<shrimp type="function" name="Exp" description="Raise e to the power x" author="rconstruct">
+	<input name="power" description="Power" type="float" default="1"/>
+	<output name="value" description="val = e to the power x" type="float"/>
+	<rsl_code>
+		$(value) = exp( $(power) );
+	</rsl_code>
+	<usage>Return e to the power of x.</usage>
+</shrimp>

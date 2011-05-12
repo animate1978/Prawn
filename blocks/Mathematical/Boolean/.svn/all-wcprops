@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Mathematical/Boolean
+END
+not.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Mathematical/Boolean/not.xml
+END
+or.xml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Mathematical/Boolean/or.xml
+END
+and.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Mathematical/Boolean/and.xml
+END
+xor.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Mathematical/Boolean/xor.xml
+END
+sub.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Mathematical/Boolean/sub.xml
+END

@@ -1,0 +1,17 @@
+<shrimp type="function" name="Tile" description="Simple tiling function" author="rconstruct">
+	<input name="s" description="X coordinate" storage="varying" type="float" default="s"/>
+	<input name="t" description="Y coordinate" storage="varying" type="float" default="t"/>
+	<input name="xfrequency" description="The frequency of the tiling in the x direction" storage="uniform" type="float" default="1"/>
+	<input name="yfrequency" description="The frequency of the tiling in the y direction" storage="uniform" type="float" default="1"/>
+	<output name="xtile" description="The x coordinate inside the tile" type="float"/>
+	<output name="ytile" description="The y coordinate inside the tile" type="float"/>
+	<output name="column" description="The column number of the current tile" type="float"/>
+	<output name="row" description="The row number of the current tile" type="float"/>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_include>rsl_shrimp_shapes.h</rsl_include>
+	<rsl_code>
+		shTile( $(s), $(t), $(xfrequency), $(yfrequency), $(xtile), $(ytile),
+				$(column), $(row) );
+	</rsl_code>
+	<usage>This function takes a point X,Y and returns the coordinates inside the tile (&quot;xtile&quot;,&quot;ytile&quot;) and the tile &quot;column&quot; and &quot;row&quot;, with &quot;xfrequency&quot; and &quot;yfrequency&quot; affecting the frequency (and consequently the shape) of the tiles in the X and Y directions.</usage>
+</shrimp>

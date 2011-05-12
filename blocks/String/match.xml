@@ -1,0 +1,9 @@
+<shrimp type="function" name="Match" description="Searches subject string for pattern string" author="rconstruct">
+	<input name="pattern" description="Pattern string" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="string" description="String to search" storage="uniform" type="string" default="&quot;&quot;"/>
+	<output name="status" description="Return status" storage="uniform" type="float"/>
+	<rsl_code>
+		$(status) = match( $(pattern), $(string) );
+	</rsl_code>
+	<usage>Searches subject string for pattern string, and returns 1 if the pattern exists in the subject, otherwise it returns 0. The pattern can be any regex expression (man regex for more information).</usage>
+</shrimp>

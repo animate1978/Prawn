@@ -1,0 +1,42 @@
+##RenderMan RIB-Structure 1.0
+version 3.03
+
+#Created with K-3D Version 0.6.7.0, http://www.k-3d.org
+
+FrameBegin 1
+$(imager_shader)
+
+Projection "perspective" "fov" 50
+Rotate -90 0 0 1
+Rotate 2.92411e-10 1 0 0
+Rotate -90 0 1 0
+Translate 12.4765 -7.4869e-18 -3.51934
+
+WorldBegin
+	Color [1 1 1]
+	Opacity [1 1 1]
+
+	# there's still the area lights, interior/exterior/atmosphere issue
+	$(light_shaders)
+	$(volume_shaders)
+
+	# Torus
+	AttributeBegin
+		Attribute "identifier" "string name" ["Torus"]
+		Transform [0.450215 0.26849 0.406353 0 -2.10598e-17 0.55337 -0.365629 0 -0.487042 0.248189 0.375627 0 0 -5.55112e-17 4.80842 1 ]
+		$(surface_shaders)
+		$(displacement_shaders)
+		Torus 5 2 0 360 360
+	AttributeEnd
+
+	# Background box
+	AttributeBegin
+		Attribute "identifier" "string name" ["BackgroundBox"]
+		Transform [2.83157 0 0 0 0 2.83157 0 0 0 0 2.83157 0 0 0 7.10261 1 ]
+		Surface "grid" "float hfreq" [3] "float vfreq" [3] "float hblur" [0.01] "float vblur" [0.01]
+		ReadArchive "archives/Box.rib.gz"
+	AttributeEnd
+WorldEnd
+
+FrameEnd
+

@@ -1,0 +1,8 @@
+<shrimp type="function" name="Dv" description="Change of surface parameters" author="rconstruct">
+    <input name="P" description="Change of surface parameter" type_parent="value" type="float color vector point" default="P"/>
+    <output name="value" description="Change of surface parameter" type="float color vector point"/>
+    <rsl_code>
+	    $(value) = Dv( $(P) );
+    </rsl_code>
+	<usage>Returns the derivative of arbitrary expression &quot;p&quot; with respect to surface parameter &quot;v&quot;.</usage>
+</shrimp>

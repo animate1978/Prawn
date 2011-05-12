@@ -1,0 +1,8 @@
+<shrimp type="function" name="Cs" description="Surface color" author="rconstruct">
+	<output name="Cs" description="Surface color" type="color"/>
+	<rsl_code>
+	$(Cs) = Cs;
+	</rsl_code>
+	<usage>Surface color. Only available in surface shaders.</usage>
+</shrimp>
+

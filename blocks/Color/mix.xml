@@ -1,0 +1,10 @@
+<shrimp type="function" name="Mix" description="Performs a linear blend between A and B" author="rconstruct">
+	<input name="weight" description="The mixing factor" type="color normal point vector float" default="0.5"/>
+	<input name="A" description="1st Input" type_parent="value" type="color normal point vector float" default="0"/>
+	<input name="B" description="2nd Input" type_parent="value" type="color normal point vector float" default="1"/>
+	<output name="value" description="The resulting mix between A and B" type="color normal point vector float"/>
+	<rsl_code>
+		$(value) = mix( $(A), $(B), $(weight) );
+	</rsl_code>
+<usage>Mix returns x*(1-a)+y*a, that is, it performs a linear blend between values A and B. The types of A and B must be identical, but may be any of float, point, vector, normal, or color. The variants that operate on colors or point-like objects operate on a component by component basis (e.g: separately for x, y, and z).</usage>
+</shrimp>

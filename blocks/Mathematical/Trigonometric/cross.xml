@@ -1,0 +1,9 @@
+<shrimp type="function" name="Cross" description="Compute cross product" author="rconstruct">
+	<input name = "A" description="1st Input" type_parent="value" type="normal point vector" default="vector(0)"/>
+	<input name = "B" description="2nd Input" type_parent="value" type="normal point vector" default="vector(1)"/>
+	<output name="value" description="val = A ^ B" type="normal point vector"/>
+	<rsl_code>
+		$(value) = $(A)^$(B);
+	</rsl_code>
+	<usage>Returns a vector which is perpendicular to both the input vectors.</usage>
+</shrimp>

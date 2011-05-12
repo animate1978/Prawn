@@ -1,0 +1,9 @@
+<shrimp type="function" name="Reflect" description="Reflected vector" author="rconstruct">
+	<input name="I" description="Incident vector" type="vector" default="normalize(I)"/>
+	<input name="N" description="Surface normal" type="vector normal" default="normalize(N)"/>
+	<output name="R" description="The reflected vector" type="vector"/>
+	<rsl_code>
+		$(R) = reflect( $(I), $(N) );
+	</rsl_code>
+<usage>Returns the vector &quot;I&quot; reflected about the unit length normal &quot;N&quot;. It&apos;s equivalent to: I-2*(N.I)*N.</usage>
+</shrimp>

@@ -1,0 +1,57 @@
+<shrimp type="function" name="Bake3d" description="Bakes associated data" author="rconstruct">
+	<input name="bakefile" description="Baked map filename" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="P" description="Surface point" storage="varying" type="point" default="P"/>
+	<input name="N" description="Surface normal" storage="varying" type="normal" default="normalize(N)"/>
+	<input name="coordsys" description="Coordinate system" storage="uniform" type="string" default="&quot;world&quot;"/>
+	<input name="filterradius" description="Filter radius" storage="varying" type="float" default="1"/>
+	<input name="filterscale" description="Filter scale" type="float" default="1"/>
+	<input name="interpolate" description="Toggle interpolation" type="float" default="1"/>
+	<input name="bakechannel" description="Data channel to bake" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="bakedata" description="Value associated with data channel" type_parent="bakevalue" storage="varying" type="point vector normal float color" default="color(0)" />
+	<output name="bakevalue" description="Baked data value" type="point vector normal float color" />
+	<output name="status" description="Status" type="float"/>
+	<rsl_code>
+	
+	#if RENDERER == pixie
+		$(status) = bake3d( $(bakefile), $(bakechannel), $(P), $(N),
+							"coordsystem", $(coordsys),
+							"interpolate", $(interpolate), 
+							"radius", $(filterradius),
+							"radiusscale", $(filterscale),
+							$(bakechannel), $(bakedata) );
+		$(bakevalue) = $(bakedata);
+		
+	#elif RENDERER == _3delight
+	/* DisplayChannels are ignored in bake3d() (as of 8.5) */
+		$(status) = bake3d(	$(bakefile), "", $(P), $(N),
+							"coordsystem", $(coordsys),
+							"radius", $(filterradius),
+							"radiusscale", $(filterscale),
+							"interpolate", $(interpolate),
+							$(bakechannel), $(bakedata) );
+		$(bakevalue) = $(bakedata);
+		
+	#elif RENDERER == prman
+		$(status) = bake3d(	$(bakefile), $(bakechannel), $(P), $(N),
+							"coordsystem", $(coordsys),
+							"radius", $(filterradius),
+							"radiusscale", $(filterscale),
+							"interpolate", $(interpolate),
+							$(bakechannel), $(bakedata) );
+		$(bakevalue) = $(bakedata);
+		
+	#elif RENDERER == air
+		$(status) = bake3d(	$(bakefile), $(P), $(N),
+							"radius", $(filterscale),
+							"radiusscale", $(filterradius),
+							$(bakechannel), $(bakedata) );
+		$(bakevalue) = $(bakedata);
+
+	#else
+		$(bakevalue) = $(bakedata);
+		$(status) = 0;
+	#endif /* RENDERER */
+			
+	</rsl_code>
+	<usage>This function bakes the supplied data channel into a bakefile. Note that this varies considerably with each renderer&apos;s implementation, please check your renderer&apos;s documentation for details. Returns 1 if sucessful, 0 if failed.</usage>
+</shrimp>

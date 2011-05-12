@@ -1,0 +1,15 @@
+<shrimp type="function" name="FSmoothpulse" description="Larry Gritz&apos;s filtered smoothpulse" author="rconstruct">
+	<input name="x" description="Value to test" storage="varying" type="float" default="s"/>
+	<input name="minimum1" description="First minimum" type="float" default="0"/>
+	<input name="maximum1" description="First maximum" type="float" default="0.3"/>
+	<input name="minimum2" description="Second minimum" type="float" default="0.7"/>
+	<input name="maximum2" description="Second maximum" type="float" default="1"/>
+	<input name="filterwidth" description="Filter width" type="float" default="0.1"/>
+	<output name="value" description="Value of the wave at x" type="float"/>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_code>
+		$(value) = filteredsmoothpulse(	$(minimum1), $(maximum1), $(minimum2),
+										$(maximum2), $(x), $(filterwidth));
+	</rsl_code>
+	<usage>Antialiased version of &quot;smoothpulse&quot; by Larry Gritz. Returns filteredsmoothstep(e0, e1, x, dx) - filteredsmoothstep( e2, e3, x, dx).</usage>
+</shrimp>

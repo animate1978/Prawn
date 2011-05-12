@@ -1,0 +1,13 @@
+<shrimp type="function" name="Area" description="Differential surface area" author="rconstruct">
+	<input name="P" description="Point to compute area at" type="point" default="P"/>
+	<input name="strategy" description="Strategy" storage="uniform" type="string" default="&quot;shading&quot;"/>
+	<output name="value" description="Differential surface area at p" type="float"/>
+	<rsl_code>
+	#if RENDERER == aqsis
+		$(value) = area( $(P) );
+	#else
+		$(value) = area( $(P), $(strategy) );
+	#endif
+	</rsl_code>
+<usage>Returns the geometric mean of the change of &quot;P&quot; between adjacent samples in each parametric direction. It can be interpreted as the area of the microfacet if the parameter being passed is the surface point &quot;P&quot;. The &quot;strategy&quot; variable can be either &quot;shading&quot;, in which case the micropolygon area is calculated with the surface derivatives, or &quot;dicing&quot;, in which case the micropolygons area will be calculated using their geometry. If unspecified, it defaults to &quot;shading&quot;.</usage>
+</shrimp>

@@ -1,0 +1,19 @@
+<shrimp type="function" name="FVLNoise1D" description="Filtered 1 dimensional VLNoise function" author="rconstruct">
+	<input name="x" description="Noise x coordinate" storage="varying" type="float" default="s"/>
+	<input name="scale" description="Scale" type="float" default="1"/>
+	<input name="width" description="Filter width" type="float" default="0"/>
+	<input name="amplitude" description="Amplitude of noise" type="float" default="1"/>
+	<output name="value" description="Noise value at (x,y)" type="color vector point float"/>
+	<rsl_include>rsl_shrimp_fractal.h</rsl_include>
+	<rsl_code>
+	#define $(blockname)_$(value:type)
+	#ifdef $(blockname)_float
+		$(value) = $(amplitude) * filteredVLNoise( $(x), $(width), $(scale) );
+	#else
+		$(value) = $(amplitude) * $(value:type) filteredvsnoise(
+				filteredvsnoise( $(x), $(width) ) * $(scale) + $(x), $(width));
+	#endif
+	#undef $(blockname)_$(value:type)
+	</rsl_code>
+	<usage>Ken Musgrave&apos;s filtered 1 dimensional Variable Lacunarity noise function.</usage>
+</shrimp>

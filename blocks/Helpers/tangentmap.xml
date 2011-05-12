@@ -1,0 +1,12 @@
+<shrimp type="function" name="TangentMap" description="Read a tangent space normal map" author="rconstruct">
+	<input name="normalmap" description="Tangent space normal map" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="s" description="Texture coordinate along S" storage="varying" type="float" default="s"/>
+	<input name="t" description="Texture coordinate along T" storage="varying" type="float" default="t"/>
+	<input name="N" description="Surface normal" storage="varying" type="normal" default="normalize(N)"/>
+	<output name="NewN" description="Converted normal" storage="varying" type="normal"/>
+	<rsl_include>rsl_conversion.h</rsl_include>
+	<rsl_code>
+		$(NewN) = tangent2object( $(normalmap), $(s), $(t), $(N) );
+	</rsl_code>
+	<usage>Read a tangent space normal map texture, like the ones generated from 3d sculpting applications. Uses the &quot;dPdu&quot; and &quot;dPdv&quot; parametric derivatives. The texture coordinates &quot;s&quot; and &quot;t&quot; are used only for the texture lookup. The output normal vector is already normalized.</usage>
+</shrimp>

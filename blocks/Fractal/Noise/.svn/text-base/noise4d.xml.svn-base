@@ -1,0 +1,10 @@
+<shrimp type="function" name="Noise4D" description="4 dimensional perlin noise function" author="rconstruct">
+	<input name="P" description="point to sample noise at" storage="varying" type="point" default="P"/>
+	<input name="w" description="4th dimension value" storage="uniform" type="float" default="time"/>
+	<input name="amplitude" description="Amplitude of noise" type="float" default="1"/>
+	<output name="value" description="Noise value at point (p,t)" type="color point vector float"/>
+	<rsl_code>
+		$(value) = $(amplitude) * $(value:type) noise( $(P), $(w) );
+	</rsl_code>
+	<usage>4 dimensional Perlin noise function. The 4th dimension parameter defaults to the global variable &quot;time&quot;, the current shutter time as defined by RiShutter. Note that &quot;time&quot;&apos;s storage class is uniform. Output value is in [0, &quot;amplitude&quot;] range.</usage>
+</shrimp>

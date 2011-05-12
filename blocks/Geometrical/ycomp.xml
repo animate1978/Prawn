@@ -1,0 +1,8 @@
+<shrimp type="function" name="Ycomp" description="Get the Y component of a point, vector or normal" author="rconstruct">
+	<input name="Vin" description="Point, vector or normal to retrieve component from" type="normal vector point" default="point(1)"/>
+	<output name="y" description="Y component" type="float"/>
+	<rsl_code>
+		$(y) = ycomp( $(Vin:type) $(Vin) );
+	</rsl_code>
+	<usage>Get the Y component of an point, vector or normal.</usage>
+</shrimp>

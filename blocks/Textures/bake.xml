@@ -1,0 +1,33 @@
+<shrimp type="function" name="Bake" description="Bakes associated data" author="rconstruct">
+	<input name="bakefile" description="Baked map filename" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="s" description="X coordinate" storage="varying" type="float" default="s"/>
+	<input name="t" description="Y coordinate" storage="varying" type="float" default="t"/>
+	<input name="bakedata" description="Data to bake" type="point color float" type_parent="bdataout" default="0"/>
+	<input name="ascii" description="ASCII/binary file toggle" type="float" default="1"/>
+	<output name="data" description="Baked data" type="point color float" />
+	<rsl_code>
+	
+	#if RENDERER==aqsis
+		bake( $(bakefile), $(s), $(t), $(bakedata) );
+		$(data) = $(bakedata);
+		
+	#elif RENDERER==_3delight
+	/* default is to save in ASCII format */
+	#define bakeformat_$(ascii)
+	#ifdef bakeformat_1
+		bake( $(bakefile), $(s), $(t), $(bakedata) );
+		$(data) = $(bakedata);
+	#else
+		bake( concat( $(bakefile), "&amp;binary"), $(s), $(t), $(bakedata) );
+		$(data) = $(bakedata);
+	#endif /* bakeformat_$(ascii) */
+	#undef bakeformat_$(ascii)
+		
+	#else
+	/* bake() is only supported on Aqsis and 3delight */
+		$(data) = $(bakedata);
+	#endif /* RENDERER */
+			
+	</rsl_code>
+<usage>Bakes the supplied data channel into a bakefile. In 3Delight&apos;s case, you can force the baked file to be in binary format, instead of ASCII format, by toggling the ascii parameter, which is enabled (ascii on) by default. Check your renderer&apos;s documentation, since this function is isn&apos;t available in all renderers.</usage>
+</shrimp>

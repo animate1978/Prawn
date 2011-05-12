@@ -1,0 +1,11 @@
+<shrimp type="function" name="Rotate3D" description="Rotates a point about an axis" author="rconstruct">
+	<input name="Q" description="point to rotate" type="point" default="P"/>
+	<input name="angle" description="The angle to rotate in radians" type="float" default="1"/>
+	<input name="P1" description="1st line endpoint" type="point" default="point(0)"/>
+	<input name="P2" description="2nd line endpoint" type="point" default="point(1)"/>
+	<output name="value" description="Rotated point" type="point"/>
+	<rsl_code>
+		$(value) = rotate( $(Q), $(angle), $(P1), $(P2) );
+	</rsl_code>
+	<usage>Rotates the point &quot;Q&quot; by &quot;angle&quot; radians about the axis through points &quot;P1&quot; and &quot;P2&quot;.</usage>
+</shrimp>

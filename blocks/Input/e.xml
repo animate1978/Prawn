@@ -1,0 +1,8 @@
+<shrimp type="function" name="E" description="Position of the eye" author="rconstruct">
+	<output name="E" description="Position of the eye" storage="uniform" type="point"/>
+	<rsl_code>
+	$(E) = E;
+	</rsl_code>
+	<usage>Position of the eye. This global variable isn't valid for the imager context.</usage>
+</shrimp>
+

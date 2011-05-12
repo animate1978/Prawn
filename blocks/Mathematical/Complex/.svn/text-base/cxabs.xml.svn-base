@@ -1,0 +1,9 @@
+<shrimp type="function" name="CxAbs" description="Complex Absolute Value block" author="rconstruct">
+	<input name="A" description="1st input" type="vector" default="vector(1,1,1)"/>
+	<output name="value" description="Complex result" type="vector"/>
+	<rsl_include>rsl_odwikicomplex.h</rsl_include>
+	<rsl_code>
+		$(value) = cx_abs( $(A) );
+	</rsl_code>
+	<usage>Complex absolute value, for a complex number. Based on Odforce&apos;s odwiki complex.h.</usage>
+</shrimp>

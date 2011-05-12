@@ -1,0 +1,8 @@
+<shrimp type="function" name="L" description="Incoming light direction" author="rconstruct">
+	<output name="L" description="Incoming light direction" type="vector"/>
+	<rsl_code>
+	$(L) = L;
+	</rsl_code>
+	<usage>Note that you can only access the L vector inside &quot;illuminance&quot; statements in surface shaders. In light shaders, you can only access the L vector inside &quot;solar&quot; or &quot;illuminate&quot; statements.</usage>
+</shrimp>
+

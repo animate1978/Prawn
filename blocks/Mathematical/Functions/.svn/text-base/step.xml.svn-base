@@ -1,0 +1,21 @@
+<shrimp type="function" name="Step" description="Step function" author="rconstruct">
+	<input name="x" description="value to test" type_parent="value" type="color float" default="1"/>
+	<input name="minimum" description="position of step" type_parent="value" type="color float" default="1"/>
+	<output name="value" description="value of step function at x" type="color float"/>
+	<rsl_code>
+	#define stype_$(minimum:type)
+	#if RENDERER == prman
+		$(value) = step( $(minimum), $(x) );
+	#else
+		#ifdef stype_float
+			$(value) = step( $(minimum), $(x) );
+		#else
+			$(value) = color(	step( comp( $(minimum),0), comp( $(x),0) ),
+								step( comp( $(minimum),1), comp( $(x),1) ),
+								step( comp( $(minimum),2), comp( $(x),2) ));
+		#endif /* stype_$(minimum:type) */
+	#endif /* RENDERER */
+	#undef stype_$(minimum:type)
+	</rsl_code>
+	<usage>Returns 0 if &quot;x&quot; is less than &quot;minimum&quot;, otherwise returns 1. On color types, it operates on a component basis. </usage>
+</shrimp>

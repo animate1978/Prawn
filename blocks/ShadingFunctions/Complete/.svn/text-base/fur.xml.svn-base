@@ -1,0 +1,39 @@
+<shrimp name="Fur" type="function" description="Clint Hanson and Armin Bruderlin&apos;s SIG2k Fur shader" author="rconstruct" rolled="1">
+    <input name="Ka" description="Ambient light coefficient" type="float" default="0.0287"/>
+    <input name="Kd" description="Diffuse light coefficient" type="float" default="0.77"/>
+    <input name="Ks" description="Global specular intensity" type="float" default="1"/>
+    <input name="roughness1" description="Primary specular roughness" type="float" default="0.008"/>
+	<input name="roughness2" description="Secondary specular roughness" type="float" default="0.016"/>
+	<input name="Ks1" description="Primary highlights intensity" type="float" default="0.3"/>
+	<input name="Ks2" description="Secondary highlights intensity" type="float" default="0.7"/>
+	<input name="startspec" description="Specularity start" type="float" default="0.3"/>
+	<input name="endspec" description="Specularity end" type="float" default="0.95"/>
+	<input name="specsizefade" description="Specular size fade" type="float" default="0.1"/>
+	<input name="coneangle" description="Illumination cone angle" type="float" default="180"/>
+	<input name="fadestart" description="Fade start" type="float" default="0.005"/>
+	<input name="fadeend" description="Fade end" type="float" default="0.001"/>
+	<input name="darkening" description="Clump darkening strength"  type="float" default="0"/>
+	<input name="rootcolor" description="Root color" type="color" default="color(.9714, .9714, .9714)"/>
+	<input name="tipcolor" description="Tip color" type="color" default="color( .519, .325, .125 )"/>
+	<input name="specularcolor" description="Specular color" type="color" default="color( .7595, .6625, .5625 )"/>
+	<input name="surfacecolor" description="Static ambient color" type="color" default="color( .057, .057, .057 )"/>
+	<input name="haircolvar" description="RIB hair color variable" storage="uniform" type="float" default="0"/>
+	<input name="hairlength" description="RIB hair length" storage="uniform" type="float" default="0"/>
+	<input name="hairid" description="RIB hair id" storage="uniform" type="float" default="0"/>
+	<input name="ribnormal" description="RIB surface normal" storage="uniform" type="normal" default="normal(1)"/>
+	<input name="ribclump" description="RIB clump vector" storage="varying" type="vector" default="vector(0)"/>
+	<input name="category" description="Light categories accepted" storage="uniform" type="string" default="&quot;&quot;" />
+    <output name="Ci" description="Shaded color" type="color" />
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+		$(Ci) = SIG2k_srf_fur( $(Ka), $(Kd), $(Ks), $(roughness1),
+				$(roughness2), $(Ks1), $(Ks2), $(startspec), $(endspec),
+				$(specsizefade), $(coneangle), $(fadestart),
+				$(fadeend), $(darkening), $(rootcolor), $(tipcolor),
+				$(specularcolor), $(surfacecolor), $(haircolvar), $(hairlength),
+				$(hairid), $(ribnormal), $(ribclump), $(category),
+				DECLARE_AOV_PARAMETERS );
+	</rsl_code>
+    <usage>Clint Hanson and Armin Bruderlin&apos;s fur shader, presented at Siggraph2000, from The RenderMan Repository - check the link . Note that specular color should be (1+tipcolor)/2. This block passes the resulting values to the &quot;aov_surfacecolor&quot;, &quot;aov_ambient&quot;, &quot;aov_diffuse&quot;, &quot;aov_specularcolor&quot; and &quot;aov_specular&quot; AOV presets. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.
+	<rsl_link>http://www.renderman.org</rsl_link></usage>
+</shrimp>

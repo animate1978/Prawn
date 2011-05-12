@@ -1,0 +1,11 @@
+<shrimp type="function" name="ToGrayscale" description="Converts color to grayscale" author="rconstruct">
+	<input name="Cin" description="The input color" type="color" default="color(.6, .2, .1)"/>
+	<input name="graymode" description="Conversion mode" storage="uniform" type="string" default="&quot;channel&quot;"/>
+	<input name="channel" description="Optional channel to use" storage="uniform" type="float" default="0"/>
+	<output name="value" description="The luminance value" type="float"/>
+	<rsl_include>rsl_texture.h</rsl_include>
+	<rsl_code>
+		$(value) = tograyscale( $(Cin), $(graymode), $(channel) );
+	</rsl_code>
+<usage>This blocks converts a color to grayscale with the methods defined in the variable &quot;graymode&quot;, specifically: &quot;minimum&quot;, &quot;maximum&quot; and &quot;average&quot; in which the grayscale value is built with the minimum, maximum or average of the color&apos;s components respectively; &quot;luminance&quot;, in which the grayscale value is built from the CIE luminance function; &quot;channel&quot;, in which the grayscale value uses the color channel specified in the &quot;channel&quot; variable. If no conversion mode is specified, it defaults to &quot;luminance&quot;.</usage>
+</shrimp>

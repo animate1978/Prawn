@@ -1,0 +1,34 @@
+<shrimp type="function" name="Transform" description="Transform to a different coordinate system" author="rconstruct">
+	<input name="P" description="Point, vector or normal to transform" type="normal vector point" type_parent="Pout" default="P"/>
+	<input name="from_space" description="The coordinate system to transform from" storage="uniform" type="string" default="&quot;current&quot;"/>
+	<input name="to_space" description="The coordinate system to transform into" storage="uniform" type="string" default="&quot;shader&quot;"/>
+	<input name="Matrix" description="Use this matrix instead of a predefined coordinate system" type="matrix" default="UND"/>
+	<output name="Pout" description="The transformed point, vector or normal" type="normal vector point"/>
+	<rsl_include>rsl_helpers.h</rsl_include>
+	<rsl_code>
+	#ifdef TRANSFORM_ARGUMENTS
+	#undef TRANSFORM_ARGUMENTS
+	#endif
+
+	#define Matrix_$(Matrix)
+	#ifdef Matrix_UND
+		#define TRANSFORM_ARGUMENTS $(to_space)
+	#else
+		#define TRANSFORM_ARGUMENTS	$(Matrix)
+	#endif /* Matrix_UND */
+
+	#define $(blockname)_$(P:type) 1
+	#ifdef $(blockname)_point
+		$(Pout) = transform( $(from_space), TRANSFORM_ARGUMENTS , $(P) );
+	#elif $(blockname)_vector
+		$(Pout) = vtransform( $(from_space), TRANSFORM_ARGUMENTS , $(P) );
+	#elif $(blockname)_normal
+		$(Pout) = ntransform( $(from_space), TRANSFORM_ARGUMENTS , $(P) );
+	#endif /* $(blockname)_$(P:type) */
+	#undef $(blockname)_$(P:type)
+	
+	#undef Matrix_$(Matrix)
+	#undef TRANSFORM_ARGUMENTS
+	</rsl_code>
+	<usage>A block for the &quot;transform&quot;, &quot;vtransform&quot; and &quot;ntransform&quot; functions, to transform the supplied point &quot;P&quot;, vector &quot;V&quot; or normal &quot;N&quot; respectively, from the coordinate system &quot;fromspace&quot; to the coordinate system &quot;tospace&quot;, with &quot;fromspace&quot; defaulting to &quot;current&quot;. Note that &quot;current&quot; is implementation specific. Predefined coordinate systems are: &quot;current&quot;, &quot;object&quot;, &quot;shader&quot;, &quot;world&quot;, &quot;camera&quot;, &quot;screen&quot;, &quot;raster&quot; and &quot;NDC&quot;. A transformation matrix might be given instead of a &quot;tospace&quot; coordinate system. User defined coordinate systems can also be refered to.</usage>
+</shrimp>

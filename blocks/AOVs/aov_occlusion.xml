@@ -1,0 +1,9 @@
+<shrimp type="function" name="AOV_Occlusion" description="Occlusion AOV" author="rconstruct">
+	<input name="in" description="Value for AOV" storage="varying" type="float" multi="+" default="0"/>
+	<output name="val" description="Value passed for AOV" storage="varying" type="float"/>
+	<rsl_code>
+		aov_occlusion += $(in);
+		$(val) = $(in);
+	</rsl_code>
+	<usage>Passes the values connected to the input, to the occlusion AOV. The preset AOVs are aov_surfacecolor, aov_ambient, aov_diffuse, aov_indirectdiffuse, aov_specular, aov_specularcolor, aov_reflection, aov_refraction, aov_rimlighting, aov_scattering, aov_translucence, aov_shadows, aov_occlusion, aov_caustics. Note that all shading models blocks already have assigned AOVs to their respective components, as well as some other blocks, see the blocks information for details.</usage>
+</shrimp>

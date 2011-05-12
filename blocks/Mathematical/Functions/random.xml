@@ -1,0 +1,10 @@
+<shrimp type="function" name="Random" description="A Random value" author="rconstruct">
+	<input name="minimum" description="minimum value" type_parent="value" type="color point float" default="0"/>
+	<input name="maximum" description="maximum value" type_parent="value" type="color point float" default="1"/>
+	<output name="value" description="A random value between min and max" type="color point float"/>
+	<rsl_code>
+		$(value) = ( $(maximum) - $(minimum) )*( $(value:type) random())
+					+ $(minimum);
+	</rsl_code>
+	<usage>Returns a random number between &quot;minimum&quot; and &quot;maximum&quot;, with types allowed defaulting to point, color and float, altough these vary with each renderer&apos;s implementation.</usage>
+</shrimp>

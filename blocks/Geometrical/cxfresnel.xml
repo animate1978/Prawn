@@ -1,0 +1,14 @@
+<shrimp type="function" name="CxFresnel" description="Complex Fresnel block" author="rconstruct">
+	<input name="I" description="Incident vector" type="vector" default="normalize(I)"/>
+	<input name="N" description="Surface normal" type="vector normal" default="normalize(N)"/>
+	<input name="ior" description="Index of refraction" type="float" default="1.5"/>
+	<input name="extinction" description="Extinction coefficient" type="float" default="0.5"/>
+	<output name="Kr" description="The reflected coefficient" type="float"/>
+	<output name="Kt" description="The refracted coefficient" type="float"/>
+	<rsl_include>rsl_odwikicomplex.h</rsl_include>
+	<rsl_code>
+		$(Kr) = fresnel_kr( -$(I).$(N), cx_set( $(ior), $(extinction) ) );
+		$(Kt) = max( 0.0, 1.0 - $(Kr) );
+	</rsl_code>
+<usage>Complex Fresnel function using full formula for unpolarized light, returns the reflection coefficient Kr and the refraction coefficient Kt, given an incident direction I, the surface normal N, and the complex ior (ior + extinction). Based on Odforce&apos;s Odwiki article on BRDFs, and on the Odwiki&apos;s complex.h file, by the Odforce community and Mario Marengo.</usage>
+</shrimp>

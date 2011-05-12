@@ -1,0 +1,835 @@
+<shrimp name="TEMPLATE" authors="Ted Gocek, Eric Back">
+	<about>Template Widow shader.	</about>
+	<network>
+		<block id="Add" position_x="-2.07192569924735" position_y="9.09605669333631" author="rconstruct">
+			<input name="A" type="color" storage="varying" value="1" description="1st input" type_parent="value">
+				<connection parent="Multiply" output="value"/>
+			</input>
+			<input name="B" type="color" storage="varying" multi="+" value="1" description="2nd or subsequent inputs" type_parent="value">
+				<connection parent="Diffuse" output="Ci"/>
+			</input>
+			<output name="value" type="color" storage="varying" description="val = A + B"/>
+			<rsl_code>
+		$(value) = $(A) + $(B);
+																																		</rsl_code>
+			<rsl_include/>
+			<usage>Adds 2 or more inputs. All the input pads will inherit the type of the output pad.																																	</usage>
+		</block>
+		<block id="Add_2" position_x="1.56260527885542" position_y="8.33094071887955" author="rconstruct">
+			<input name="A" type="color" storage="varying" value="1" description="1st input" type_parent="value">
+				<connection parent="Add" output="value"/>
+			</input>
+			<input name="B" type="color" storage="varying" multi="+" value="1" description="2nd or subsequent inputs" type_parent="value">
+				<connection parent="Specular" output="Ci"/>
+			</input>
+			<output name="value" type="color" storage="varying" description="val = A + B"/>
+			<rsl_code>
+		$(value) = $(A) + $(B);
+																																					</rsl_code>
+			<rsl_include/>
+			<usage>Adds 2 or more inputs. All the input pads will inherit the type of the output pad.																																				</usage>
+		</block>
+		<block id="Add_3" position_x="4.92130097459826" position_y="7.20283131521404" author="rconstruct">
+			<input name="A" type="color" storage="varying" value="1" description="1st input" type_parent="value">
+				<connection parent="Add_2" output="value"/>
+			</input>
+			<input name="B" type="color" storage="varying" multi="+" value="1" description="2nd or subsequent inputs" type_parent="value">
+				<connection parent="Add_4" output="value"/>
+			</input>
+			<output name="value" type="color" storage="varying" description="val = A + B"/>
+			<rsl_code>
+		$(value) = $(A) + $(B);
+																																					</rsl_code>
+			<rsl_include/>
+			<usage>Adds 2 or more inputs. All the input pads will inherit the type of the output pad.																																				</usage>
+		</block>
+		<block id="Add_4" position_x="1.46330746391087" position_y="6.23025040211311" author="rconstruct">
+			<input name="A" type="color" storage="varying" value="1" description="1st input" type_parent="value">
+				<connection parent="Environment" output="value"/>
+			</input>
+			<input name="B" type="color" storage="varying" multi="+" value="1" description="2nd or subsequent inputs" type_parent="value">
+				<connection parent="Environment_2" output="value"/>
+			</input>
+			<output name="value" type="color" storage="varying" description="val = A + B"/>
+			<rsl_code>
+		$(value) = $(A) + $(B);
+																									</rsl_code>
+			<rsl_include/>
+			<usage>Adds 2 or more inputs. All the input pads will inherit the type of the output pad.																								</usage>
+		</block>
+		<block id="Add_5" position_x="6.39673460341699" position_y="-11.5677441178921" author="rconstruct">
+			<input name="A" type="point" storage="varying" value="1" description="1st input" type_parent="value">
+				<connection parent="p" output="P"/>
+			</input>
+			<input name="B" type="point" storage="varying" multi="+" value="1" description="2nd or subsequent inputs" type_parent="value">
+				<connection parent="Normal2Point" output="value"/>
+			</input>
+			<output name="value" type="point" storage="varying" description="val = A + B"/>
+			<rsl_code>
+		$(value) = $(A) + $(B);
+																</rsl_code>
+			<rsl_include/>
+			<usage>Adds 2 or more inputs. All the input pads will inherit the type of the output pad.															</usage>
+		</block>
+		<block id="CalcNormal" position_x="8.45512385529192" position_y="-11.7108634966467" author="rconstruct">
+			<input name="P" type="point" storage="varying" value="P" description="Point to calculate normal at">
+				<connection parent="Add_5" output="value"/>
+			</input>
+			<output name="N" type="normal" storage="varying" description="NN is normal at p"/>
+			<rsl_code>
+		$(N) = calculatenormal( $(P) );
+																</rsl_code>
+			<rsl_include/>
+			<usage>Returns the surface normal of the given point on the surface. You should always recalculate the normals after a displacement.															</usage>
+		</block>
+		<block id="CxFresnel" position_x="-9.52937367003794" position_y="-0.86816187540985" author="rconstruct">
+			<input name="I" type="vector" storage="varying" value="normalize(I)" description="Incident vector"/>
+			<input name="N" type="normal" storage="varying" value="normalize(N)" description="Surface normal"/>
+			<input name="ior" type="float" storage="varying" shader_parameter="1" value="1.25" description="Index of refraction"/>
+			<input name="extinction" type="float" storage="varying" shader_parameter="1" value="0.1" description="Extinction coefficient"/>
+			<output name="Kr" type="float" storage="varying" description="The reflected coefficient"/>
+			<output name="Kt" type="float" storage="varying" description="The refracted coefficient"/>
+			<rsl_code>
+		$(Kr) = fresnel_kr( -$(I).$(N), cx_set( $(ior), $(extinction) ) );
+		$(Kt) = max( 0.0, 1.0 - $(Kr) );
+										</rsl_code>
+			<rsl_include>rsl_odwikicomplex.h									</rsl_include>
+			<usage>Complex Fresnel function using full formula for unpolarized light, returns the reflection coefficient Kr and the refraction coefficient Kt, given an incident direction I, the surface normal N, and the complex ior (ior + extinction). Based on Odforce&apos;s Odwiki article on BRDFs, and on the Odwiki&apos;s complex.h file, by the Odforce community and Mario Marengo.									</usage>
+		</block>
+		<block id="Diffuse" position_x="-4.62303135746799" position_y="8.01797958720871" author="rconstruct">
+			<input name="Cdiff" type="color" storage="varying" shader_parameter="1" value="0 0.541176 1" description="Diffuse color"/>
+			<input name="Kd" type="float" storage="varying" shader_parameter="1" value="0.75" description="The diffuse coefficient"/>
+			<input name="N" type="normal" storage="varying" value="normalize(N)" description="The surface normal"/>
+			<input name="P" type="point" storage="varying" value="P" description="Surface position, see usage"/>
+			<input name="coneangle" type="float" storage="varying" value="PI/2" description="Cone angle, see usage"/>
+			<input name="model" type="float" storage="uniform" value="0" description="Toggle 1 or 3 argument diffuse, see usage"/>
+			<output name="Ci" type="color" storage="varying" description="The amount of diffuse light"/>
+			<rsl_code>
+		aov_surfacecolor += $(Cdiff);
+
+		/* Pixie&apos;s diffuse() has 2 forms */
+		#define $(blockname)_$(model)
+		#if RENDERER == pixie &amp;&amp; defined $(blockname)_1
+			aov_diffuse += $(Kd) * diffuse( $(P), $(N), $(coneangle) );
+		#else
+			aov_diffuse += $(Kd) * diffuse( $(N) );
+		#endif /* RENDERER */
+		#undef $(blockname)_$(model)
+
+		$(Ci) = aov_surfacecolor * aov_diffuse;
+																																								</rsl_code>
+			<rsl_include/>
+			<usage>Lambertian Diffuse term. The diffuse color value is passed to the &quot;aov_surfacecolor&quot;, and the diffuse value to the &quot;aov_diffuse&quot; AOV presets. Pixie&apos;s diffuse shadeop has 2 forms, the first one with a single argument, with the surface normal &quot;N&quot;, the second form, with 3 arguments, allowing the surface position and cone angle (in radians) to be specified as well. The default cone angle is PI/2. The variable &quot;model&quot; toggles between the single argument &quot;diffuse&quot; (0), and the 3 arguments &quot;diffuse&quot; (1).																																							</usage>
+		</block>
+		<block id="Divide" position_x="3.0261902948674" position_y="-9.98833339364303" author="rconstruct">
+			<input name="A" type="float" storage="varying" value="1" description="1st input" type_parent="value">
+				<connection parent="fBm3D" output="value"/>
+			</input>
+			<input name="B" type="float" storage="varying" value="1" description="2nd input" type_parent="value">
+				<connection parent="Length" output="value"/>
+			</input>
+			<output name="value" type="float" storage="varying" description="val = A / B"/>
+			<rsl_code>
+		$(value) = $(A) / $(B);
+																</rsl_code>
+			<rsl_include/>
+			<usage>Divides input A by input B.															</usage>
+		</block>
+		<block id="Environment" position_x="-4.56355935107525" position_y="4.87489273515378" author="rconstruct">
+			<input name="texmap" type="string" storage="uniform" shader_parameter="1" value="&quot;raytrace&quot;" description="Texture map name"/>
+			<input name="Kr" type="float" storage="varying" shader_parameter="1" value="0.5" description="Environment intensity">
+				<connection parent="Multiply_4" output="value"/>
+			</input>
+			<input name="direction" type="vector" storage="varying" value="reflect( I, normalize(N))" description="Direction vector">
+				<connection parent="Transform" output="Pout"/>
+			</input>
+			<input name="sblur" type="float" storage="varying" value="0" description="Blur along S"/>
+			<input name="tblur" type="float" storage="varying" value="0" description="Blur along T"/>
+			<input name="swidth" type="float" storage="uniform" value="1" description="Blur filter width along S"/>
+			<input name="twidth" type="float" storage="uniform" value="1" description="Blur filter width along T"/>
+			<input name="samples" type="float" storage="uniform" shader_parameter="1" value="4" description="Sampling rate"/>
+			<input name="fill" type="float" storage="uniform" value="0" description="Fill value on empty channel"/>
+			<input name="filter" type="string" storage="uniform" value="&quot;gaussian&quot;" description="Filter type"/>
+			<input name="channel" type="float" storage="varying" value="0" description="Channel, in color textures"/>
+			<input name="tint" type="color" storage="varying" value="1" description="Color tint for the environment" type_parent="value"/>
+			<input name="label" type="string" storage="uniform" value="&quot;&quot;" description="Ray label"/>
+			<input name="subset" type="string" storage="uniform" value="&quot;&quot;" description="Ray subset"/>
+			<input name="bias" type="float" storage="uniform" value="-1" description="Ray bias"/>
+			<input name="hitmode" type="string" storage="uniform" value="&quot;default&quot;" description="Override hitmode"/>
+			<input name="maxdist" type="float" storage="varying" value="1e38" description="Maximum ray distance"/>
+			<input name="coneangle" type="float" storage="varying" value="radians(5)" description="Cone angle"/>
+			<input name="expandLDR" type="float" storage="uniform" value="0" description="Expand range of LDR image"/>
+			<input name="dynrange" type="float" storage="varying" value="1" description="Maximum value to expand range to"/>
+			<input name="startlum" type="float" storage="varying" value="0.5" description="Starting luminance for expansion"/>
+			<input name="exponent" type="float" storage="varying" value="2.0" description="Range exponent for falloff"/>
+			<output name="value" type="color" storage="varying" description="Output color"/>
+			<rsl_code>
+
+	/* make sure options are clear and set them according to shadeop
+	 * and renderer */
+	#ifdef SHADEOP_ARGUMENTS
+	#undef SHADEOP_ARGUMENTS
+	#endif
+	
+    #if RENDERER == pixie
+	#define SHADEOP_ARGUMENTS	&quot;filter&quot;, $(filter), \
+								/* can&apos;t specify s/tblur */ \
+								&quot;blur&quot;, $(sblur), \
+								&quot;swidth&quot;, $(swidth), &quot;twidth&quot;, $(twidth),\
+								&quot;fill&quot;, $(fill), &quot;samples&quot;, $(samples), \
+								&quot;bias&quot;, $(bias), &quot;maxdist&quot;, $(maxdist), \
+								&quot;samplecone&quot;, $(coneangle), &quot;label&quot;, $(label)
+	#elif RENDERER == _3delight
+	#define SHADEOP_ARGUMENTS	&quot;sblur&quot;, $(sblur), &quot;tblur&quot;, $(tblur), \
+								&quot;swidth&quot;, $(swidth), &quot;twidth&quot;, $(twidth),\
+								&quot;samples&quot;, $(samples), &quot;fill&quot;, $(fill), \
+								&quot;filter&quot;, $(filter), &quot;label&quot;, $(label), \
+								&quot;subset&quot;, $(subset), &quot;bias&quot;, $(bias), \
+								&quot;hitmode&quot;, $(hitmode), \
+								&quot;maxdist&quot;, $(maxdist)
+    #elif RENDERER == air
+	#define SHADEOP_ARGUMENTS	&quot;bias&quot;, $(bias), \
+								/* can&apos;t specify s/blur */ \
+								&quot;blur&quot;, $(sblur), &quot;label&quot;, $(label), \
+								&quot;maxdist&quot;, $(maxdist), \
+								&quot;samples&quot;, $(samples), \
+								&quot;subset&quot;, $(subset)
+	#else
+	#define SHADEOP_ARGUMENTS	&quot;sblur&quot;, $(sblur), &quot;tblur&quot;, $(tblur), \
+								&quot;swidth&quot;, $(swidth), &quot;twidth&quot;, $(twidth),\
+								&quot;samples&quot;, $(samples), \
+								&quot;filter&quot;, $(filter), \
+								&quot;fill&quot;, $(fill)
+    #endif /* RENDERER */
+	
+	// LDR expansion, from SIGGRAPH 2002 Course 16,
+	// &quot;Production Ready GI&quot;, by Hayden Landis
+	#define $(blockname)_expandLDR $(expandLDR)
+	#if $(blockname)_expandLDR == 1
+		varying $(value:type) $(blockname)_ctmp = $(Kr) * $(tint) *
+				$(value:type) environment(	$(texmap)[$(channel)],
+											$(direction),
+											SHADEOP_ARGUMENTS );
+		$(value) = envexpand(	$(blockname)_ctmp, $(dynrange),
+								$(startlum), $(exponent) );
+	#else // no expansion
+	// tint is of float type if output variable is of float type
+		$(value) = $(Kr) * $(tint) * $(value:type) environment(
+						$(texmap)[$(channel)],
+						$(direction),
+						SHADEOP_ARGUMENTS );
+	#endif // expandLDR
+	aov_reflection += $(value);
+
+	#undef $(blockname)_expandLDR
+	#undef SHADEOP_ARGUMENTS
+	
+																																					</rsl_code>
+			<rsl_include>rsl_texture.h																																				</rsl_include>
+			<usage>This block returns the texture value from an environment map, for the specified direction vector. If the filename specified is &quot;raytrace&quot; then raytracing is used instead of a texture map. The variables &quot;sblur&quot; and &quot;tblur&quot; specify the blur along the &quot;S&quot; and &quot;T&quot; directions respectively, while &quot;swidth&quot; and &quot;twidth&quot; specify the filter width along the &quot;S&quot; and &quot;T&quot; directions respectively. The filter type can be &quot;box&quot;, &quot;triangle&quot;, or &quot;gaussian&quot;, with &quot;samples&quot; controling the number of samples to use. The starting channel is specified with the &quot;channel&quot; parameter. The type returned can be float, or color, and it is passed to the preset &quot;aov_reflection&quot; AOV. When raytracing is used, extra parameters available to raytracing functions are available, such as &quot;label&quot;, &quot;subset&quot;, &quot;bias&quot; and &quot;hitmode&quot;. Note that this function might vary considerably with each renderer, so please check your renderer&apos;s documentation. This block also implements the LDR expansion from SIGGRAPH 2002 Course 16, &quot;Production Ready GI&quot;, by Hayden Landis, to avoid washed out reflection highlights when using Low Dynamic Range images for reflection maps. When toggling &quot;expandLDR&quot; on/off, the following variables apply to control the expansion: &quot;dynrange&quot;, defines the maximum value to expand the specified region of the map to; &quot;startlum&quot;, defines the starting luminance for the expansion to begin with; &quot;exponent&quot;, defines the exponent for the falloff.																																				</usage>
+		</block>
+		<block id="Environment_2" position_x="-1.82543730736001" position_y="4.48938254955952" author="rconstruct">
+			<input name="texmap" type="string" storage="uniform" shader_parameter="1" value="&quot;raytrace&quot;" description="Texture map name"/>
+			<input name="Kr" type="float" storage="varying" shader_parameter="1" value="0" description="Environment intensity"/>
+			<input name="direction" type="vector" storage="varying" value="reflect( I, normalize(N))" description="Direction vector">
+				<connection parent="Transform_2" output="Pout"/>
+			</input>
+			<input name="sblur" type="float" storage="varying" value="0" description="Blur along S"/>
+			<input name="tblur" type="float" storage="varying" value="0" description="Blur along T"/>
+			<input name="swidth" type="float" storage="uniform" value="1" description="Blur filter width along S"/>
+			<input name="twidth" type="float" storage="uniform" value="1" description="Blur filter width along T"/>
+			<input name="samples" type="float" storage="uniform" shader_parameter="1" value="4" description="Sampling rate"/>
+			<input name="fill" type="float" storage="uniform" value="0" description="Fill value on empty channel"/>
+			<input name="filter" type="string" storage="uniform" value="&quot;gaussian&quot;" description="Filter type"/>
+			<input name="channel" type="float" storage="varying" value="0" description="Channel, in color textures"/>
+			<input name="tint" type="color" storage="varying" value="1" description="Color tint for the environment" type_parent="value"/>
+			<input name="label" type="string" storage="uniform" value="&quot;&quot;" description="Ray label"/>
+			<input name="subset" type="string" storage="uniform" value="&quot;&quot;" description="Ray subset"/>
+			<input name="bias" type="float" storage="uniform" value="-1" description="Ray bias"/>
+			<input name="hitmode" type="string" storage="uniform" value="&quot;default&quot;" description="Override hitmode"/>
+			<input name="maxdist" type="float" storage="varying" value="1e38" description="Maximum ray distance"/>
+			<input name="coneangle" type="float" storage="varying" value="radians(5)" description="Cone angle"/>
+			<input name="expandLDR" type="float" storage="uniform" value="0" description="Expand range of LDR image"/>
+			<input name="dynrange" type="float" storage="varying" value="1" description="Maximum value to expand range to"/>
+			<input name="startlum" type="float" storage="varying" value="0.5" description="Starting luminance for expansion"/>
+			<input name="exponent" type="float" storage="varying" value="2.0" description="Range exponent for falloff"/>
+			<output name="value" type="color" storage="varying" description="Output color"/>
+			<rsl_code>
+
+	/* make sure options are clear and set them according to shadeop
+	 * and renderer */
+	#ifdef SHADEOP_ARGUMENTS
+	#undef SHADEOP_ARGUMENTS
+	#endif
+	
+    #if RENDERER == pixie
+	#define SHADEOP_ARGUMENTS	&quot;filter&quot;, $(filter), \
+								/* can&apos;t specify s/tblur */ \
+								&quot;blur&quot;, $(sblur), \
+								&quot;swidth&quot;, $(swidth), &quot;twidth&quot;, $(twidth),\
+								&quot;fill&quot;, $(fill), &quot;samples&quot;, $(samples), \
+								&quot;bias&quot;, $(bias), &quot;maxdist&quot;, $(maxdist), \
+								&quot;samplecone&quot;, $(coneangle), &quot;label&quot;, $(label)
+	#elif RENDERER == _3delight
+	#define SHADEOP_ARGUMENTS	&quot;sblur&quot;, $(sblur), &quot;tblur&quot;, $(tblur), \
+								&quot;swidth&quot;, $(swidth), &quot;twidth&quot;, $(twidth),\
+								&quot;samples&quot;, $(samples), &quot;fill&quot;, $(fill), \
+								&quot;filter&quot;, $(filter), &quot;label&quot;, $(label), \
+								&quot;subset&quot;, $(subset), &quot;bias&quot;, $(bias), \
+								&quot;hitmode&quot;, $(hitmode), \
+								&quot;maxdist&quot;, $(maxdist)
+    #elif RENDERER == air
+	#define SHADEOP_ARGUMENTS	&quot;bias&quot;, $(bias), \
+								/* can&apos;t specify s/blur */ \
+								&quot;blur&quot;, $(sblur), &quot;label&quot;, $(label), \
+								&quot;maxdist&quot;, $(maxdist), \
+								&quot;samples&quot;, $(samples), \
+								&quot;subset&quot;, $(subset)
+	#else
+	#define SHADEOP_ARGUMENTS	&quot;sblur&quot;, $(sblur), &quot;tblur&quot;, $(tblur), \
+								&quot;swidth&quot;, $(swidth), &quot;twidth&quot;, $(twidth),\
+								&quot;samples&quot;, $(samples), \
+								&quot;filter&quot;, $(filter), \
+								&quot;fill&quot;, $(fill)
+    #endif /* RENDERER */
+	
+	// LDR expansion, from SIGGRAPH 2002 Course 16,
+	// &quot;Production Ready GI&quot;, by Hayden Landis
+	#define $(blockname)_expandLDR $(expandLDR)
+	#if $(blockname)_expandLDR == 1
+		varying $(value:type) $(blockname)_ctmp = $(Kr) * $(tint) *
+				$(value:type) environment(	$(texmap)[$(channel)],
+											$(direction),
+											SHADEOP_ARGUMENTS );
+		$(value) = envexpand(	$(blockname)_ctmp, $(dynrange),
+								$(startlum), $(exponent) );
+	#else // no expansion
+	// tint is of float type if output variable is of float type
+		$(value) = $(Kr) * $(tint) * $(value:type) environment(
+						$(texmap)[$(channel)],
+						$(direction),
+						SHADEOP_ARGUMENTS );
+	#endif // expandLDR
+	aov_refraction += $(value);
+
+	#undef $(blockname)_expandLDR
+	#undef SHADEOP_ARGUMENTS
+	
+																															</rsl_code>
+			<rsl_include>rsl_texture.h																														</rsl_include>
+			<usage>This block returns the texture value from an environment map, for the specified direction vector. If the filename specified is &quot;raytrace&quot; then raytracing is used instead of a texture map. The variables &quot;sblur&quot; and &quot;tblur&quot; specify the blur along the &quot;S&quot; and &quot;T&quot; directions respectively, while &quot;swidth&quot; and &quot;twidth&quot; specify the filter width along the &quot;S&quot; and &quot;T&quot; directions respectively. The filter type can be &quot;box&quot;, &quot;triangle&quot;, or &quot;gaussian&quot;, with &quot;samples&quot; controling the number of samples to use. The starting channel is specified with the &quot;channel&quot; parameter. The type returned can be float, or color, and it is passed to the preset &quot;aov_reflection&quot; AOV. When raytracing is used, extra parameters available to raytracing functions are available, such as &quot;label&quot;, &quot;subset&quot;, &quot;bias&quot; and &quot;hitmode&quot;. Note that this function might vary considerably with each renderer, so please check your renderer&apos;s documentation. This block also implements the LDR expansion from SIGGRAPH 2002 Course 16, &quot;Production Ready GI&quot;, by Hayden Landis, to avoid washed out reflection highlights when using Low Dynamic Range images for reflection maps. When toggling &quot;expandLDR&quot; on/off, the following variables apply to control the expansion: &quot;dynrange&quot;, defines the maximum value to expand the specified region of the map to; &quot;startlum&quot;, defines the starting luminance for the expansion to begin with; &quot;exponent&quot;, defines the exponent for the falloff.																														</usage>
+		</block>
+		<block id="Length" position_x="0.744865729517421" position_y="-9.60578787942846" author="rconstruct">
+			<input name="Vin" type="vector" storage="varying" value="vector(1)" description="Input vector">
+				<connection parent="Transform_3" output="Pout"/>
+			</input>
+			<output name="value" type="float" storage="varying" description="The lenght of the vector"/>
+			<rsl_code>
+		$(value) = length( $(Vin) );
+																</rsl_code>
+			<rsl_include/>
+			<usage>Returns the length of a vector ( sqrt(Vin.Vin) ).															</usage>
+		</block>
+		<block id="Multiply" position_x="-4.62702873363927" position_y="9.18509537719837" author="rconstruct">
+			<input name="A" type="color" storage="varying" shader_parameter="1" value="0 0 0" description="1st input" type_parent="value"/>
+			<input name="B" type="color" storage="varying" multi="*" value="1" description="2nd or subsequent inputs" type_parent="value">
+				<connection parent="Occlusion" output="Occlusion"/>
+			</input>
+			<output name="value" type="color" storage="varying" description="val = A * B"/>
+			<rsl_code>
+		$(value) = $(A) * $(B);
+																																		</rsl_code>
+			<rsl_include/>
+			<usage>All inputs must be of the same type. The operation is done in parallel for each component.																																	</usage>
+		</block>
+		<block id="Multiply_2" position_x="5.40474644112352" position_y="-8.71610744822821" author="rconstruct">
+			<input name="A" type="normal" storage="varying" value="1" description="1st input" type_parent="value">
+				<connection parent="Normalize" output="value"/>
+			</input>
+			<input name="B" type="normal" storage="varying" multi="*" value="1" description="2nd or subsequent inputs" type_parent="value">
+				<connection parent="Divide" output="value"/>
+			</input>
+			<output name="value" type="normal" storage="varying" description="val = A * B"/>
+			<rsl_code>
+		$(value) = $(A) * $(B);
+																</rsl_code>
+			<rsl_include/>
+			<usage>All inputs must be of the same type. The operation is done in parallel for each component.															</usage>
+		</block>
+		<block id="Multiply_3" position_x="-7.14418946083918" position_y="-2.24702448809339" author="rconstruct">
+			<input name="A" type="float" storage="varying" shader_parameter="1" value="0.5" description="1st input" type_parent="value"/>
+			<input name="B" type="float" storage="varying" multi="*" value="1" description="2nd or subsequent inputs" type_parent="value">
+				<connection parent="CxFresnel" output="Kr"/>
+			</input>
+			<output name="value" type="float" storage="varying" description="val = A * B"/>
+			<rsl_code>
+		$(value) = $(A) * $(B);
+							</rsl_code>
+			<rsl_include/>
+			<usage>All inputs must be of the same type. The operation is done in parallel for each component.						</usage>
+		</block>
+		<block id="Multiply_4" position_x="-7.16393148477402" position_y="-0.607760930932039" author="rconstruct">
+			<input name="A" type="float" storage="varying" shader_parameter="1" value="1" description="1st input" type_parent="value"/>
+			<input name="B" type="float" storage="varying" multi="*" value="1" description="2nd or subsequent inputs" type_parent="value">
+				<connection parent="CxFresnel" output="Kr"/>
+			</input>
+			<output name="value" type="float" storage="varying" description="val = A * B"/>
+			<rsl_code>
+		$(value) = $(A) * $(B);
+							</rsl_code>
+			<rsl_include/>
+			<usage>All inputs must be of the same type. The operation is done in parallel for each component.						</usage>
+		</block>
+		<block id="N" position_x="-1.33215917533474" position_y="-7.69337257236468" author="rconstruct">
+			<output name="N" type="normal" storage="varying" description="Surface shading normal"/>
+			<rsl_code>
+    $(N) = N;
+    															</rsl_code>
+			<rsl_include/>
+			<usage>Surface shading normal. The availability of this global variable in the different shading contexts is renderer specific. It&apos;s not available in imager shaders.															</usage>
+		</block>
+		<block id="Normal2Point" position_x="7.37375815012524" position_y="-9.93252940482477" author="rconstruct">
+			<input name="in" type="normal" storage="varying" value="normal(0)" description="Input value">
+				<connection parent="Multiply_2" output="value"/>
+			</input>
+			<output name="value" type="point" storage="varying" description="Output value"/>
+			<rsl_code>
+	    $(value) = point( comp( $(in), 0), comp( $(in), 1), comp( $(in), 2) );
+																</rsl_code>
+			<rsl_include/>
+			<usage>Sets a point with a normal&apos;s components.															</usage>
+		</block>
+		<block id="Normalize" position_x="-1.30758725881022" position_y="-8.61517145461467" author="rconstruct">
+			<input name="Vin" type="vector" storage="varying" value="N" description="Input vector" type_parent="value">
+				<connection parent="N" output="N"/>
+			</input>
+			<output name="value" type="vector" storage="varying" description="Output unit length vector"/>
+			<rsl_code>
+		$(value) = normalize( $(Vin) );
+																</rsl_code>
+			<rsl_include/>
+			<usage>Returns a unit vector in the direction of input vector (Vin/length(Vin)).															</usage>
+		</block>
+		<block id="Occlusion" position_x="-8.95190167263812" position_y="9.68815945274179" author="rconstruct">
+			<input name="P" type="point" storage="varying" value="P" description="Surface point"/>
+			<input name="direction" type="normal" storage="varying" value="faceforward( normalize(N), normalize(I))" description="Direction"/>
+			<input name="adaptive" type="float" storage="uniform" value="1" description="Turns adaptive sampling on/off"/>
+			<input name="minsamples" type="float" storage="uniform" value="16" description="Minimum number of samples to use"/>
+			<input name="samples" type="float" storage="varying" shader_parameter="1" value="32" description="Samples"/>
+			<input name="samplebase" type="float" storage="uniform" value="1" description="Controls ray origin jittering"/>
+			<input name="maxdist" type="float" storage="uniform" value="1e38" description="Maximum distance"/>
+			<input name="maxpixeldist" type="float" storage="varying" value="-1" description="Maximum samples distance"/>
+			<input name="maxsolidang" type="float" storage="uniform" value="0.05" description="Maximum solid angle, in steradians"/>
+			<input name="maxerror" type="float" storage="varying" value="-1" description="Quality vs speed"/>
+			<input name="bias" type="float" storage="varying" value="0.01" description="Bias to control self-intersection"/>
+			<input name="coneangle" type="float" storage="uniform" value="1.570796327" description="Cone angle"/>
+			<input name="axis" type="vector" storage="uniform" value="vector(0)" description="Direction of light casting hemisphere"/>
+			<input name="distribution" type="string" storage="uniform" value="&quot;cosine&quot;" description="Distribution"/>
+			<input name="hitsides" type="string" storage="uniform" value="&quot;front&quot;" description="Side of surface to consider by a ray hit"/>
+			<input name="hitmode" type="string" storage="uniform" value="&quot;default&quot;" description="Ray hit mode"/>
+			<input name="label" type="string" storage="uniform" value="&quot;&quot;" description="Ray lavel"/>
+			<input name="subset" type="string" storage="uniform" value="&quot;&quot;" description="Objects subset considered"/>
+			<input name="envmap" type="string" storage="uniform" value="&quot;&quot;" description="Environment map"/>
+			<input name="envspace" type="string" storage="uniform" value="&quot;world&quot;" description="Environment space"/>
+			<input name="occlmap" type="string" storage="uniform" shader_parameter="1" value="&quot;&quot;" description="Occlusion map"/>
+			<input name="blur" type="float" storage="varying" shader_parameter="1" value="0" description="Shadow map blur"/>
+			<input name="useptc" type="float" storage="uniform" value="0" description="Toggle point based occlusion"/>
+			<input name="ptcfile" type="string" storage="uniform" value="&quot;&quot;" description="Point cloud filename"/>
+			<input name="coordsys" type="string" storage="uniform" value="&quot;world&quot;" description="Point cloud coordinate system"/>
+			<input name="clamp" type="float" storage="uniform" value="0" description="Clamp excessive occlusion"/>
+			<input name="sortbleeding" type="float" storage="uniform" value="0" description="Sort bleeding"/>
+			<input name="falloffmode" type="float" storage="uniform" value="0" description="Falloff mode, exponential or polynomial"/>
+			<input name="falloff" type="float" storage="uniform" value="0" description="Falloff, 1 = linear"/>
+			<output name="Occlusion" type="float" storage="varying" description="Occlusion value"/>
+			<output name="Envcolor" type="color" storage="varying" description="Environment color lookup result"/>
+			<output name="Envdirection" type="vector" storage="varying" description="Average unoccluded direction"/>
+			<output name="Irradiance" type="color" storage="varying" description="Irradiance"/>
+			<rsl_code>
+	
+	/* initialize */
+	$(Envcolor) = color(0); $(Envdirection) = vector(0); $(Irradiance) = color(0);
+
+	/* make sure options are clear */
+	/* and set them according to shadeop and renderer */
+	#ifdef SHADEOP_ARGUMENTS
+	#undef SHADEOP_ARGUMENTS
+	#endif /* SHADEOP_ARGUMENTS */
+	
+	#if RENDERER == _3delight
+	#define SHADEOP_ARGUMENTS	&quot;label&quot;, $(label), &quot;subset&quot;, $(subset), \
+								&quot;bias&quot;, $(bias), &quot;hitmode&quot;, $(hitmode), \
+								&quot;coneangle&quot;, $(coneangle), &quot;axis&quot;, $(axis), \
+								&quot;samplebase&quot;, $(samplebase), \
+								&quot;maxdist&quot;, $(maxdist), \
+								&quot;environmentmap&quot;, $(envmap), \
+								&quot;environmentspace&quot;, $(envspace), \
+								&quot;distribution&quot;, $(distribution), \
+								&quot;environmentcolor&quot;, $(Envcolor), \
+								&quot;environmentdir&quot;, $(Envdirection), \
+								&quot;adaptive&quot;, $(adaptive), \
+								&quot;minsamples&quot;, $(minsamples), \
+								&quot;falloffmode&quot;, $(falloffmode), \
+								&quot;falloff&quot;, $(falloff), &quot;pointbased&quot;, $(useptc), \
+								&quot;filename&quot;, $(ptcfile), &quot;hitsides&quot;, $(hitsides), \
+								&quot;maxsolidangle&quot;, $(maxsolidang), \
+								&quot;clamp&quot;, $(clamp), \
+								&quot;sortbleeding&quot;, $(sortbleeding), \
+								&quot;coordsystem&quot;, $(coordsys)
+	#elif RENDERER == pixie
+	#define SHADEOP_ARGUMENTS	&quot;coordsystem&quot;, $(coordsys), \
+								&quot;maxdist&quot;, $(maxdist), \
+								&quot;coneangle&quot;, $(coneangle), \
+								&quot;samplebase&quot;, $(samplebase), \
+								&quot;label&quot;, $(label), &quot;bias&quot;, $(bias), \
+								&quot;maxerror&quot;, $(maxerror), \
+								&quot;pointbased&quot;, $(useptc), \
+								&quot;environmentmap&quot;, $(envmap), \
+								&quot;filename&quot;, $(ptcfile), \
+								&quot;maxpixeldist&quot;, $(maxpixeldist), \
+								&quot;maxsolidangle&quot;, $(maxsolidang), \
+								&quot;environmentcolor&quot;, $(Envcolor)
+	#elif RENDERER == prman
+	#define SHADEOP_ARGUMENTS	&quot;adaptive&quot;, $(adaptive), \
+								&quot;minsamples&quot;, $(minsamples), \
+								&quot;coordsystem&quot;, $(coordsys), \
+								&quot;distribution&quot;, $(distribution), \
+								&quot;maxdist&quot;, $(maxdist), \
+								&quot;coneangle&quot;, $(coneangle), \
+								&quot;samplebase&quot;, $(samplebase), \
+								&quot;hitmode&quot;, $(hitmode), \
+								&quot;hitsides&quot;, $(hitsides), &quot;subset&quot;, $(subset), \
+								&quot;label&quot;, $(label), \
+								&quot;environmentmap&quot;, $(envmap), \
+								&quot;environmentspace&quot;, $(envspace), \
+								&quot;bias&quot;, $(bias), \
+								&quot;maxpixeldist&quot;, $(maxpixeldist), \
+								&quot;maxerror&quot;, $(maxerror), \
+								&quot;falloffmode&quot;, $(falloffmode), \
+								&quot;falloff&quot;, $(falloff), &quot;pointbased&quot;, $(useptc), \
+								&quot;filename&quot;, $(ptcfile), \
+								&quot;maxsolidangle&quot;, $(maxsolidang), \
+								&quot;clamp&quot;, $(clamp), \
+								&quot;environmentcolor&quot;, $(Envcolor), \
+								&quot;environmentdir&quot;, $(Envdirection)		
+	#elif RENDERER == air
+	#define SHADEOP_ARGUMENTS	&quot;bias&quot;, $(bias), &quot;label&quot;, $(label), \
+								&quot;maxdist&quot;, $(maxdist), \
+								&quot;maxerror&quot;, $(maxerror), \
+								&quot;maxpixeldist&quot;, $(maxpixeldist), \
+								&quot;samples&quot;, $(samples), &quot;subset&quot;, $(subset)
+	#elif RENDERER == aqsis
+	#define SHADEOP_ARGUMENTS	&quot;blur&quot;, $(blur), &quot;bias&quot;, $(bias)
+	#else /* entropy, bmrt, renderdotc? */
+	#endif /* RENDERER */
+
+	/* different order of arguments */
+	#if RENDERER == _3delight || RENDERER == pixie || RENDERER == prman
+		aov_occlusion += occlusion(	$(P), $(direction), $(samples),
+									SHADEOP_ARGUMENTS );
+		$(Occlusion) = 1 - aov_occlusion;
+	#elif RENDERER == air /* shadow map based, unless map = &quot;raytrace&quot; */
+		aov_occlusion += occlusion(	$(occlmap), $(P), $(direction),
+									$(angle), SHADEOP_ARGUMENTS );
+		$(Occlusion) = 1 - aov_occlusion;
+	#elif RENDERER == aqsis /* shadow map based occlusion */
+		aov_occlusion += occlusion(	$(occlmap), $(P), $(direction),
+									$(samples), SHADEOP_ARGUMENTS );
+		$(Occlusion) = 1 - aov_occlusion;
+	#else /* entropy, bmrt, renderdotc? */
+		$(Occlusion) = 0;		
+	#endif /* RENDERER */
+	
+																																					</rsl_code>
+			<rsl_include/>
+			<usage>This function returns the ambient occlusion, and optionally environment color, environment direction and indirect lighting. This function&apos;s arguments vary with each renderer&apos;s implementation, so make sure to consult your renderer&apos;s documentation. This block provided the following arguments: &quot;coneangle&quot;, defaults to PI/2; &quot;distribution&quot;, can be &quot;cosine&quot; or &quot;uniform&quot;, defaults to &quot;cosine&quot;. This function can use an optional environment map to use when rays don&apos;t hit the geometry, and can also return the environment direction vector, the average of the unoccluded direction. Note that you can use either the surface normal, or the reflection vector, for the &quot;indir&quot; variable, in which case the function will output ambient occlusion or reflection occlusion respectively. You can also use point-based occlusion, or Aqsis&apos;s implementation which uses multiple shadow maps. Note that this function varies considerably from implementation to implementation, so please consult your renderer&apos;s documentation for details. The occlusion value is passed to aov_occlusion AOV preset, as occlusion, not 1 - occlusion.																																				</usage>
+		</block>
+		<block id="Reflect" position_x="-6.82777789086767" position_y="8.14616336923085" author="rconstruct">
+			<input name="I" type="vector" storage="varying" value="normalize(I)" description="Incident vector"/>
+			<input name="N" type="normal" storage="varying" value="normalize(N)" description="Surface normal"/>
+			<output name="R" type="vector" storage="varying" description="The reflected vector"/>
+			<rsl_code>
+		$(R) = reflect( $(I), $(N) );
+																									</rsl_code>
+			<rsl_include/>
+			<usage>Returns the vector &quot;I&quot; reflected about the unit length normal &quot;N&quot;. It&apos;s equivalent to: I-2*(N.I)*N.																								</usage>
+		</block>
+		<block id="Refract" position_x="-6.88379873785944" position_y="6.99213392120089" author="rconstruct">
+			<input name="I" type="vector" storage="varying" value="normalize(I)" description="Incident vector"/>
+			<input name="N" type="normal" storage="varying" value="normalize(N)" description="Surface normal"/>
+			<input name="eta" type="float" storage="varying" shader_parameter="1" value="0.01" description="The ratio of medium IORs, see usage."/>
+			<output name="T" type="vector" storage="varying" description="The refracted vector"/>
+			<rsl_code>
+		$(T) = refract( $(I), $(N), $(eta) );
+																									</rsl_code>
+			<rsl_include/>
+			<usage>Return the refracted vector &quot;T&quot;given an incident direction &quot;I&quot;, the normal vector &quot;N&quot;, and the relative index of refraction &quot;eta&quot;. Eta is the ratio of the index of refraction in the volume containing the incident vector, to that of the volume being entered. If the returned vector has zero length, then there is no transmitted light because of total internal reflrection.																								</usage>
+		</block>
+		<block id="Root block" position_x="15.1407734288959" position_y="7.80349257437263" author="" root="RIB" AOV_preview="1">
+			<rib_statements>Attribute &quot;visibility&quot; &quot;int transmission&quot; [ 1 ]
+Attribute &quot;visibility&quot; &quot;int specular&quot; [ 1 ]
+Attribute &quot;visibility&quot; &quot;int camera&quot; [ 1 ]
+Attribute &quot;visibility&quot; &quot;int diffuse&quot; [ 1 ]
+Attribute &quot;visibility&quot; &quot;int photon&quot; [ 1 ]
+Attribute &quot;shade&quot; &quot;string transmissionhitmode&quot; &quot;shader&quot;
+Attribute &quot;shade&quot; &quot;string specularhitmode&quot; &quot;shader&quot;
+			</rib_statements>
+			<imager_statement/>
+			<input name="Ci" type="color" storage="varying" shader_parameter="1" value="0" description="Incident ray colour">
+				<connection parent="Add_3" output="value"/>
+			</input>
+			<input name="Oi" type="color" storage="varying" shader_parameter="1" value="1" description="Incident ray opacity"/>
+			<input name="P" type="point" storage="varying" shader_parameter="1" value="P" description="Displaced surface position">
+				<connection parent="Add_5" output="value"/>
+			</input>
+			<input name="N" type="normal" storage="varying" shader_parameter="1" value="N" description="Displaced surface shading normal">
+				<connection parent="CalcNormal" output="N"/>
+			</input>
+			<input name="Cl" type="color" storage="varying" shader_parameter="1" value="0" description="Outgoing light ray colour">
+				<connection parent="ShadowSpotLight" output="Cl"/>
+			</input>
+			<input name="Ol" type="color" storage="varying" shader_parameter="1" value="1" description="Outgoing light ray opacity"/>
+			<input name="Cv" type="color" storage="varying" shader_parameter="1" value="0" description="Attenuated ray colour"/>
+			<input name="Ov" type="color" storage="varying" shader_parameter="1" value="1" description="Attenuated ray opacity"/>
+			<input name="Cm" type="color" storage="varying" shader_parameter="1" value="0" description="Output pixel colour"/>
+			<input name="Om" type="color" storage="varying" shader_parameter="1" value="1" description="Output pixel opacity"/>
+			<input name="AOV" type="color" storage="varying" shader_parameter="1" value="1" description="AOV preview output">
+				<connection parent="Add_3" output="value"/>
+			</input>
+			<rsl_code/>
+			<rsl_include/>
+			<usage/>
+		</block>
+		<block id="ShadowSpotLight" position_x="4.88358811575387" position_y="18.8819714035225" author="rconstruct">
+			<input name="intensity" type="float" storage="varying" shader_parameter="1" value="5000" description="Light intensity"/>
+			<input name="lightcolor" type="color" storage="varying" shader_parameter="1" value="color( 1, .93, .81 )" description="Light color"/>
+			<input name="position" type="point" storage="varying" shader_parameter="1" value="point &quot;shader&quot; ( -15, 10, 5 )" description="Light source position"/>
+			<input name="target" type="point" storage="varying" shader_parameter="1" value="point &quot;shader&quot; ( 0, 0, 0 )" description="Light source target position"/>
+			<input name="coneangle" type="float" storage="uniform" shader_parameter="1" value="30" description="Cone angle"/>
+			<input name="conedelta" type="float" storage="uniform" shader_parameter="1" value="5" description="Cone delta angle"/>
+			<input name="beam" type="float" storage="uniform" value="2" description="Beam distribution"/>
+			<input name="shadowmap" type="string" storage="uniform" shader_parameter="1" value="&quot;raytrace&quot;" description="Shadow map name"/>
+			<input name="filter" type="string" storage="uniform" value="&quot;gaussian&quot;" description="Filter type"/>
+			<input name="samples" type="float" storage="uniform" shader_parameter="1" value="4" description="Shadow map samples"/>
+			<input name="blur" type="float" storage="varying" shader_parameter="1" value="0.05" description="Shadow map blur"/>
+			<input name="width" type="float" storage="uniform" value="1" description="Shadow map filter width"/>
+			<input name="bias" type="float" storage="uniform" shader_parameter="1" value="0.01" description="Shadow map bias"/>
+			<input name="attenuation" type="float" storage="varying" shader_parameter="1" value="1e6" description="Attenuation"/>
+			<input name="nondiffuse" type="float" storage="uniform" value="0" description="Non-diffuse light"/>
+			<input name="nonspecular" type="float" storage="uniform" value="0" description="Non-specular light"/>
+			<input name="category" type="string" storage="uniform" value="&quot;&quot;" description="Light category"/>
+			<output name="Cl" type="color" storage="varying" description="Light ray color"/>
+			<rsl_code>
+		__nondiffuse = $(nondiffuse);
+		__nonspecular = $(nonspecular);
+		__category = $(category);
+		/* tmp storage for shadows */
+		color $(blockname)_inshadow = color(0);
+		
+		$(Cl) = sig2kshadowspot(	$(intensity), $(lightcolor), $(position),
+									$(target), radians( $(coneangle) ),
+									radians( $(conedelta)), $(beam), $(samples),
+									$(bias), $(width), $(shadowmap), $(filter),
+									$(blur), $(attenuation),
+									$(blockname)_inshadow );
+
+		__shadow = $(blockname)_inshadow;
+
+																																								</rsl_code>
+			<rsl_include>rsl_shrimp_lights.h																																							</rsl_include>
+			<usage>Modified shadow spotlight shader, by Tal Lancaster, from The RenderMan repository ( www.renderman.org ). Modified to better handle atenuation. Bias overrides the global shadow bias value, with -1 being the global default, and blur, the amount to soften the shadow edges. Shadow map filter type defaults to &quot;gaussian&quot;, with &quot;triangle&quot; and &quot;box&quot; as optional.																																							</usage>
+		</block>
+		<block id="Specular" position_x="-2.1390121038548" position_y="7.93525497580498" author="rconstruct">
+			<input name="Cspec" type="color" storage="varying" shader_parameter="1" value="color(1)" description="Specular color"/>
+			<input name="Ks" type="float" storage="varying" shader_parameter="1" value="1" description="Specular coefficient"/>
+			<input name="N" type="normal" storage="varying" value="normalize(N)" description="The surface normal"/>
+			<input name="V" type="vector" storage="varying" value="-normalize(I)" description="The viewer vector"/>
+			<input name="roughness" type="float" storage="varying" shader_parameter="1" value="0.1" description="The specular roughness">
+				<connection parent="Multiply_3" output="value"/>
+			</input>
+			<output name="Ci" type="color" storage="varying" description="The amount of diffuse light"/>
+			<rsl_code>
+		aov_specularcolor += $(Cspec);
+		aov_specular += $(Ks) * specular( $(N), $(V), $(roughness) );
+		$(Ci) = aov_specularcolor * aov_specular;
+																																					</rsl_code>
+			<rsl_include/>
+			<usage>Specular term, using the &quot;specular&quot; function. Note that what is a standard &quot;specular&quot; might vary with the renderer you&apos;re using. The specular color value is passed to &quot;aov_specularcolor&quot;, while the specular value is passed to the &quot;aov_specular&quot; AOV presets.																																				</usage>
+		</block>
+		<block id="Transform" position_x="-6.92961822072261" position_y="5.57259145540494" author="rconstruct">
+			<input name="P" type="vector" storage="varying" value="P" description="Point, vector or normal to transform" type_parent="Pout">
+				<connection parent="Reflect" output="R"/>
+			</input>
+			<input name="from_space" type="string" storage="uniform" value="&quot;current&quot;" description="The coordinate system to transform from"/>
+			<input name="to_space" type="string" storage="uniform" value="&quot;world&quot;" description="The coordinate system to transform into"/>
+			<input name="Matrix" type="matrix" storage="varying" value="UND" description="Use this matrix instead of a predefined coordinate system"/>
+			<output name="Pout" type="vector" storage="varying" description="The transformed point, vector or normal"/>
+			<rsl_code>
+	#ifdef TRANSFORM_ARGUMENTS
+	#undef TRANSFORM_ARGUMENTS
+	#endif
+
+	#define Matrix_$(Matrix)
+	#ifdef Matrix_UND
+		#define TRANSFORM_ARGUMENTS $(to_space)
+	#else
+		#define TRANSFORM_ARGUMENTS	$(Matrix)
+	#endif /* Matrix_UND */
+
+	#define $(blockname)_$(P:type) 1
+	#ifdef $(blockname)_point
+		$(Pout) = transform( $(from_space), TRANSFORM_ARGUMENTS , $(P) );
+	#elif $(blockname)_vector
+		$(Pout) = vtransform( $(from_space), TRANSFORM_ARGUMENTS , $(P) );
+	#elif $(blockname)_normal
+		$(Pout) = ntransform( $(from_space), TRANSFORM_ARGUMENTS , $(P) );
+	#endif /* $(blockname)_$(P:type) */
+	#undef $(blockname)_$(P:type)
+	
+	#undef Matrix_$(Matrix)
+	#undef TRANSFORM_ARGUMENTS
+																												</rsl_code>
+			<rsl_include>rsl_helpers.h																											</rsl_include>
+			<usage>A block for the &quot;transform&quot;, &quot;vtransform&quot; and &quot;ntransform&quot; functions, to transform the supplied point &quot;P&quot;, vector &quot;V&quot; or normal &quot;N&quot; respectively, from the coordinate system &quot;fromspace&quot; to the coordinate system &quot;tospace&quot;, with &quot;fromspace&quot; defaulting to &quot;current&quot;. Note that &quot;current&quot; is implementation specific. Predefined coordinate systems are: &quot;current&quot;, &quot;object&quot;, &quot;shader&quot;, &quot;world&quot;, &quot;camera&quot;, &quot;screen&quot;, &quot;raster&quot; and &quot;NDC&quot;. A transformation matrix might be given instead of a &quot;tospace&quot; coordinate system. User defined coordinate systems can also be refered to.																											</usage>
+		</block>
+		<block id="Transform_2" position_x="-6.92004661492154" position_y="3.68270799629759" author="rconstruct">
+			<input name="P" type="vector" storage="varying" value="P" description="Point, vector or normal to transform" type_parent="Pout">
+				<connection parent="Refract" output="T"/>
+			</input>
+			<input name="from_space" type="string" storage="uniform" value="&quot;current&quot;" description="The coordinate system to transform from"/>
+			<input name="to_space" type="string" storage="uniform" value="&quot;world&quot;" description="The coordinate system to transform into"/>
+			<input name="Matrix" type="matrix" storage="varying" value="UND" description="Use this matrix instead of a predefined coordinate system"/>
+			<output name="Pout" type="vector" storage="varying" description="The transformed point, vector or normal"/>
+			<rsl_code>
+	#ifdef TRANSFORM_ARGUMENTS
+	#undef TRANSFORM_ARGUMENTS
+	#endif
+
+	#define Matrix_$(Matrix)
+	#ifdef Matrix_UND
+		#define TRANSFORM_ARGUMENTS $(to_space)
+	#else
+		#define TRANSFORM_ARGUMENTS	$(Matrix)
+	#endif /* Matrix_UND */
+
+	#define $(blockname)_$(P:type) 1
+	#ifdef $(blockname)_point
+		$(Pout) = transform( $(from_space), TRANSFORM_ARGUMENTS , $(P) );
+	#elif $(blockname)_vector
+		$(Pout) = vtransform( $(from_space), TRANSFORM_ARGUMENTS , $(P) );
+	#elif $(blockname)_normal
+		$(Pout) = ntransform( $(from_space), TRANSFORM_ARGUMENTS , $(P) );
+	#endif /* $(blockname)_$(P:type) */
+	#undef $(blockname)_$(P:type)
+	
+	#undef Matrix_$(Matrix)
+	#undef TRANSFORM_ARGUMENTS
+																												</rsl_code>
+			<rsl_include>rsl_helpers.h																											</rsl_include>
+			<usage>A block for the &quot;transform&quot;, &quot;vtransform&quot; and &quot;ntransform&quot; functions, to transform the supplied point &quot;P&quot;, vector &quot;V&quot; or normal &quot;N&quot; respectively, from the coordinate system &quot;fromspace&quot; to the coordinate system &quot;tospace&quot;, with &quot;fromspace&quot; defaulting to &quot;current&quot;. Note that &quot;current&quot; is implementation specific. Predefined coordinate systems are: &quot;current&quot;, &quot;object&quot;, &quot;shader&quot;, &quot;world&quot;, &quot;camera&quot;, &quot;screen&quot;, &quot;raster&quot; and &quot;NDC&quot;. A transformation matrix might be given instead of a &quot;tospace&quot; coordinate system. User defined coordinate systems can also be refered to.																											</usage>
+		</block>
+		<block id="Transform_3" position_x="-1.33464471210431" position_y="-9.4857573557603" author="rconstruct">
+			<input name="P" type="vector" storage="varying" value="P" description="Point, vector or normal to transform" type_parent="Pout">
+				<connection parent="Normalize" output="value"/>
+			</input>
+			<input name="from_space" type="string" storage="uniform" value="&quot;current&quot;" description="The coordinate system to transform from"/>
+			<input name="to_space" type="string" storage="uniform" value="&quot;shader&quot;" description="The coordinate system to transform into"/>
+			<input name="Matrix" type="matrix" storage="varying" value="UND" description="Use this matrix instead of a predefined coordinate system"/>
+			<output name="Pout" type="vector" storage="varying" description="The transformed point, vector or normal"/>
+			<rsl_code>
+	#ifdef TRANSFORM_ARGUMENTS
+	#undef TRANSFORM_ARGUMENTS
+	#endif
+
+	#define Matrix_$(Matrix)
+	#ifdef Matrix_UND
+		#define TRANSFORM_ARGUMENTS $(to_space)
+	#else
+		#define TRANSFORM_ARGUMENTS	$(Matrix)
+	#endif /* Matrix_UND */
+
+	#define $(blockname)_$(P:type) 1
+	#ifdef $(blockname)_point
+		$(Pout) = transform( $(from_space), TRANSFORM_ARGUMENTS , $(P) );
+	#elif $(blockname)_vector
+		$(Pout) = vtransform( $(from_space), TRANSFORM_ARGUMENTS , $(P) );
+	#elif $(blockname)_normal
+		$(Pout) = ntransform( $(from_space), TRANSFORM_ARGUMENTS , $(P) );
+	#endif /* $(blockname)_$(P:type) */
+	#undef $(blockname)_$(P:type)
+	
+	#undef Matrix_$(Matrix)
+	#undef TRANSFORM_ARGUMENTS
+																</rsl_code>
+			<rsl_include>rsl_helpers.h															</rsl_include>
+			<usage>A block for the &quot;transform&quot;, &quot;vtransform&quot; and &quot;ntransform&quot; functions, to transform the supplied point &quot;P&quot;, vector &quot;V&quot; or normal &quot;N&quot; respectively, from the coordinate system &quot;fromspace&quot; to the coordinate system &quot;tospace&quot;, with &quot;fromspace&quot; defaulting to &quot;current&quot;. Note that &quot;current&quot; is implementation specific. Predefined coordinate systems are: &quot;current&quot;, &quot;object&quot;, &quot;shader&quot;, &quot;world&quot;, &quot;camera&quot;, &quot;screen&quot;, &quot;raster&quot; and &quot;NDC&quot;. A transformation matrix might be given instead of a &quot;tospace&quot; coordinate system. User defined coordinate systems can also be refered to.															</usage>
+		</block>
+		<block id="Transform_4" position_x="-1.45793348991167" position_y="-11.4525271710207" author="rconstruct">
+			<input name="P" type="point" storage="varying" value="P" description="Point, vector or normal to transform" type_parent="Pout">
+				<connection parent="p" output="P"/>
+			</input>
+			<input name="from_space" type="string" storage="uniform" value="&quot;current&quot;" description="The coordinate system to transform from"/>
+			<input name="to_space" type="string" storage="uniform" value="&quot;shader&quot;" description="The coordinate system to transform into"/>
+			<input name="Matrix" type="matrix" storage="varying" value="UND" description="Use this matrix instead of a predefined coordinate system"/>
+			<output name="Pout" type="point" storage="varying" description="The transformed point, vector or normal"/>
+			<rsl_code>
+	#ifdef TRANSFORM_ARGUMENTS
+	#undef TRANSFORM_ARGUMENTS
+	#endif
+
+	#define Matrix_$(Matrix)
+	#ifdef Matrix_UND
+		#define TRANSFORM_ARGUMENTS $(to_space)
+	#else
+		#define TRANSFORM_ARGUMENTS	$(Matrix)
+	#endif /* Matrix_UND */
+
+	#define $(blockname)_$(P:type) 1
+	#ifdef $(blockname)_point
+		$(Pout) = transform( $(from_space), TRANSFORM_ARGUMENTS , $(P) );
+	#elif $(blockname)_vector
+		$(Pout) = vtransform( $(from_space), TRANSFORM_ARGUMENTS , $(P) );
+	#elif $(blockname)_normal
+		$(Pout) = ntransform( $(from_space), TRANSFORM_ARGUMENTS , $(P) );
+	#endif /* $(blockname)_$(P:type) */
+	#undef $(blockname)_$(P:type)
+	
+	#undef Matrix_$(Matrix)
+	#undef TRANSFORM_ARGUMENTS
+																</rsl_code>
+			<rsl_include>rsl_helpers.h															</rsl_include>
+			<usage>A block for the &quot;transform&quot;, &quot;vtransform&quot; and &quot;ntransform&quot; functions, to transform the supplied point &quot;P&quot;, vector &quot;V&quot; or normal &quot;N&quot; respectively, from the coordinate system &quot;fromspace&quot; to the coordinate system &quot;tospace&quot;, with &quot;fromspace&quot; defaulting to &quot;current&quot;. Note that &quot;current&quot; is implementation specific. Predefined coordinate systems are: &quot;current&quot;, &quot;object&quot;, &quot;shader&quot;, &quot;world&quot;, &quot;camera&quot;, &quot;screen&quot;, &quot;raster&quot; and &quot;NDC&quot;. A transformation matrix might be given instead of a &quot;tospace&quot; coordinate system. User defined coordinate systems can also be refered to.															</usage>
+		</block>
+		<block id="fBm3D" position_x="1.06083885378075" position_y="-11.6792919531463" author="rconstruct">
+			<input name="P" type="point" storage="varying" value="P" description="Point to sample fBm at">
+				<connection parent="Transform_4" output="Pout"/>
+			</input>
+			<input name="filterwidth" type="float" storage="varying" value="0" description="Filter width for antialiasing"/>
+			<input name="octaves" type="float" storage="uniform" value="5" description="Maximum octaves of noise"/>
+			<input name="lacunarity" type="float" storage="varying" value="2.17" description="Controls the smoothness of the fBm"/>
+			<input name="gain" type="float" storage="varying" value="0.5" description="Controls the contrast of the fBm"/>
+			<input name="amplitude" type="float" storage="varying" shader_parameter="1" value="0" description="Amplitude of fBm"/>
+			<output name="value" type="float" storage="varying" description="fBm value at p"/>
+			<rsl_code>
+	#define $(blockname)_$(value:type)
+	#ifdef $(blockname)_float
+		$(value) = $(amplitude) * fBm( $(P), $(filterwidth), $(octaves),
+					$(lacunarity),$(gain) );
+	#else
+		$(value) = $(amplitude) * $(value:type) (vector vfBm( $(P),
+					$(filterwidth), $(octaves),	$(lacunarity), $(gain) ) );		
+	#endif
+	#undef $(blockname)_$(value:type)
+																</rsl_code>
+			<rsl_include>rsl_fractal.h															</rsl_include>
+			<usage>3 dimensional fractional Brownian motion is a sumation of noises at different frequencies. Note that the output is not clamped and may exceed +1 or -1.															</usage>
+		</block>
+		<block id="p" position_x="-1.39450604316325" position_y="-13.3009819923024" author="rconstruct">
+			<output name="P" type="point" storage="varying" description="Surface position"/>
+			<rsl_code>
+    $(P) = P;
+    															</rsl_code>
+			<rsl_include/>
+			<usage>Note that in all shading contexts, &quot;P&quot; is the surface position, the only exception being volume shaders, in which &quot;P&quot; is the light ray origin. Also note that in imager shaders, &quot;P&quot; is the position of the pixel center in raster space, with the z coordinate being 0.															</usage>
+		</block>
+	</network>
+</shrimp>

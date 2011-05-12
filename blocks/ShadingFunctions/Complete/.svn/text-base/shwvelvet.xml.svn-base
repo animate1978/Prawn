@@ -1,0 +1,19 @@
+<shrimp name="SHWVelvet" type="function" description="Stephen H. Westins velvet shader." author="rconstruct">
+    <input name="Ks" description="Specular light coefficient" type="float" default="0.8"/>
+    <input name="backscatter" description="Back scattering value" type="float" default="0.6"/>
+    <input name="edginess" description="Backscattering edginess" type="float" default="10"/>
+    <input name="roughness" description="Roughness" type="float" default="0.05"/>
+    <input name="sheen" description="Sheen color" type="color" default="color(.5, .4, .2)"/>
+    <input name="N" description="Normal vector" storage="varying" type="vector normal" default="normalize(N)"/>
+    <input name="I" description="Eye vector" storage="varying" type="vector" default="normalize(I)"/>
+	<input name="category" description="Light categories accepted" storage="uniform" type="string" default="&quot;&quot;" />
+    <output name="Ci" description="Shaded color" type="color"/>
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_code>
+        $(Ci) = velvet( $(Ks), $(backscatter), $(edginess), $(roughness),
+						$(sheen), $(N), $(I), $(category),
+						DECLARE_AOV_PARAMETERS );
+	</rsl_code>
+    <usage>Based on Stephen H. Westin&apos;s velvet shader. &quot;Ks&quot; controls overall intensity of effect, &quot;edginess&quot; controls the edge sharpness of the backscattering effect, &quot;roughness&quot; controls the apparent surface roughness, and &quot;sheen&quot; controls the sheen color. This block passes the resulting values to the &quot;aov_rimlighting&quot; and &quot;aov_scattering&quot; AOV presets. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.</usage>
+</shrimp>

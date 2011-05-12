@@ -1,0 +1,9 @@
+<shrimp type="function" name="Subtract" description="Subtraction block" author="rconstruct">
+	<input name="A" description="1st input" type="float color point vector normal float" type_parent="value" default="1"/>
+	<input name="B" description="2nd input" type="float color point vector normal float" type_parent="value" default="1"/>
+	<output name="value" description="val = A - B" type="float color point vector normal float"/>
+	<rsl_code>
+		$(value) = $(A) - $(B);
+	</rsl_code>
+	<usage>Note that unlike the operators in the Renderman shading language the result is always the same type as the inputs. Also both inputs must be of the same type. The operation is done in parallel for each component.</usage>
+</shrimp>

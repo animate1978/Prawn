@@ -1,0 +1,9 @@
+<shrimp type="function" name="Mscale" description="Scales matrix M" author="rconstruct">
+    <input name="matrix" description="Matrix input" type="matrix" default="1"/>
+	<input name="P" description="Point input" type="point" default="P"/>
+    <output name="newmatrix" description="Translated matrix" type="matrix"/>
+	<rsl_code>
+		$(newmatrix) = scale( $(matrix), $(P) );
+	</rsl_code>
+	<usage>Scales a matrix M. These functions are similar to the RI statements &quot;RiTranslate&quot;, &quot;RiRotate&quot;, and &quot;RiScale&quot;, except that the rotation angle in &quot;rotate&quot; is in radians, not in degrees as with &quot;RiRotate&quot;.</usage>
+</shrimp>

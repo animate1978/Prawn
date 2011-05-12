@@ -1,0 +1,8 @@
+<shrimp type="function" name="Color2Point" description="Color to point conversion" author="rconstruct">
+    <input name="in" description="Input color" type="color" default="color(0)"/>
+    <output name="value" description="Output value" type="point"/>
+	<rsl_code>
+	    $(value) = point( comp( $(in), 0), comp( $(in), 1), comp( $(in), 2) );
+	</rsl_code>
+	<usage>Sets a point with a color&apos;s components, the resulting point being in the [0,1] range.</usage>
+</shrimp>

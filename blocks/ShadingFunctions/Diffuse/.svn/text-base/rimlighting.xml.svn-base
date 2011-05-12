@@ -1,0 +1,21 @@
+<shrimp type="function" name="RimLight" description="Rim lighting shader" author="rconstruct">
+	<input name="Crim" description="Rim color" type="color" default="color(1)"/>
+	<input name="intensity" description="Rim coefficient" type="float" default="1"/>
+	<input name="rimwidth" description="Rim width" type="float" default="1"/>
+	<input name="N" description="Surface normal" storage="varying" type="vector normal" default="normalize(N)"/>
+	<input name="I" description="Viewer or user supplied vector" storage="varying" type="vector" default="normalize(I)"/>
+	<input name="filterwidth" description="Filter width" type="float" default="0.0"/>
+	<output name="Ci" description="The amount of diffuse light" type="color" />
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+	#if RENDERER == pixie
+		aov_rimlighting += $(Crim) * $(intensity) * float rimlighting(
+						$(rimwidth), $(filterwidth), $(N), $(I) );
+	#else
+		aov_rimlighting += $(Crim) * $(intensity) * rimlighting( $(rimwidth),
+						$(filterwidth), $(N), $(I) );
+	#endif
+		$(Ci) = aov_rimlighting;
+	</rsl_code>
+<usage>Rim lighting function, returns the cosine of the angle between the surface normal and the viewer vector, altough you can supply an custom vector instead of viewer vector, to get a directional rim lighting effect. The parameter &quot;rimwidth&quot; controls the rim width effect, while the parameter &quot;intensity&quot;, controls the rim intensity. You can specify an filter width, via the parameter &quot;filterwidth&quot;, in which case the function uses &quot;filteredsmoothstep&quot; instead of &quot;smoothstep&quot;. This value is passed to the &quot;aov_rimlighting&quot; AOV preset.</usage>
+</shrimp>

@@ -1,0 +1,8 @@
+<shrimp type="function" name="I" description="Incident ray direction" author="rconstruct">
+	<output name="I" description="Incident ray direction" storage="varying" type="vector"/>
+	<rsl_code>
+	$(I) = I;
+	</rsl_code>
+	<usage>Incident ray direction. The availability of this global variable for the different shading contexts is renderer specific.</usage>
+</shrimp>
+

@@ -1,0 +1,21 @@
+<shrimp type="function" name="Brick" description="Larry Gritz&apos;s brick tiling pattern" author="rconstruct">
+	<input name="s" description="X point to be tested" storage="varying" type="float" default="s"/>
+	<input name="t" description="Y point to be tested" storage="varying" type="float" default="t"/>
+    <input name="tilewidth" description="Tile width" storage="uniform" type="float" default="0.6"/>
+    <input name="tileheight" description="Tile height" storage="uniform" type="float" default="0.2"/>
+    <input name="staggering" description="Row stagger" storage="uniform" type="float" default="0.2"/>
+    <input name="variation" description="Row stagger variation" storage="uniform" type="float" default="0.4"/>
+    <input name="frequency" description="Edge noise frequency" storage="uniform" type="float" default="2"/>
+    <input name="amplitude" description="Edge noise amplitude" storage="uniform" type="float" default="0.5"/>
+    <output name="row" description="Output row" type="float"/>
+    <output name="column" description="Output column" type="float"/>
+    <output name="stile" description="X position with this tile" type="float"/>
+    <output name="ttile" description="Y position with this tile" type="float"/>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_code>
+		basicbrick( $(s), $(t), $(tilewidth), $(tileheight), $(staggering),
+					$(variation), $(frequency), $(amplitude),
+					$(column), $(row), $(stile), $(ttile) );
+	</rsl_code>
+	<usage>Larry Gritz&apos;s basic brick tiling pattern function. &quot;S&quot; and &quot;t&quot; are respectively the s and t coordinates of the surface, &quot;tilewidth&quot; and &quot;tileheight&quot; are the dimensions of each tile. &quot;staggering&quot; controls the row stagger relative to the previous row, and &quot;variation&quot; defines how much &quot;staggering&quot; should randomly vary. &quot;frequency&quot; and &quot;amplitude&quot; define the frequency and amplitude of the noise added to the edge between tiles. This block outputs the row and column indexes of which tile the sample is in, and the position x and y coords within this tile, in the [0,1] range.</usage>
+</shrimp>

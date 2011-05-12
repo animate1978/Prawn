@@ -1,0 +1,9 @@
+<shrimp type="function" name="Noise3D" description="3 dimensional perlin noise function" author="rconstruct">
+	<input name="P" description="point to sample noise at" storage="varying" type="point" default="P"/>
+	<input name="amplitude" description="Amplitude of noise" type="float" default="1"/>
+	<output name="value" description="Noise value at point p" type="color point vector float"/>
+	<rsl_code>
+		$(value) = $(amplitude) * $(value:type) noise( $(P) );
+	</rsl_code>
+	<usage>3 dimensional Perlin noise function, in [0, &quot;amplitude&quot;] range.</usage>
+</shrimp>

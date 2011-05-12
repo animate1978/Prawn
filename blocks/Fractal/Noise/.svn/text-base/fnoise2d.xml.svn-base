@@ -1,0 +1,20 @@
+<shrimp type="function" name="FNoise2D" description="Filtered 2 dimensional perlin noise function" author="rconstruct">
+	<input name="s" description="noise x co-ordinate" type="float" default="s"/>
+	<input name="t" description="noise y co-ordinate" type="float" default="t"/>
+	<input name="filterwidth" description="Filter width" type="float" default="0"/>
+	<input name="amplitude" description="Amplitude of noise" type="float" default="1"/>
+	<output name="value" description="Noise value at (x,y)" type="color vector point float"/>
+	<rsl_include>rsl_shrimp_fractal.h</rsl_include>
+	<rsl_code>
+	#define $(blockname)_$(value:type) 1
+	#ifdef $(blockname)_float
+		$(value) = $(amplitude) * $(value:type) filterednoisexy( $(s), $(t),
+												$(filterwidth) );
+	#else
+		$(value) = $(amplitude) * $(value:type) filteredvnoisexy( $(s), $(t),
+												$(filterwidth) );
+	#endif
+	#undef $(blockname)_$(value:type)
+	</rsl_code>
+	<usage>Filtered two dimensional Perlin noise function, in [0, &quot;amplitude&quot;] range.</usage>
+</shrimp>

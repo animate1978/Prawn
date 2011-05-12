@@ -1,0 +1,8 @@
+<shrimp type="function" name="Normalize" description="Normalize a vector" author="rconstruct">
+	<input name="Vin" description="Input vector" type="vector normal" type_parent="value" default="N"/>
+	<output name="value" description="Output unit length vector" type="vector normal"/>
+	<rsl_code>
+		$(value) = normalize( $(Vin) );
+	</rsl_code>
+	<usage>Returns a unit vector in the direction of input vector (Vin/length(Vin)).</usage>
+</shrimp>

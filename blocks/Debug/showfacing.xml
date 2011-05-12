@@ -1,0 +1,11 @@
+<shrimp type="function" name="ShowFacing" description="Show orientation of surface" author="rconstruct">
+	<input name="N" description="Surface normal" storage="varying" type="normal" default="normalize(N)"/>
+	<input name="I" description="Viewer vector" storage="varying" type="vector" default="normalize(I)"/>
+	<output name="Ci" description="Output value" type="color"/>
+	<rsl_code>
+		$(Ci) = mix( color( 0, 1, 0), color(1, 0, 0),
+						step( 0, $(VV).$(NN)) ) * 0.5 *
+						diffuse( faceforward( $(NN), $(VV) ));
+	</rsl_code>
+<usage>Shows forward or backward facing surfaces - displays as green for forward facing, and red for backward facing. Output is multiplied by diffuse(Nf), to give an idea of the surface shape.</usage>
+</shrimp>

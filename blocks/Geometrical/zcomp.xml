@@ -1,0 +1,8 @@
+<shrimp type="function" name="Zcomp" description="Get the Z component of a point, vector or normal" author="rconstruct">
+	<input name="Vin" description="Point, vector or normal to retrieve component from" type="normal vector point" default="point(1)"/>
+	<output name="z" description="Z component" type="float"/>
+	<rsl_code>
+		$(z) = zcomp( $(Vin:type) $(Vin) );
+	</rsl_code>
+	<usage>Get the Z component of an point, vector or normal.</usage>
+</shrimp>

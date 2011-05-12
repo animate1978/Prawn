@@ -1,0 +1,11 @@
+<shrimp type="function" name="Odd" description="Returns 1 if the input is odd, otherwise 0" author="rconstruct">
+	<input name = "A" description="Input value" type="float" default="0"/>
+	<output name="value" description="Returns 1 if A is odd" type="float"/>
+	<rsl_code>
+	if( mod( $(A), 2 ) == 1)
+		$(value) = 1;
+	else
+		$(value) = 0;
+	</rsl_code>
+	<usage>Returns 1 if the input is odd, otherwise returns 0.</usage>
+</shrimp>

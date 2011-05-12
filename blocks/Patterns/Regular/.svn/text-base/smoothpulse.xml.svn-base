@@ -1,0 +1,13 @@
+<shrimp type="function" name="Smoothpulse" description="Larry Gritz&apos;s smoothpulse" author="rconstruct">
+	<input name="x" description="Value to test" storage="varying" type="float" default="s"/>
+	<input name="minimum1" description="E0" type="float" default="0"/>
+	<input name="maximum1" description="E1" type="float" default="0.3"/>
+	<input name="minimum2" description="E2" type="float" default="0.7"/>
+	<input name="maximum2" description="E3" type="float" default="1"/>
+	<output name="value" description="Value of the wave at x" type="float"/>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_code>
+		$(value) = smoothpulse( $(minimum1), $(maximum1), $(minimum2), $(maximum2), $(x) );
+	</rsl_code>
+	<usage>Larry Gritz&apos;s &quot;smoothpulse&quot; function, returns smoothstep(e0,e1,x)-smoothstep(e2,e3,x).</usage>
+</shrimp>

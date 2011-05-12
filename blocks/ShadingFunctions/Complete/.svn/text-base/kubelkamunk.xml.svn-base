@@ -1,0 +1,17 @@
+<shrimp name="KubelkaMunk" type="function" description="Kubelka-Munk model for the composition of layered surfaces." author="rconstruct">
+    <input name="Kd" description="Diffuse light coefficient" type="color" default="0.05"/>
+    <input name="Ks" description="Specular light coefficient" type="color" default="0.3"/>
+	<input name="thicklayer" description="Reflectivity value of infinitely thick layer" type="color" default="color( .9, .5, .2 )"/>
+    <input name="thickness" description="Layer thickness" type="float" default="0.5"/>
+    <input name="roughness" description="Surface roughness" type="float" default="0.25"/>
+	<input name="N" description="Surface normal" storage="varying" type="vector normal" default="normalize(N)"/>
+	<input name="I" description="Direction of viewer" storage="varying" type="vector" default="normalize(I)"/>
+	<output name="Ci" description="Shaded color" type="color"/>
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+        $(Ci) = KMOverGlossy(	$(N), $(I), $(Kd), $(Ks), $(thicklayer), 
+								$(thickness), $(roughness),
+								DECLARE_AOV_PARAMETERS );
+	</rsl_code>
+<usage>Based on Matt Pharr&apos;s implementation of the Kubelka-Munk model, for the composition of layered surfaces. &quot;SigmaA&quot; is the attenuation coefficient of the paint layer, describing the differential attenuation per distance travelled in the medium, while &quot;SigmaS&quot; represents the scattering coefficient of the paint layer - as light travels in the medium, it&apos;s scattered to different directions, some of this scattered light eventually exits the medium, with the color of the particles it interacted with. Both &quot;SigmaA&quot; and &quot;SigmaS&quot; are estimated according to the reflectance value of an infinitely thick layer, set with the parameter &quot;thicklayer&quot;. See SIGGRAPH 2001 course notes, &quot;Advanced RenderMan 3: Render Harder&quot;, for notes and background information. This block passes the resulting values to the &quot;aov_surfacecolor&quot;, &quot;aov_diffuse&quot;, &quot;aov_specularcolor&quot; and &quot;aov_specular&quot; AOV presets. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.</usage>
+</shrimp>

@@ -1,0 +1,14 @@
+<shrimp type="function" name="Phong" description="Computes Phong specular light at surface" author="rconstruct">
+	<input name="Cspec" description="Specular color" type="color" default="color(1)"/>
+	<input name="Ks" description="Specular coefficient" type="float" default="1"/>
+	<input name="N" description="The surface normal" storage="varying" type="vector normal" default="normalize(N)"/>
+	<input name="V" description="The viewer vector" storage="varying" type="vector" default="-normalize(I)"/>
+	<input name="size" description="The specular highlight size" type="float" default="15"/>
+	<output name="Ci" description="The amount of diffuse light" type="color" />
+	<rsl_code>
+		aov_specularcolor += $(Cspec);
+		aov_specular += $(Ks) * phong( $(N), $(V), $(size));
+		$(Ci) = aov_specularcolor * aov_specular;
+	</rsl_code>
+	<usage>Specular term, using the Phong model. The specular color value is passed to &quot;aov_specularcolor&quot;, while the specular value, to the &quot;aov_specular&quot; AOV presets.</usage>
+</shrimp>

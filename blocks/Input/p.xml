@@ -1,0 +1,8 @@
+<shrimp type="function" name="p" description="Surface position" author="rconstruct">
+    <output name="P" description="Surface position" storage="varying" type="point"/>
+    <rsl_code>
+    $(P) = P;
+    </rsl_code>
+	<usage>Note that in all shading contexts, &quot;P&quot; is the surface position, the only exception being volume shaders, in which &quot;P&quot; is the light ray origin. Also note that in imager shaders, &quot;P&quot; is the position of the pixel center in raster space, with the z coordinate being 0.</usage>
+</shrimp>
+

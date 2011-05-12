@@ -1,0 +1,9 @@
+<shrimp type="function" name="NOT" description="Boolean NOT function" author="rconstruct">
+	<input name = "A" description="Input value" type="float" default="1"/>
+	<output name="value" description="The logical inversion of A" type="float"/>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_code>
+		$(value) = complement( $(A) );
+	</rsl_code>
+	<usage>This block computes the logical inversion of the input.</usage>
+</shrimp>

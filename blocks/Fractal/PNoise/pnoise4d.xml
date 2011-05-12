@@ -1,0 +1,13 @@
+<shrimp type="function" name="PNoise4D" description="4 dimensional periodic noise function" author="rconstruct">
+	<input name="P" description="point to sample noise at" storage="varying" type="point" default="P"/>
+	<input name="w" description="4th dimension value" storage="uniform" type="float" default="time"/>
+	<input name="Pperiod" description="Point period" storage="uniform" type="point" default="point(5)"/>
+	<input name="wperiod" description="4d period" storage="uniform" type="float" default="1"/>
+	<input name="amplitude" description="Amplitude of noise" type="float" default="1"/>
+	<output name="value" description="Noise value at point (p,t)" type="color point vector float"/>
+	<rsl_code>
+		$(value) = $(amplitude) * $(value:type) pnoise( $(P), $(w),
+									$(Pperiod), $(wperiod) );
+	</rsl_code>
+<usage>4 dimensional period noise function. The 4th dimension parameter defaults to the global variable &quot;time&quot;, the current shutter time as defined by RiShutter. Note that &quot;time&quot;&apos;s storage class is uniform. Both the point period and the 4th dimension variable period should be integers up to 256. The noise output value is in the [0, &quot;amplitude&quot;] range.</usage>
+</shrimp>

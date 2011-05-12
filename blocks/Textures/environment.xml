@@ -1,0 +1,89 @@
+<shrimp type="function" name="Environment" description="Access a environment map" author="rconstruct">
+	<input name="texmap" description="Texture map name" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="Kr" description="Environment intensity" type="float" default="1"/>
+	<input name="direction" description="Direction vector" storage="varying" type="normal vector" default="reflect( I, normalize(N))"/>
+    <input name="sblur" description="Blur along S" storage="varying" type="float" default="0"/>
+    <input name="tblur" description="Blur along T" storage="varying" type="float" default="0"/>
+    <input name="swidth" description="Blur filter width along S" storage="uniform" type="float" default="1"/>
+    <input name="twidth" description="Blur filter width along T" storage="uniform" type="float" default="1"/>
+	<input name="samples" description="Sampling rate" storage="uniform" type="float" default="4"/>
+    <input name="fill" description="Fill value on empty channel" type="float" storage="uniform" default="0"/>
+    <input name="filter" description="Filter type" storage="uniform" type="string" default="&quot;gaussian&quot;"/>
+    <input name="channel" description="Channel, in color textures" type="float" default="0"/>
+	<input name="tint" description="Color tint for the environment" type="color" type_parent="value" default="1"/>
+	<input name="label" description="Ray label" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="subset" description="Ray subset" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="bias" description="Ray bias" storage="uniform" type="float" default="-1"/>
+	<input name="hitmode" description="Override hitmode" storage="uniform" type="string" default="&quot;default&quot;"/>
+	<input name="maxdist" description="Maximum ray distance" type="float" default="1e38"/>
+	<input name="coneangle" description="Cone angle" type="float" default="radians(5)"/>
+	<input name="expandLDR" description="Expand range of LDR image" storage="uniform" type="float" default="0"/>
+	<input name="dynrange" description="Maximum value to expand range to" type="float" default="1"/>
+	<input name="startlum" description="Starting luminance for expansion" type="float" default="0.5"/>
+	<input name="exponent" description="Range exponent for falloff" type="float" default="2.0"/>
+	<output name="value" description="Output color" type="float color"/>
+	<rsl_include>rsl_texture.h</rsl_include>
+	<rsl_code>
+
+	/* make sure options are clear and set them according to shadeop
+	 * and renderer */
+	#ifdef SHADEOP_ARGUMENTS
+	#undef SHADEOP_ARGUMENTS
+	#endif
+	
+    #if RENDERER == pixie
+	#define SHADEOP_ARGUMENTS	"filter", $(filter), \
+								/* can't specify s/tblur */ \
+								"blur", $(sblur), \
+								"swidth", $(swidth), "twidth", $(twidth),\
+								"fill", $(fill), "samples", $(samples), \
+								"bias", $(bias), "maxdist", $(maxdist), \
+								"samplecone", $(coneangle), "label", $(label)
+	#elif RENDERER == _3delight
+	#define SHADEOP_ARGUMENTS	"sblur", $(sblur), "tblur", $(tblur), \
+								"swidth", $(swidth), "twidth", $(twidth),\
+								"samples", $(samples), "fill", $(fill), \
+								"filter", $(filter), "label", $(label), \
+								"subset", $(subset), "bias", $(bias), \
+								"hitmode", $(hitmode), \
+								"maxdist", $(maxdist)
+    #elif RENDERER == air
+	#define SHADEOP_ARGUMENTS	"bias", $(bias), \
+								/* can't specify s/blur */ \
+								"blur", $(sblur), "label", $(label), \
+								"maxdist", $(maxdist), \
+								"samples", $(samples), \
+								"subset", $(subset)
+	#else
+	#define SHADEOP_ARGUMENTS	"sblur", $(sblur), "tblur", $(tblur), \
+								"swidth", $(swidth), "twidth", $(twidth),\
+								"samples", $(samples), \
+								"filter", $(filter), \
+								"fill", $(fill)
+    #endif /* RENDERER */
+	
+	// LDR expansion, from SIGGRAPH 2002 Course 16,
+	// &quot;Production Ready GI&quot;, by Hayden Landis
+	#define $(blockname)_expandLDR $(expandLDR)
+	#if $(blockname)_expandLDR == 1
+		varying $(value:type) $(blockname)_ctmp = $(Kr) * $(tint) *
+				$(value:type) environment(	$(texmap)[$(channel)],
+											$(direction),
+											SHADEOP_ARGUMENTS );
+		$(value) = envexpand(	$(blockname)_ctmp, $(dynrange),
+								$(startlum), $(exponent) );
+	#else // no expansion
+	// tint is of float type if output variable is of float type
+		$(value) = $(Kr) * $(tint) * $(value:type) environment(
+						$(texmap)[$(channel)],
+						$(direction),
+						SHADEOP_ARGUMENTS );
+	#endif // expandLDR
+	aov_reflection += $(value);
+
+	#undef $(blockname)_expandLDR
+	#undef SHADEOP_ARGUMENTS
+	
+	</rsl_code>
+<usage>This block returns the texture value from an environment map, for the specified direction vector. If the filename specified is &quot;raytrace&quot; then raytracing is used instead of a texture map. The variables &quot;sblur&quot; and &quot;tblur&quot; specify the blur along the &quot;S&quot; and &quot;T&quot; directions respectively, while &quot;swidth&quot; and &quot;twidth&quot; specify the filter width along the &quot;S&quot; and &quot;T&quot; directions respectively. The filter type can be &quot;box&quot;, &quot;triangle&quot;, or &quot;gaussian&quot;, with &quot;samples&quot; controling the number of samples to use. The starting channel is specified with the &quot;channel&quot; parameter. The type returned can be float, or color, and it is passed to the preset &quot;aov_reflection&quot; AOV. When raytracing is used, extra parameters available to raytracing functions are available, such as &quot;label&quot;, &quot;subset&quot;, &quot;bias&quot; and &quot;hitmode&quot;. Note that this function might vary considerably with each renderer, so please check your renderer&apos;s documentation. This block also implements the LDR expansion from SIGGRAPH 2002 Course 16, &quot;Production Ready GI&quot;, by Hayden Landis, to avoid washed out reflection highlights when using Low Dynamic Range images for reflection maps. When toggling &quot;expandLDR&quot; on/off, the following variables apply to control the expansion: &quot;dynrange&quot;, defines the maximum value to expand the specified region of the map to; &quot;startlum&quot;, defines the starting luminance for the expansion to begin with; &quot;exponent&quot;, defines the exponent for the falloff.</usage>
+</shrimp>

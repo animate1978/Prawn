@@ -1,0 +1,8 @@
+<shrimp type="function" name="Xcomp" description="Get the X component of a point, vector or normal" author="rconstruct">
+	<input name="Vin" description="Point, vector or normal to retrieve component from" type="normal vector point" default="point(1)"/>
+	<output name="x" description="X component" type="float"/>
+	<rsl_code>
+		$(x) = xcomp( $(Vin:type) $(Vin) );
+	</rsl_code>
+	<usage>Get the X component of an point, vector or normal.</usage>
+</shrimp>

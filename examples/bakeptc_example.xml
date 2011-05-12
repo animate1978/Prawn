@@ -1,0 +1,289 @@
+<shrimp name="new_scene">
+	<about/>
+	<network>
+		<block id="Bake3d" position_x="4" position_y="1" author="rconstruct">
+			<input name="bakefile" type="string" storage="uniform" value="&quot;/home/cgwork/bakeocc.ptc&quot;" description="Baked map filename"/>
+			<input name="PP" type="point" storage="varying" value="P" description="Surface point"/>
+			<input name="NN" type="normal" storage="varying" value="normalize(N)" description="Surface normal"/>
+			<input name="coordsys" type="string" storage="uniform" value="&quot;world&quot;" description="Coordinate system"/>
+			<input name="filterradius" type="float" storage="varying" value="1" description="Filter radius"/>
+			<input name="filterscale" type="float" storage="varying" value="1" description="Filter scale"/>
+			<input name="interpolate" type="float" storage="varying" value="1" description="Toggle interpolation"/>
+			<input name="channel" type="string" storage="uniform" value="&quot;occlusion&quot;" description="Data channel to bake"/>
+			<input name="value" type="float" storage="varying" value="color(0)" description="Value associated with data channel" type_parent="bdataval">
+				<connection parent="Occlusion" output="Occ"/>
+			</input>
+			<output name="bdataval" type="color" storage="varying" description="Baked data value"/>
+			<output name="status" type="float" storage="varying" description="Status"/>
+			<rsl_code>
+	
+	#if RENDERER == pixie
+		$(status) = bake3d( $(bakefile), $(channel), $(PP), $(NN),
+							&quot;coordsystem&quot;, $(coordsys),
+							&quot;interpolate&quot;, $(interpolate), 
+							&quot;radius&quot;, $(filterradius),
+							&quot;radiusscale&quot;, $(filterscale),
+							$(channel), $(value) );
+		$(bdataval) = $(value);
+		
+	#elif RENDERER == _3delight
+	/* DisplayChannels are ignored in bake3d() (as of 8.5) */
+		$(status) = bake3d( $(bakefile), $(channel), $(PP), $(NN),
+								&quot;coordsystem&quot;, $(coordsys),
+								&quot;radius&quot;, $(filterradius),
+								&quot;radiusscale&quot;, $(filterscale),
+								&quot;interpolate&quot;, $(interpolate),
+								$(channel), $(value) );
+		$(bdataval) = $(value);
+		
+	#elif RENDERER == prman
+		$(status) = bake3d( $(bakefile), $(channel), $(PP), $(NN),
+								&quot;coordsystem&quot;, $(coordsys),
+								&quot;radius&quot;, $(filterradius),
+								&quot;radiusscale&quot;, $(filterscale),
+								&quot;interpolate&quot;, $(interpolate),
+								$(channel), $(value) );
+		$(bdataval) = $(value);
+		
+	#elif RENDERER == air
+		$(status) = bake3d( $(bakefile), $(PP), $(NN),
+								&quot;radius&quot;, $(filterscale),
+								&quot;radiusscale&quot;, $(filterradius),
+								$(channel), $(value) );
+		$(bdataval) = $(value);
+
+	#else
+		$(bdataval) = $(value);
+		$(status) = 0;
+	#endif /* RENDERER */
+			
+							</rsl_code>
+			<rsl_include/>
+			<usage>This function bakes the supplied data channel into a bakefile. Note that this varies considerably with each renderer&apos;s implementation, please check your renderer&apos;s documentation for details. Returns 1 if sucessful, 0 if failed.						</usage>
+		</block>
+		<block id="FaceForward_2" position_x="-2" position_y="1" author="rconstruct">
+			<input name="N" type="normal" storage="varying" value="normalize(N)" description="Vector or Normal to flip" type_parent="NN">
+				<connection parent="Normalize_3" output="val"/>
+			</input>
+			<input name="I" type="vector" storage="varying" value="normalize(I)" description="Vector to face away from">
+				<connection parent="Normalize_4" output="val"/>
+			</input>
+			<input name="Nref" type="normal" storage="varying" value="Ng" description="Optional reference vector" type_parent="NN"/>
+			<output name="NN" type="normal" storage="varying" description="A vector pointing in the direction oposite to I"/>
+			<rsl_code>
+		$(NN) = faceforward( $(N), $(I), $(Nref) );
+							</rsl_code>
+			<rsl_include/>
+			<usage>This function will flip the direction of N so that it faces a direction oposite to that of I, with respect to Nref.						</usage>
+		</block>
+		<block id="I_2" position_x="-5" position_y="-1" author="rconstruct">
+			<output name="I" type="vector" storage="varying" description="Incident ray direction"/>
+			<rsl_code>
+	$(I) = I;
+							</rsl_code>
+			<rsl_include/>
+			<usage>Incident ray direction. The availability of this global variable for the different shading contexts is renderer specific.						</usage>
+		</block>
+		<block id="N_2" position_x="-5" position_y="2" author="rconstruct">
+			<output name="N" type="normal" storage="varying" description="Surface shading normal"/>
+			<rsl_code>
+    $(N) = N;
+    						</rsl_code>
+			<rsl_include/>
+			<usage>Surface shading normal. The availability of this global variable in the different shading contexts is renderer specific. It&apos;s not available in imager shaders.						</usage>
+		</block>
+		<block id="Normalize_3" position_x="-5" position_y="1" author="rconstruct">
+			<input name="A" type="normal" storage="varying" value="N" description="Input vector" type_parent="val">
+				<connection parent="N_2" output="N"/>
+			</input>
+			<output name="val" type="normal" storage="varying" description="Output unit length vector"/>
+			<rsl_code>
+		$(val) = normalize( $(A) );
+							</rsl_code>
+			<rsl_include/>
+			<usage>Returns a unit vector in the direction of input vector (V/length(V)).						</usage>
+		</block>
+		<block id="Normalize_4" position_x="-5" position_y="-0" author="rconstruct">
+			<input name="A" type="vector" storage="varying" value="N" description="Input vector" type_parent="val">
+				<connection parent="I_2" output="I"/>
+			</input>
+			<output name="val" type="vector" storage="varying" description="Output unit length vector"/>
+			<rsl_code>
+		$(val) = normalize( $(A) );
+							</rsl_code>
+			<rsl_include/>
+			<usage>Returns a unit vector in the direction of input vector (V/length(V)).						</usage>
+		</block>
+		<block id="Occlusion" position_x="1" position_y="3" author="rconstruct">
+			<input name="inpoint" type="point" storage="varying" value="P" description="Surface point">
+				<connection parent="p_2" output="P"/>
+			</input>
+			<input name="indir" type="normal" storage="varying" value="faceforward( normalize(N), normalize(I))" description="Direction">
+				<connection parent="FaceForward_2" output="NN"/>
+			</input>
+			<input name="adapt" type="float" storage="uniform" value="1" description="Turns adaptive sampling on/off"/>
+			<input name="minsamp" type="float" storage="uniform" value="16" description="Minimum number of samples to use"/>
+			<input name="samples" type="float" storage="varying" value="32" description="Samples"/>
+			<input name="samplebase" type="float" storage="uniform" value="1" description="Controls ray origin jittering"/>
+			<input name="maxdist" type="float" storage="uniform" value="1e38" description="Maximum distance"/>
+			<input name="maxpixeldist" type="float" storage="varying" value="-1" description="Maximum samples distance"/>
+			<input name="maxsangle" type="float" storage="uniform" value="0.05" description="Maximum solid angle, in steradians"/>
+			<input name="maxerror" type="float" storage="varying" value="-1" description="Quality vs speed"/>
+			<input name="bias" type="float" storage="varying" value="0.01" description="Bias to control self-intersection"/>
+			<input name="coneangle" type="float" storage="uniform" value="1.570796327" description="Cone angle"/>
+			<input name="axis" type="vector" storage="uniform" value="vector(0)" description="Direction of light casting hemisphere"/>
+			<input name="distribution" type="string" storage="uniform" value="&quot;cosine&quot;" description="Distribution"/>
+			<input name="hitsides" type="string" storage="uniform" value="&quot;front&quot;" description="Side of surface to consider by a ray hit"/>
+			<input name="hitmode" type="string" storage="uniform" value="&quot;default&quot;" description="Ray hit mode"/>
+			<input name="label" type="string" storage="uniform" value="&quot;&quot;" description="Ray lavel"/>
+			<input name="subset" type="string" storage="uniform" value="&quot;&quot;" description="Objects subset considered"/>
+			<input name="envmap" type="string" storage="uniform" value="&quot;&quot;" description="Environment map"/>
+			<input name="envspace" type="string" storage="uniform" value="&quot;world&quot;" description="Environment space"/>
+			<input name="occmap" type="string" storage="uniform" value="&quot;raytrace;&quot;" description="Occlusion map"/>
+			<input name="blur" type="float" storage="varying" value="0" description="Shadow map blur"/>
+			<input name="usept" type="float" storage="uniform" value="0" description="Toggle point based occlusion"/>
+			<input name="pfile" type="string" storage="uniform" value="&quot;&quot;" description="Point cloud filename"/>
+			<input name="coordsys" type="string" storage="uniform" value="&quot;world&quot;" description="Point cloud coordinate system"/>
+			<input name="clamp" type="float" storage="uniform" value="0" description="Clamp excessive occlusion"/>
+			<input name="sbleeding" type="float" storage="uniform" value="0" description="Sort bleeding"/>
+			<input name="floffmode" type="float" storage="uniform" value="0" description="Falloff mode, exponential or polynomial"/>
+			<input name="falloff" type="float" storage="uniform" value="0" description="Falloff, 1 = linear"/>
+			<output name="Occ" type="float" storage="varying" description="Occlusion value"/>
+			<output name="Envcolor" type="color" storage="varying" description="Environment color lookup result"/>
+			<output name="Envdir" type="vector" storage="varying" description="Average unoccluded direction"/>
+			<output name="Irrad" type="color" storage="varying" description="Irradiance"/>
+			<rsl_code>
+	
+	/* initialize */
+	$(Envcolor) = color(0); $(Envdir) = vector(0); $(Irrad) = color(0);
+
+	/* make sure options are clear */
+	/* and set them according to shadeop and renderer */
+	#ifdef SHADEOP_ARGUMENTS
+	#undef SHADEOP_ARGUMENTS
+	#endif /* SHADEOP_ARGUMENTS */
+	
+	#if RENDERER == _3delight
+	#define SHADEOP_ARGUMENTS	&quot;label&quot;, $(label), &quot;subset&quot;, $(subset), \
+								&quot;bias&quot;, $(bias), &quot;hitmode&quot;, $(hitmode), \
+								&quot;coneangle&quot;, $(coneangle), &quot;axis&quot;, $(axis), \
+								&quot;samplebase&quot;, $(samplebase), \
+								&quot;maxdist&quot;, $(maxdist), \
+								&quot;environmentmap&quot;, $(envmap), \
+								&quot;environmentspace&quot;, $(envspace), \
+								&quot;distribution&quot;, $(distribution), \
+								&quot;environmentcolor&quot;, $(Envcolor), \
+								&quot;environmentdir&quot;, $(Envdir), \
+								&quot;adaptive&quot;, $(adapt), \
+								&quot;minsamples&quot;, $(minsamp), \
+								&quot;falloffmode&quot;, $(floffmode), \
+								&quot;falloff&quot;, $(falloff), &quot;pointbased&quot;, $(usept), \
+								&quot;filename&quot;, $(pfile), &quot;hitsides&quot;, $(hitsides), \
+								&quot;maxsolidangle&quot;, $(maxsangle), \
+								&quot;clamp&quot;, $(clamp), \
+								&quot;sortbleeding&quot;, $(sbleeding), \
+								&quot;coordsystem&quot;, $(coordsys)
+	#elif RENDERER == pixie
+	#define SHADEOP_ARGUMENTS	&quot;coordsystem&quot;, $(coordsys), \
+								&quot;maxdist&quot;, $(maxdist), \
+								&quot;coneangle&quot;, $(coneangle), \
+								&quot;samplebase&quot;, $(samplebase), \
+								&quot;label&quot;, $(label), &quot;bias&quot;, $(bias), \
+								&quot;maxerror&quot;, $(maxerror), \
+								&quot;pointbased&quot;, $(usept), \
+								&quot;environmentmap&quot;, $(envmap), \
+								&quot;filename&quot;, $(pfile), \
+								&quot;maxpixeldist&quot;, $(maxpixeldist), \
+								&quot;maxsolidangle&quot;, $(maxsangle), \
+								&quot;environmentcolor&quot;, $(Envcolor)
+	#elif RENDERER == prman
+	#define SHADEOP_ARGUMENTS	&quot;adaptive&quot;, $(adapt), \
+								&quot;minsamples&quot;, $(minsamp), \
+								&quot;coordsystem&quot;, $(coordsys), \
+								&quot;distribution&quot;, $(distribution), \
+								&quot;maxdist&quot;, $(maxdist), \
+								&quot;coneangle&quot;, $(coneangle), \
+								&quot;samplebase&quot;, $(samplebase), \
+								&quot;hitmode&quot;, $(hitmode), \
+								&quot;hitsides&quot;, $(hitsides), &quot;subset&quot;, $(subset), \
+								&quot;label&quot;, $(label), \
+								&quot;environmentmap&quot;, $(envmap), \
+								&quot;environmentspace&quot;, $(envspace), \
+								&quot;bias&quot;, $(bias), \
+								&quot;maxpixeldist&quot;, $(maxpixeldist), \
+								&quot;maxerror&quot;, $(maxerror), \
+								&quot;falloffmode&quot;, $(floffmode), \
+								&quot;falloff&quot;, $(falloff), &quot;pointbased&quot;, $(usept), \
+								&quot;filename&quot;, $(pfile), \
+								&quot;maxsolidangle&quot;, $(maxsangle), \
+								&quot;clamp&quot;, $(clamp), \
+								&quot;environmentcolor&quot;, $(Envcolor), \
+								&quot;environmentdir&quot;, $(Envdir)		
+	#elif RENDERER == air
+	#define SHADEOP_ARGUMENTS	&quot;bias&quot;, $(bias), &quot;label&quot;, $(label), \
+								&quot;maxdist&quot;, $(maxdist), \
+								&quot;maxerror&quot;, $(maxerror), \
+								&quot;maxpixeldist&quot;, $(maxpixeldist), \
+								&quot;samples&quot;, $(samples), &quot;subset&quot;, $(subset)
+	#elif RENDERER == aqsis
+	#define SHADEOP_ARGUMENTS	&quot;blur&quot;, $(blur), &quot;bias&quot;, $(bias)
+	#else /* entropy, bmrt, renderdotc? */
+	#endif /* RENDERER */
+
+	/* different order of arguments */
+	#if RENDERER == _3delight || RENDERER == pixie || RENDERER == prman
+		aov_occlusion += occlusion(	$(inpoint), $(indir), $(samples),
+									SHADEOP_ARGUMENTS );
+		$(Occ) = 1 - aov_occlusion;
+	#elif RENDERER == air /* shadow map based, unless map = &quot;raytrace&quot; */
+		aov_occlusion += occlusion(	$(occmap), $(inpoint), $(indir),
+									$(angle), SHADEOP_ARGUMENTS );
+		$(Occ) = 1 - aov_occlusion;
+	#elif RENDERER == aqsis /* shadow map based occlusion */
+		aov_occlusion += occlusion(	$(occmap), $(inpoint), $(indir),
+									$(samples), SHADEOP_ARGUMENTS );
+		$(Occ) = 1 - aov_occlusion;
+	#else /* entropy, bmrt, renderdotc? */
+		$(Occ) = 0;		
+	#endif /* RENDERER */
+	
+							</rsl_code>
+			<rsl_include/>
+			<usage>This function returns the ambient occlusion, and optionally environment color, environment direction and indirect lighting. This function&apos;s arguments vary with each renderer&apos;s implementation, so make sure to consult your renderer&apos;s documentation. This block provided the following arguments: &quot;coneangle&quot;, defaults to PI/2; &quot;distribution&quot;, can be &quot;cosine&quot; or &quot;uniform&quot;, defaults to &quot;cosine&quot;. This function can use an optional environment map to use when rays don&apos;t hit the geometry, and can also return the environment direction vector, the average of the unoccluded direction. Note that you can use either the surface normal, or the reflection vector, for the &quot;indir&quot; variable, in which case the function will output ambient occlusion or reflection occlusion respectively. You can also use point-based occlusion, or Aqsis&apos;s implementation which uses multiple shadow maps. Note that this function varies considerably from implementation to implementation, so please consult your renderer&apos;s documentation for details. The occlusion value is passed to aov_occlusion AOV preset, as occlusion, not 1 - occlusion.						</usage>
+		</block>
+		<block id="Root block" position_x="6" position_y="1" author="" root="RIB">
+			<rib_statements>DisplayChannel &quot;float occlusion&quot;
+Attribute &quot;visibility&quot; &quot;integer diffuse&quot; [1]
+Attribute &quot;visibility&quot; &quot;integer specular&quot; [1]
+Attribute &quot;visibility&quot; &quot;integer transmission&quot; [1]
+Attribute &quot;cull&quot; &quot;integer hidden&quot; [0]
+Attribute &quot;cull&quot; &quot;integer backfacing&quot; [0]
+Attribute &quot;dice&quot; &quot;integer rasterorient&quot; [0]
+			</rib_statements>
+			<imager_statement/>
+			<input name="Ci" type="color" storage="varying" shader_parameter="1" value="0" description="Incident ray colour">
+				<connection parent="Bake3d" output="bdataval"/>
+			</input>
+			<input name="Oi" type="color" storage="varying" shader_parameter="1" value="1" description="Incident ray opacity"/>
+			<input name="P" type="point" storage="varying" shader_parameter="1" value="P" description="Displaced surface position"/>
+			<input name="N" type="normal" storage="varying" shader_parameter="1" value="N" description="Displaced surface shading normal"/>
+			<input name="Cl" type="color" storage="varying" shader_parameter="1" value="0" description="Outgoing light ray colour"/>
+			<input name="Cv" type="color" storage="varying" shader_parameter="1" value="0" description="Attenuated ray colour"/>
+			<input name="Ov" type="color" storage="varying" shader_parameter="1" value="1" description="Attenuated ray opacity"/>
+			<input name="Cm" type="color" storage="varying" shader_parameter="1" value="0" description="Output pixel colour"/>
+			<input name="Om" type="color" storage="varying" shader_parameter="1" value="1" description="Output pixel opacity"/>
+			<input name="AOV" type="color" storage="varying" shader_parameter="1" value="1" description="AOV preview output"/>
+			<rsl_code/>
+			<rsl_include/>
+			<usage/>
+		</block>
+		<block id="p_2" position_x="-3" position_y="3" author="rconstruct">
+			<output name="P" type="point" storage="varying" description="Surface position"/>
+			<rsl_code>
+    $(P) = P;
+    						</rsl_code>
+			<rsl_include/>
+			<usage>Note that in all shading contexts, &quot;P&quot; is the surface position, the only exception being volume shaders, in which &quot;P&quot; is the light ray origin. Also note that in imager shaders, &quot;P&quot; is the position of the pixel center in raster space, with the z coordinate being 0.						</usage>
+		</block>
+	</network>
+</shrimp>

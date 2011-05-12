@@ -1,0 +1,9 @@
+<shrimp name="Rayinfo" type="function" description="Provides information on the current ray" author="rconstruct">
+    <input name="parameter" description="Ray info fields, see usage" storage="uniform" type="string" default="&quot;depth&quot;"/>
+	<output name="status" description="Exit status" type="float"/>
+	<output name="result" description="Query value" type="vector point string float"/>
+	<rsl_code>
+		$(status) = rayinfo( $(parameter), $(result) );
+	</rsl_code>
+	<usage>Returns the data associated with the current ray, as long as the data is known to the renderer and of correct type, in which case the result will contain the associated data content, and &quot;rayinfo&quot; will exit with 1, otherwise &quot;rayinfo&quot; will exit with 0. The data accessible by the &quot;rayinfo&quot; function varies with each renderer&apos;s implementation, please check your renderer&apos;s documentation for details. Usual information to query is: &quot;speculardepth&quot;, &quot;diffusedepth&quot;, &quot;shadowdepth&quot;, &quot;depth&quot;, &quot;type&quot;, &quot;label&quot;, &quot;origin&quot;, &quot;direction&quot;, &quot;length&quot;.</usage>
+</shrimp>

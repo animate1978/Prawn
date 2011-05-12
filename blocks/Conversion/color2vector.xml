@@ -1,0 +1,8 @@
+<shrimp type="function" name="Color2Vector" description="Color to vector conversion" author="rconstruct">
+    <input name="in" description="Input color" type="color" default="color(0)"/>
+    <output name="value" description="Output value" type="vector"/>
+	<rsl_code>
+	    $(value) = vector( comp( $(in), 0), comp( $(in), 1), comp( $(in), 2) );
+	</rsl_code>
+	<usage>Sets a vector with a color&apos;s components, the resulting vector being in the [0,1] range.</usage>
+</shrimp>

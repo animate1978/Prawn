@@ -1,0 +1,9 @@
+<shrimp type="function" name="Format" description="Formats a string" author="rconstruct">
+	<input name="pattern" description="String pattern" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="string" description="String to search" storage="uniform" type="string" default="&quot;&quot;" multi=","/>
+	<output name="newstring" description="Formatted string" storage="uniform" type="string"/>
+	<rsl_code>
+		$(newstring) = format( $(pattern), $(string) );
+	</rsl_code>
+	<usage>Similar to &quot;sprintf&quot; in C, formats a string according to string pattern. The formatting for the string uses &quot;%f&quot;, &quot;%c&quot;, &quot;%p&quot;, &quot;%m&quot; and &quot;%s&quot;, for variables of type float, color, normal/vector/point, matrix, and string respectively. This function might vary with some renderer&apos;s implementations.</usage>
+</shrimp>

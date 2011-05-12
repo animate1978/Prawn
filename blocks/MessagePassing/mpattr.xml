@@ -1,0 +1,9 @@
+<shrimp name="MPAttr" type="function" description="Returns primitive attribute state data" author="rconstruct">
+    <input name="parameter" description="Primitive attribute data to query, see usage." storage="uniform" type="string" default="&quot;&quot;"/>
+	<output name="result" description="Query value" type="color normal vector point string float"/>
+	<output name="status" description="Exit status" type="float"/>
+	<rsl_code>
+		$(status) = attribute( $(parameter), $(result) );
+	</rsl_code>
+    <usage>Returns the data associated with a primitive&apos;s attribute state, as long as the data is known to the renderer and of correct type, in which case the result will contain the associated data content and &quot;attribute&quot; will exit with 1, otherwise, &quot;attribute&quot; will exit with 0. The data accessible by the &quot;attribute&quot; function is listed next, as well as its associated type: &quot;ShadingRate&quot;, uniform float; &quot;Sides&quot;, uniform float; &quot;Matte&quot;, uniform float; &quot;GeometricApproximation:motionfactor&quot;, uniform float; &quot;displacementbound:sphere&quot;, uniform float; &quot;displacementbound:coordinatesystem&quot;, uniform string; &quot;identifier:name&quot;, uniform string; &quot;grouping:membership&quot;, uniform string; &quot;trace:bias&quot;, uniform float: &quot;trace:displacements&quot;, uniform float; &quot;photon:shadingmodel&quot;, uniform string; &quot;photon:causticmap&quot;, uniform string; &quot;photon:globalmap&quot;, uniform string; &quot;photon:estimator&quot;, uniform float; &quot;visibility:camera&quot;, uniform float; &quot;visibility:trace&quot;, uniform float; &quot;visibility:transmission&quot;, uniform string; &quot;user:attributename&quot;, user set type. Notice that different renderer implementations of &quot;attribute&quot; might be able to access different data fields.</usage>
+</shrimp>

@@ -1,0 +1,7 @@
+<shrimp type="function" name="ShowUV" description="Show UV parameters" author="rconstruct">
+	<output name="Ci" description="Output value" storage="varying" type="color"/>
+	<rsl_code>
+        $(Ci) = color( u, v, .1 );
+	</rsl_code>
+	<usage>Shows the surface&apos;s UV parameters as a color, with the color&apos;s components being R=U, G=V, B=0.1.</usage>
+</shrimp>

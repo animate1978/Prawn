@@ -1,0 +1,8 @@
+<shrimp type="function" name="dPdTime" description="How the surface position P is changing per unit time" author="rconstruct">
+	<output name="dPdtime" description="How the surface position P is changing per unit time" storage="varying" type="vector"/>
+	<rsl_code>
+	$(dPdtime) = dPdtime;
+	</rsl_code>
+<usage>How the surface position &quot;P&quot; is changing per unit time. Its available in surface and displacement contexts, depending on renderer&apos;s implementations.</usage>
+</shrimp>
+

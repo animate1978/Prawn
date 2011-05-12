@@ -1,0 +1,52 @@
+file /home/animate1978/prawn/SConstruct,line 38:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for C header file gl.h... 
+scons: Configure: ".sconf_temp/conftest_0.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_0.c <-
+  |  |
+  |  |#include "gl.h"
+  |  |
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_0.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_0.o -c -Wno-non-virtual-dtor -I/usr/local/include -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include -I/usr/include/GL -I/usr/local/include/fltk/compat .sconf_temp/conftest_0.c
+  |
+scons: Configure: (cached) yes
+
+scons: Configure: Checking for C header file glu.h... 
+scons: Configure: ".sconf_temp/conftest_1.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_1.c <-
+  |  |
+  |  |#include "glu.h"
+  |  |
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_1.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_1.o -c -Wno-non-virtual-dtor -I/usr/local/include -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include -I/usr/include/GL -I/usr/local/include/fltk/compat .sconf_temp/conftest_1.c
+  |
+scons: Configure: (cached) yes
+
+scons: Configure: Checking for C++ header file fltk/run.h... 
+scons: Configure: ".sconf_temp/conftest_2.cpp" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_2.cpp <-
+  |  |
+  |  |#include "fltk/run.h"
+  |  |
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_2.o" is up to date.
+scons: Configure: The original builder output was:
+  |g++ -o .sconf_temp/conftest_2.o -c -Wno-non-virtual-dtor -I/usr/local/include -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include -I/usr/include/GL -I/usr/local/include/fltk/compat .sconf_temp/conftest_2.cpp
+  |
+scons: Configure: (cached) yes
+
+scons: Configure: ".sconf_temp/conftest_3" is up to date.
+scons: Configure: The original builder output was:
+  |pkg-config --exists sigc++-2.0
+  |
+

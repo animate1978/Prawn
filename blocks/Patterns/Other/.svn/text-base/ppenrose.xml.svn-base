@@ -1,0 +1,13 @@
+<shrimp type="function" name="PaintedPenrose" description="Painted Penrose rhomb tile" author="rconstruct">
+	<input name="s" description="X value to sample" storage="varying" type="float" default="s"/>
+	<input name="t" description="Y value to sample" storage="varying" type="float" default="t"/>
+	<input name="tilesize" description="Tile size" type="float" default="1"/>
+	<input name="skinnycolor" description="Skinny color" type="color" default="color( 0.2, 0.4, 0.65 )"/>
+	<input name="fatcolor" description="Fat color" type="color" default="color( 0.92, 0.33, 0.61 )"/>
+	<output name="value" description="Output color" type="color"/>
+	<rsl_include>rsl_shrimp_extrapatterns.h</rsl_include>
+	<rsl_code>
+		$(value) = painted_tiling( $(s), $(t), $(tilesize), $(skinnycolor), $(fatcolor) );
+	</rsl_code>
+	<usage>Painted Penrose rhomb tiles, by Derek Ledbetter.</usage>
+</shrimp>

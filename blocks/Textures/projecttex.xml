@@ -1,0 +1,44 @@
+<shrimp type="function" name="ProjectTex" description="Project texture, get color and opacity." author="rconstruct">
+	<input name="texmap" description="Texture map" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="projection" description="Projection to use" storage="uniform" type="string" default="&quot;st&quot;"/>
+	<input name="whichspace" description="Space to use for projection" storage="uniform" type="string" default="&quot;shader&quot;"/>
+	<input name="graymode" description="Grayscale conversion mode" storage="uniform" type="string" default="&quot;luminance&quot;"/>
+	<input name="xform" description="Transformation matrix" storage="uniform" type="matrix" default="1"/>
+	<input name="channel" description="Optional channel for grayscale conversion" storage="uniform" type="float" default="0"/>
+	<input name="blur" description="Texture blur" type="float" default="0"/>
+	<input name="samples" description="Texture samples" storage="uniform" type="float" default="1"/>
+	<input name="filter" description="Filter type" storage="uniform" type="string" default="&quot;gaussian&quot;"/>
+	<input name="width" description="Filter width" storage="uniform" type="float" default="1"/>
+	<input name="maxwidth" description="Maximum filter width" storage="uniform" type="float" default="1"/>
+	<input name="P" description="Surface point" type="point" default="P"/>
+	<input name="N" description="Surface normal" type="normal" default="normalize(N)"/>
+	<input name="widthrepeat" description="Repeat width" type="float" default="1"/>
+	<input name="heightrepeat" description="Repeat height" type="float" default="1"/>
+	<input name="xpatoffsetw" description="X offset width" type="float" default="0"/>
+	<input name="xpatoffseth" description="X offset height" type="float" default="0"/>
+	<input name="ypatoffsetw" description="Y offset width" type="float" default="0"/>
+	<input name="ypatoffseth" description="Y offset height" type="float" default="0"/>
+	<input name="zpatoffsetw" description="Z offset width" type="float" default="0"/>
+	<input name="zpatoffseth" description="Z offset height" type="float" default="0"/>
+	<input name="xinverts" description="Invert S on X plane" storage="uniform" type="float" default="0"/>
+	<input name="yinverts" description="Invert S on Y plane" storage="uniform" type="float" default="0"/>
+	<input name="zinverts" description="Invert S on Z plane" storage="uniform" type="float" default="0"/>
+	<input name="fixseams" description="Fix wrapping seams" storage="uniform" type="float" default="0"/>
+	<output name="mapcolor" description="Texture color" storage="varying" type="color"/>
+	<output name="mapopacity" description="Texture opacity" storage="varying" type="color"/>
+	<rsl_include>rsl_texture.h</rsl_include>
+	<rsl_code>
+		$(mapcolor) = color(0);
+		$(mapopacity) = color(0);
+		getcolorandalpha(	$(texmap), $(projection), $(whichspace),
+							$(graymode), $(xform), $(channel), $(blur),
+							$(samples), $(filter), $(width), $(maxwidth),
+							$(P), $(N), $(widthrepeat), $(heightrepeat),
+							$(xpatoffsetw), $(xpatoffseth),
+							$(ypatoffsetw), $(ypatoffseth),
+							$(zpatoffsetw), $(zpatoffseth),
+							$(xinverts), $(yinverts), $(zinverts),
+							$(fixseams), $(mapcolor), $(mapopacity) );
+	</rsl_code>
+	<usage>This block projects textures and retrieves the color and opacity values. The variables used are: &quot;texmap&quot;, the texture map to use; &quot;projection&quot;, the projection to use, being &quot;box&quot;, &quot;perspective&quot;, &quot;cylindrical&quot;, &quot;spherical&quot;, and &quot;st&quot; the allowed types, defaulting to &quot;st&quot;; &quot;whichspace&quot;, in which space to do the transformations for the projections; &quot;graymode&quot;, if the texture has enough channels, how do to the color to grayscale conversion for the alpha channel - the allowed modes being the same as in the &quot;ToGrayscale&quot; block, namely: &quot;minimum&quot;, &quot;maximum&quot;, and &quot;average&quot; the minimum, maximum, and average of the color components (if there are at least 3 color components), and &quot;luminance&quot; and &quot;channel&quot; doing the conversion from color to grayscale using CIE luminance function, or by using the channel specified in &quot;channel&quot; as the grayscale value used for the alpha channel. If the texture has 6 textures, the opacity map is a color map, that uses the channel 3, 4 and 5 respectively for R, G and B. The remaining variables are: &quot;blur&quot;, the blur parameter passed to the &quot;texture&quot; shadeop; &quot;samples&quot;, the samples used for the &quot;texture&quot; shadeop, only valid when the filter type is &quot;box&quot;, which can be defined in &quot;filter&quot;; &quot;width&quot; and &quot;maxwidth&quot; controlling the filter width and maximum width respectively; &quot;P&quot; and &quot;N&quot; the surface point P and normalized surface normal N. The following variables are used to control the &quot;box&quot; projection, being: &quot;repeatwidth&quot; and &quot;repeatheight&quot;, the number of times the texture repeats in width and height for each of the face&apos;s projections; &quot;xpatoffsetw&quot;, &quot;xpatoffseth&quot;, &quot;ypatoffsetw&quot;, &quot;ypatoffseth&quot;, &quot;zpatoffsetw&quot;, &quot;zpatoffseth&quot;, controlling the width and height offsets for each of X, Y and Z coordinates. The variable &quot;fixseams&quot; toggles the use between the normal &quot;texture&quot; shadeop, and Dan Maas&apos;s &quot;clampedtexture&quot; function, from teh SIGGRAPH 2006 course 25, &quot;What the RI Spec never told you&quot;, to control the seams artifacts when wrapping textures.</usage>
+</shrimp>

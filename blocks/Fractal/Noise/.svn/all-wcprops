@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Fractal/Noise
+END
+noise1d.xml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Fractal/Noise/noise1d.xml
+END
+noise2d.xml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Fractal/Noise/noise2d.xml
+END
+noise3d.xml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Fractal/Noise/noise3d.xml
+END
+noise4d.xml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Fractal/Noise/noise4d.xml
+END
+fnoise1d.xml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Fractal/Noise/fnoise1d.xml
+END
+fnoise2d.xml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Fractal/Noise/fnoise2d.xml
+END
+fnoise3d.xml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Fractal/Noise/fnoise3d.xml
+END
+fnoise4d.xml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/shrimp/!svn/ver/325/shrimp-2.0/blocks/Fractal/Noise/fnoise4d.xml
+END

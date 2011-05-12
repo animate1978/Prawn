@@ -1,0 +1,27 @@
+<shrimp name="Caustic" type="function" description="Returns caustic on surface point" author="rconstruct">
+    <input name="P" description="Surface point" storage="varying" type="point" default="P"/>
+	<input name="N" description="Surface normal" storage="varying" type="normal" default="normalize(N)"/>
+	<output name="Ci" description="Caustic value" type="color"/>
+	<rsl_code>
+	
+	#if RENDERER == pixie || RENDERER == _3delight
+		/* get estimator and caustic map via attribute() */
+		uniform float estimator_$(blockname) = 100;
+		uniform string cmap_$(blockname) = "";
+		attribute(&quot;photon:estimator&quot;, estimator_$(blockname) );
+		if (1 == attribute(&quot;photon:causticmap&quot;,
+			cmap_$(blockname) ) &amp;&amp;
+			cmap_$(blockname) != &quot;&quot; ) {
+			aov_caustics += photonmap(	cmap_$(blockname), $(P), $(N),
+							&quot;estimator&quot;, estimator_$(blockname) );
+		}
+	#elif RENDERER == aqsis /* do nothing (0) */
+	#else
+		/* color caustic() on PRMan and Air */
+		aov_caustics += color caustic( $(P), $(N) );
+	#endif /* RENDERER */
+		$(Ci) = aov_caustics;
+
+	</rsl_code>
+    <usage>This function returns caustics from a caustic photon map lookup, on a surface area defined by surface point &quot;P&quot; and surface normal &quot;N&quot;. This can be done also using &quot;photonmap&quot;, retrieving the caustics map and the photon estimator via &quot;attribute&quot; function, as the &quot;caustic&quot; function does. The caustics value is passed to &quot;aov_caustics&quot; AOV preset.</usage>
+</shrimp>

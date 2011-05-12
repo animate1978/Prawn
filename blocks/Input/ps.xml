@@ -1,0 +1,8 @@
+<shrimp type="function" name="Ps" description="Position being illuminated" author="rconstruct">
+    <output name="Ps" description="Position being illuminated" storage="varying" type="point"/>
+    <rsl_code>
+    $(Ps) = Ps;
+    </rsl_code>
+	<usage>Position being illuminated. Note that this variable is only accessed in light shaders.</usage>
+</shrimp>
+

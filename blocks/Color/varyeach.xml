@@ -1,0 +1,14 @@
+<shrimp type="function" name="VaryEach" description="Larry Gritz&apos;s VaryEach" author="rconstruct">
+	<input name="Cin" description="Input color" type="color" default="color(0.5)"/>
+	<input name="index" description="Index" type="float" default="1"/>
+    <input name="varyhue" description="Hue variation" type="float" default="1"/>
+    <input name="varysat" description="Saturation variation" type="float" default="1"/>
+    <input name="varylum" description="Luminance variation" type="float" default="1"/>
+	<output name="value" description="The resulting color" type="color"/>
+    <rsl_include>rsl_helpers.h</rsl_include>
+	<rsl_code>
+		$(value) = varyEach(	$(Cin), $(index), $(varyhue),
+							$(varysat), $(varylum) );
+	</rsl_code>
+<usage>Larry Gritz&apos;s VaryEach takes a computed color, then tweaks each indexed item separately to add some variation. Hue, saturation and lightness are all independently controlled. Hue adds, but saturation and lightness multiply.</usage>
+</shrimp>

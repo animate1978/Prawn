@@ -1,0 +1,8 @@
+<shrimp type="function" name="N" description="Surface shading normal" author="rconstruct">
+    <output name="N" description="Surface shading normal" storage="varying" type="normal"/>
+    <rsl_code>
+    $(N) = N;
+    </rsl_code>
+	<usage>Surface shading normal. The availability of this global variable in the different shading contexts is renderer specific. It&apos;s not available in imager shaders.</usage>
+</shrimp>
+

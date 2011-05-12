@@ -1,0 +1,18 @@
+<shrimp type="function" name="Voronoi3D2F" description="3D Voronoi noise, 2 features." author="rconstruct">
+	<input name="P" description="Point to sample Voronoi at" storage="varying" type="point" default="P"/>
+	<input name="jittering" description="Jitter" type="float" default="1"/>
+	<input name="metric" description="Distanc metric, see help" storage="uniform" type="float" default="2"/>
+	<output name="feature1" description="Feature 1" storage="varying" type="float"/>
+	<output name="feature2" description="Feature 2" storage="varying" type="float"/>
+	<output name="Ppos1" description="Position 1" storage="varying" type="point"/>
+	<output name="Ppos2" description="Position 2" storage="varying" type="point"/>
+	<rsl_include>rsl_shrimp_fractal.h</rsl_include>
+	<rsl_code>
+		/* initialize */
+		$(feature1) = 0; $(Ppos1) = point(0);
+		$(feature2) = 0; $(Ppos2) = point(0);
+		voronoi_f1f2_3d( $(P), $(jittering), $(metric), $(feature1),
+					$(feature2), $(Ppos1), $(Ppos2) );
+	</rsl_code>
+	<usage>3D Voronoi cell noise, 2 features version. When &quot;metric&quot; = 0, distance metric is Tchebychev otherwise the distance metric = Minkowski, being &quot;metric&quot;, Minkowski&apos;s P parameter, with P = 1 as the Manhattan metric, P = 2, the Euclidian metric, and allowing higher orders of P. Note that as P increases, it tends towards the Tchebychev result.</usage> 
+</shrimp>

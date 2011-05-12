@@ -1,0 +1,15 @@
+<shrimp type="function" name="MPCurvature" description="Matthew Parrot&apos;s surface curvature function" author="rconstruct">
+	<input name="P" description="Surface point" storage="varying" type="point" default="P"/>
+	<input name="offset" description="Offset" type="float" default="0"/>
+	<input name="gain" description="Gain" type="float" default="1.0"/>
+	<output name="value" description="Curvature at P" type="color"/>
+	<output name="minimum" description="Minimum curvature" type="float"/>
+	<output name="maximum" description="Maximum curvature" type="float"/>
+	<rsl_include>rsl_helpers.h</rsl_include>
+	<rsl_code>
+		mpcurvature( $(P), $(maximum), $(minimum) );
+		$(value) = color "hsv" ( $(maximum) + $(minimum) * $(gain) + 
+						$(offset), .8, .8 );
+	</rsl_code>
+	<usage>Surface curvature function, alternative implementation by Matthew Parrot, derived from the function contained in &quot;Advanced Renderman&quot; by Anthony A. Apodaca and Larry Gritz, and Mathworld. This function calculates how quickly the supplied surface point &quot;P&quot; is changing along an axis, and then compares this value to the change in the tangent of the surface and the angle which the tangent makes with the surface. The resulting curvature value is set as the &quot;hue&quot; component of the output color.</usage>
+</shrimp>

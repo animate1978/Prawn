@@ -1,0 +1,14 @@
+<shrimp type="function" name="Spline" description="Fits a Spline to the given control points" author="rconstruct">
+	<input name="basis" description="The basis function" storage="uniform" type="string" default="&quot;catmull-rom&quot;"/>
+	<input name="x" description="The value to test the spline at" type="float" default="0"/>
+	<input name="point1" description="The 1st Control Point" type_parent="value" type="point vector color float" default="0"/>
+	<input name="point2" description="The 2nd Control Point" type_parent="value" type="point vector color float" default="0.2"/>
+	<input name="point3" description="The 3rd Control Point" type_parent="value" type="point vector color float" default="0.8"/>
+	<input name="point4" description="The 4th or subsequent Control Points" type_parent="value" type="point vector color float" multi="," default="1"/>
+	<output name="value" description="The value of the spline at x" type="point vector color float"/>
+	<rsl_code>
+		$(value) = spline(	$(basis), $(x), $(point1), $(point2),
+							$(point3), $(point4) );
+	</rsl_code>
+<usage>Fits a spline into the control points passed, using the specified spline basis function. These can be of type &quot;catmull-rom&quot;, &quot;bezier&quot;, &quot;bspline&quot;, &quot;hermite&quot;, or &quot;linear&quot;. Defaults to &quot;catmull-rom&quot;. In 3delight, any spline type may be prefixed by &quot;solve&quot;, such as &quot;solvecatmull-rom&quot;, in which case this shadeop becomes a root solver and may be used as an invert function. The number of required data points is, for &quot;catmull-rom&quot;, 4 or higher; for &quot;bezier&quot;, 4n+3; for &quot;hermite&quot;, 4n+2; for &quot;bspline&quot; 4 or higher.</usage>
+</shrimp>

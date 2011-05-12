@@ -1,0 +1,10 @@
+<shrimp type="function" name="Refract" description="Refracted vector" author="rconstruct">
+	<input name="I" description="Incident vector" type="vector" default="normalize(I)"/>
+	<input name="N" description="Surface normal" type="vector normal" default="normalize(N)"/>
+	<input name="eta" description="The ratio of medium IORs, see usage." type="float" default="0.75"/>
+	<output name="T" description="The refracted vector" type="vector"/>
+	<rsl_code>
+		$(T) = refract( $(I), $(N), $(eta) );
+	</rsl_code>
+	<usage>Return the refracted vector &quot;T&quot;given an incident direction &quot;I&quot;, the normal vector &quot;N&quot;, and the relative index of refraction &quot;eta&quot;. Eta is the ratio of the index of refraction in the volume containing the incident vector, to that of the volume being entered. If the returned vector has zero length, then there is no transmitted light because of total internal reflrection.</usage>
+</shrimp>

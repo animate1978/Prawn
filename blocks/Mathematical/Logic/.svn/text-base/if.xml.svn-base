@@ -1,0 +1,13 @@
+<shrimp type="function" name="If" description="Conditionaly pass a value" author="rconstruct">
+	<input name="x" description="Condition value, true if non-zero, false if zero" type="float" default="0"/>
+	<input name="true_value" description="Input value to pass through if x is true" type_parent="value" type="string vector point normal color float" default="0"/>
+	<input name="false_value" description="Input value to pass through if exp is false" type_parent="value" type="string vector point normal color float" default="0"/>
+	<output name="value" description="if condition is true then this is true_value, otherwise it is false_value" type="string vector point normal color float"/>
+	<rsl_code>
+	if( $(x) )
+		$(value) = $(true_value);
+	else
+		$(value) = $(false_value);
+	</rsl_code>
+	<usage>The value of &quot;x&quot; is a float that determines which input value is passed to the output. Any non-zero value is regarded as true.</usage>
+</shrimp>

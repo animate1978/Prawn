@@ -1,0 +1,24 @@
+<shrimp type="function" name="Turbulence2D" description="2 dimensional turbulence function." author="rconstruct">
+	<input name="s" description="X coordinate to sample turbulence at" storage="varying" type="float" default="s"/>
+	<input name="t" description="Y coordinate to sample turbulence at" storage="varying" type="float" default="t"/>
+	<input name="filterwidth" description="Filter width for antialiasing" type="float" default="0"/>
+	<input name="octaves" description="Maximum octaves of noise" storage="uniform" type="float" default="5"/>
+	<input name="lacunarity" description="Gap of successive frequencies" type="float" default="2.17"/>
+	<input name="gain" description="Controls the contrast of the turbulence" type="float" default="0.5"/>
+	<input name="amplitude" description="Amplitude of turbulence" type="float" default="1"/>
+	<output name="value" description="Turbulence value at (x,y)" type="color vector point float"/>
+	<rsl_include>rsl_shrimp_fractal.h</rsl_include>
+	<rsl_code>
+	#define $(blockname)_$(value:type)
+	#ifdef $(blockname)_float
+		$(value) = $(amplitude) * turbulence( $(s), $(t), $(filterwidth),
+					$(octaves), $(lacunarity), $(gain));
+	#else
+		$(value) = $(amplitude) * $(value:type) ( vector vturbulence( $(s),
+				$(t), $(filterwidth), $(octaves), $(lacunarity), $(gain) ) );
+	#endif
+	#undef $(blockname)_$(value:type)
+
+	</rsl_code>
+	<usage>2 dimensional turbulence fractal function with Perlin noise basis. Returns a result in the [0,1] range by default.</usage>
+</shrimp>

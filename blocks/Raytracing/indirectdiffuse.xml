@@ -1,0 +1,123 @@
+<shrimp name="IndirectDiffuse" type="function" description="Computes indirect lighting" author="rconstruct" rolled="1">
+    <input name="P" description="Surface point" storage="varying" type="point" default="P"/>
+	<input name="direction" description="Direction" storage="varying" type="vector normal" default="faceforward( normalize(N), normalize(I))"/>
+	<input name="adaptive" description="Turns adaptive sampling on/off" storage="uniform" type="float" default="1"/>
+	<input name="minsamples" description="Minimum number of samples to use" storage="uniform" type="float" default="16"/>
+	<input name="falloffmode" description="Falloff mode, 0 = exponential, 1 = polynomial" storage="uniform" type="float" default="0"/>
+	<input name="falloff" description="Falloff, 0 = no falloff, 1 = linear falloff" storage="uniform" type="float" default="0"/>
+    <input name="samples" description="Samples" type="float" default="32"/>
+	<input name="samplebase" description="Controls ray origin jittering" storage="uniform" type="float" default="1"/>
+    <input name="maxdist" description="Maximum distance" storage="uniform" type="float" default="1e38"/>
+	<input name="maxpixeldist" description="Maximum samples distance" type="float" default="-1"/>
+	<input name="maxsolidangle" description="Maximum solid angle, in steradians" storage="uniform" type="float" default="0.05"/>
+	<input name="maxerror" description="Quality vs speed" type="float" default="-1"/>
+	<input name="bias" description="Bias to control self-intersection" type="float" default="0.01"/>
+	<input name="coneangle" description="Cone angle" storage="uniform" type="float" default="1.570796327"/>
+	<input name="axis" description="Direction of light casting hemisphere" storage="uniform" type="vector" default="vector(0)"/>
+	<input name="distribution" description="Distribution" storage="uniform" type="string" default="&quot;cosine&quot;"/>
+	<input name="hitsides" description="Side of surface to consider by a ray hit" storage="uniform" type="string" default="&quot;front&quot;"/>
+	<input name="hitmode" description="Ray hit mode" storage="uniform" type="string" default="&quot;default&quot;"/>
+	<input name="label" description="Ray lavel" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="subset" description="Objects subset considered" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="envmap" description="Environment map" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="envspace" description="Environment space" storage="uniform" type="string" default="&quot;world&quot;"/>
+	<input name="useptc" description="Toggle point based irradiance" storage="uniform" type="float" default="0"/>
+	<input name="ptcfile" description="Point cloud filename" storage="uniform" type="string" default="&quot;&quot;"/>
+	<input name="coordsys" description="Point cloud coordinate system" storage="uniform" type="string" default="&quot;world&quot;"/>
+	<input name="clamp" description="Clamp excessive occlusion" storage="uniform" type="float" default="0"/>
+	<input name="sortbleeding" description="Sort bleeding" storage="uniform" type="float" default="0"/>
+	<output name="Ci" description="Occlusion value" storage="varying" type="color" />
+	<output name="Envcolor" description="Environment color lookup result" storage="varying" type="color" />
+	<output name="Envdirection" description="Average unoccluded direction" storage="varying" type="vector" />
+	<output name="Occlusion" description="Occlusion amount" storage="varying" type="float" />
+	<rsl_code>
+	
+	/* initialize */
+	$(Envcolor) = color(0); $(Envdirection) = vector(0); $(Occlusion) = 0;
+
+	/* make sure options are clear */
+	/* and set them according to shadeop and renderer */
+	#ifdef SHADEOP_ARGUMENTS
+	#undef SHADEOP_ARGUMENTS
+	#endif /* SHADEOP_ARGUMENTS */
+
+	#if RENDERER == _3delight
+	#define SHADEOP_ARGUMENTS	"label", $(label), "subset", $(subset), \
+								"bias", $(bias), "hitmode", $(hitmode), \
+								"coneangle", $(coneangle), "axis", $(axis), \
+								"samplebase", $(samplebase), \
+								"maxdist", $(maxdist), \
+								"environmentmap", $(envmap), \
+								"environmentspace", $(envspace), \
+								"distribution", $(distribution), \
+								"adaptive", $(adaptive), \
+								"minsamples", $(minsamples), \
+								"falloffmode", $(falloffmode), \
+								"falloff", $(falloff), \
+								"pointbased", $(useptc), "filename", $(ptcfile), \
+								"hitsides", $(hitsides), \
+								"maxsolidangle", $(maxsolidangle), \
+								"clamp", $(clamp), \
+								"sortbleeding", $(sortbleeding), \
+								"coordsystem", $(coordsys), "occlusion", $(Occlusion)
+	#elif RENDERER == pixie
+	#define SHADEOP_ARGUMENTS	"coordsystem", $(coordsys), \
+								"maxdist", $(maxdist), \
+								"coneangle", $(coneangle), \
+								"samplebase", $(samplebase), \
+								"label", $(label), "bias", $(bias), \
+								"maxerror", $(maxerror), \
+								"pointbased", $(useptc), \
+								"environmentmap", $(envmap), \
+								"filename", $(ptcfile), \
+								"maxpixeldist", $(maxpixeldist), \
+								"maxsolidangle", $(maxsolidangle), \
+								"occlusion", $(Occlusion)
+	#elif RENDERER == prman
+	#define SHADEOP_ARGUMENTS	"adapt", $(adaptive), "minsamples", $(minsamples), \
+								"coordsystem", $(coordsys), \
+								"distribution", $(distribution), \
+								"maxdist", $(maxdist), \
+								"falloffmode", $(falloffmode), \
+								"falloff", $(falloff), \
+								"coneangle", $(coneangle), \
+								"samplebase", $(samplebase), \
+								"hitmode", $(hitmode), \
+								"hitsides", $(hitsides), "subset", $(subset), \
+								"label", $(label), \
+								"environmentmap", $(envmap), \
+								"environmentspace", $(envspace), \
+								"bias", $(bias), \
+								"maxpixeldist", $(maxpixeldist), \
+								"maxerror", $(maxerror), \
+								"pointbased", $(useptc), \
+								"filename", $(ptcfile), \
+								"maxsolidangle", $(maxsolidangle), \
+								"clamp", $(clamp), \
+								"environmentcolor", $(Envcolor), \
+								"environmentdir", $(Envdirection), \
+								"occlusion", $(Occlusion)	
+	#elif RENDERER == air
+	#define SHADEOP_ARGUMENTS	"environmentmap", $(envmap), \
+								"environmentspace", $(envspace), \
+								"label", $(label), "subset", $(subset)
+	#else /* no indirectdiffuse() available */
+	#define NOSHADEOP /* what about bmrt, entropy, renderdotc? */
+	#endif /* RENDERER */
+
+	#ifdef NOSHADEOP
+		$(Ci) = color(0);
+	#else
+		aov_indirectdiffuse += indirectdiffuse(	$(P), $(direction),
+												$(samples), SHADEOP_ARGUMENTS );
+		aov_occlusion += $(Occlusion);
+		$(Ci) = aov_indirectdiffuse;
+		$(Occlusion) = 1 - $(Occlusion);
+	#endif /* NOSHADEOP */
+	
+	#undef NOSHADEOP
+	#undef SHADEOP_ARGUMENTS
+	
+	</rsl_code>
+    <usage>Indirect diffuse retrieves the diffuse illumination from indirect light, allowing effects such as color bleeding.  Coneangle defaults to PI/2. Distribution can be one of &quot;cosine&quot; or &quot;uniform&quot;, defaulting to &quot;cosine&quot;. This function can use an optional environment map to use when rays don&apos;t hit the geometry. You can also use point-based &quot;indirectdiffuse&quot;. Note that this function varies considerably from implementation to implementation, so please consult your renderer&apos;s documentation for details. This function passes the indirect diffuse value into the &quot;aov_indirectdiffuse&quot;, and the optional occlusion value into the &quot;aov_occlusion&quot; AOV presets (as occlusion, not 1 - occlusion).</usage>
+</shrimp>

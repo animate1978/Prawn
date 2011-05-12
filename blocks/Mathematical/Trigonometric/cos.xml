@@ -1,0 +1,8 @@
+<shrimp type="function" name="Cos" description="Cosine block" author="rconstruct">
+	<input name="theta" description="Input value in radians" type="float" default="1"/>
+	<output name="value" description="Cosine value" type="float"/>
+	<rsl_code>
+		$(value) = cos( $(theta) );
+	</rsl_code>
+	<usage>Standard trigonomic cosine function of radian arguments.</usage>
+</shrimp>

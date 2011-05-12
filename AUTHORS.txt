@@ -1,0 +1,12 @@
+
+Andy Gill: wrote the first Shrimp version
+
+Luis Barrancos (aka rconstruct): RenderMan Shader Language guru, rewrote and greatly enhanced all the blocks
+
+Romain Behar: rewrote Shrimp entirely using FLTK 2 and OpenGL
+
+Freddy Chaleur (aka fredfewo): added box selection, copy paste and delete of blocks and groups, improved mouse control, wrote spline arrows to connect block
+
+Matthew Lawrence: OpenGL code cleanup, replaced round corners with vertex arrays and GL_POLYGON_STRIP and improved performances dramatically; made it MESA stack compatible
+
+Ted Gocek : Modified branch (Widow), with changes to the RSL include names to fit into the pipeline, internal use.

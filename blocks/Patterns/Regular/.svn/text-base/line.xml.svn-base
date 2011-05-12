@@ -1,0 +1,18 @@
+<shrimp type="function" name="Line" description="Returns 1 if on the line, otherwise 0" author="rconstruct">
+	<input name="s" description="X coordinate of point to be tested" storage="varying" type="float" default="s"/>
+	<input name="t" description="Y coordinate of point to be tested" storage="varying" type="float" default="t"/>
+	<input name="x0" description="X coordinate of the 1st endpoint of the line" type="float" default="0"/>
+	<input name="y0" description="Y coordiante of the 1st endpoint of the line" type="float" default="0"/>
+	<input name="x1" description="X coordinate of the 2nd endpoint of the line" type="float" default="1"/>
+	<input name="y1" description="Y coordinate of the 2nd endpoint of the line" type="float" default="1"/>
+	<input name="thickness" description="The thickness of the line" type="float" default="0.1"/>
+	<input name="blur" description="The amount the edge is to be blurred" type="float" default="0.001"/>
+	<output name="value" description="Returns 1 if X,Y lies on the line" type="float"/>
+	<rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_include>rsl_shrimp_shapes.h</rsl_include>
+	<rsl_code>
+		$(value) = shLine(	$(x0), $(y0), $(x1), $(y1),
+							$(s), $(t), $(thickness), $(blur) );
+	</rsl_code>
+	<usage>This function tests whether a 2D point lines on a 2D line. Blur can be used to control the antialiasing. The output varies smoothly between 0 and 1 in the blurred regions.</usage>
+</shrimp>

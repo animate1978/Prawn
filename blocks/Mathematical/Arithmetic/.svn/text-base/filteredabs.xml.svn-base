@@ -1,0 +1,10 @@
+<shrimp type="function" name="FilteredAbs" description="Antialiased abs()" author="rconstruct">
+	<input name="x" description="Value to test" type="float" default="1"/>
+    <input name="filterwidth" description="Filter value" type="float" default="0.1"/>
+	<output name="value" description="The smallest integer not smaller than a" type="float"/>
+    <rsl_include>rsl_shrimp_helpers.h</rsl_include>
+	<rsl_code>
+        $(value) = filteredabs( $(x), $(filterwidth) );
+	</rsl_code>
+    <usage>Antialiased &quot;abs&quot;, by Larry Gritz (patterns.h). Returns the &quot;box&quot; filter of abs(t) from x-dx/2 to x+dx/2.</usage>
+</shrimp>

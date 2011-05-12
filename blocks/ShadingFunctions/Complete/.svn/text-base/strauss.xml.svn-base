@@ -1,0 +1,18 @@
+<shrimp name="Strauss" type="function" description="Strauss empirical BRDF" author="rconstruct">
+	<input name="Cdiff" description="Surface color" type="color" default="color(.5)"/>
+	<input name="smoothness" description="Surface smoothness" type="float" default=".5"/>
+	<input name="metalness" description="Surface metalness" type="float" default=".5"/>
+	<input name="transparency" description="Surface transparency" type="float" default="0"/>
+    <input name="N" description="Normal vector" storage="varying" type="vector normal" default="normalize(N)"/>
+    <input name="I" description="Eye vector" storage="varying" type="vector" default="normalize(I)"/>
+	<input name="category" description="Light categories accepted" storage="uniform" type="string" default="&quot;&quot;" />
+    <output name="Ci" description="Shaded color" type="color"/>
+	<rsl_include>rsl_shrimp_shadingmodels.h</rsl_include>
+	<rsl_code>
+		$(Ci) = strauss(	$(Cdiff), $(smoothness), $(metalness),
+							$(transparency),
+							$(N), $(I), $(category),
+							DECLARE_AOV_PARAMETERS );
+	</rsl_code>
+    <usage>Implementation of the Strauss empirical BRDF, from the paper: &quot;A Realistic Lighting Model for Computer Animators&quot;, by Paul S.Strauss. All parameters are in the range [0,1]. The &quot;smoothness&quot; parameter controls the surface smoothness, being 0 a rough, and perfectly diffuse surface, and 1 a smooth and perfectly specular mirroring surface - it affects both the diffuse to specular reflection ratio, and also the size and brightness of the specular highlights. The &quot;metalness&quot; parameter controls the off-specular peaks of the surface, being 0 the appearance of a non-metal surface, and 1 the appearance of a metal surface - this affects the specular color, as well as the amount of diffuse contribution. The &quot;transparency&quot; parameter indicates that the surface is not totally opaque. This block passes the resulting values to the &quot;aov_surfacecolor&quot;, &quot;aov_diffuse&quot; and &quot;aov_specular&quot; AOV presets. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.</usage>
+</shrimp>

@@ -1,0 +1,10 @@
+<shrimp type="function" name="MatrixGetComp" description="Get a component of a matrix" author="rconstruct">
+    <input name="matrix" description="Matrix input" type="matrix" default="0"/>
+    <input name="row" description="Input row" type="float" default="1"/>
+    <input name="column" description="Input column" type="float" default="1"/>
+    <output name="component" description="Matrix component" type="float"/>
+	<rsl_code>
+	    $(component) = comp( $(matrix), $(row), $(column) );
+	</rsl_code>
+	<usage>Gets the row and column component of matrix M.</usage>
+</shrimp>

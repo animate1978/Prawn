@@ -1,0 +1,9 @@
+<shrimp type="function" name="Min" description="Return the smallest input" author="rconstruct">
+	<input name="A" description="1st input" type_parent="value" type="color point vector normal float" default="0"/>
+	<input name="B" description="2nd or subsequent inputs" type_parent="value" type="color point vector normal float" multi="," default="0"/>
+	<output name="value" description="out = the smallest input" type="color point vector normal float"/>
+	<rsl_code>
+		$(value) = min( $(A), $(B) );
+	</rsl_code>
+	<usage>Returns the minimum of the arguments given. When evaluating point type variables, the arguments will be evaluated on a component basis.</usage>
+</shrimp>

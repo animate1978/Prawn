@@ -1,0 +1,13 @@
+<shrimp type="function" name="PNoise2D" description="2 dimensional periodic noise function" author="rconstruct">
+	<input name="s" description="noise x co-ordinate" storage="varying" type="float" default="s"/>
+	<input name="t" description="noise y co-ordinate" storage="varying" type="float" default="t"/>
+	<input name="xperiod" description="X period" storage="uniform" type="float" default="5"/>
+	<input name="yperiod" description="Y period" storage="uniform" type="float" default="5"/>
+	<input name="amplitude" description="Amplitude of noise" type="float" default="1"/>
+	<output name="value" description="Noise value at (x,y)" type="color point vector float"/>
+	<rsl_code>
+		$(value) = $(amplitude) * $(value:type) pnoise( $(s), $(s),
+							$(xperiod), $(yperiod) );
+	</rsl_code>
+<usage>2 dimensional periodic noise function. XY periods should be integers up to 256. Output value is in the [0, &quot;amplitude&quot;] range.</usage>
+</shrimp>

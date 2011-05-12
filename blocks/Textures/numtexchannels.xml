@@ -1,0 +1,9 @@
+<shrimp type="function" name="NumTexChannels" description="Number of texture channels" author="rconstruct">
+	<input name="texmap" description="Texture map" storage="uniform" type="string" default="&quot;&quot;"/>
+	<output name="value" description="Adjusted value." storage="uniform" type="float"/>
+	<rsl_include>rsl_texture.h</rsl_include>
+	<rsl_code>
+	$(value) = numtexchannels( $(texmap) );
+	</rsl_code>
+	<usage>This block returns the number of channels in a texture map.</usage>
+</shrimp>

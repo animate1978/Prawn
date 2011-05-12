@@ -1,0 +1,106 @@
+<shrimp name="new_scene">
+	<about/>
+	<network>
+		<block id="Add" position_x="2" position_y="2" author="rconstruct">
+			<input name="A" type="color" storage="varying" value="1" description="1st input" type_parent="value">
+				<connection parent="DiffuseFalloff" output="Ci"/>
+			</input>
+			<input name="B" type="color" storage="varying" multi="+" value="1" description="2nd or subsequent inputs" type_parent="value">
+				<connection parent="Phong" output="Ci"/>
+			</input>
+			<output name="value" type="color" storage="varying" description="val = A + B"/>
+			<rsl_code>
+		$(value) = $(A) + $(B);
+																												</rsl_code>
+			<rsl_include/>
+			<usage>Adds 2 or more inputs. All the input pads will inherit the type of the output pad.																											</usage>
+		</block>
+		<block id="DiffuseFalloff" position_x="-2" position_y="3" author="rconstruct">
+			<input name="Cdiff" type="color" storage="varying" value="color(.5)" description="Diffuse color"/>
+			<input name="Kd" type="float" storage="varying" value="1" description="Diffuse coefficient"/>
+			<input name="falloff" type="float" storage="varying" value="0.5" description="Diffuse falloff"/>
+			<input name="N" type="normal" storage="varying" value="normalize(N)" description="The surface normal"/>
+			<input name="I" type="vector" storage="varying" value="normalize(I)" description="The viewer vector"/>
+			<input name="category" type="string" storage="uniform" value="&quot;&quot;" description="Light categories accepted"/>
+			<output name="Ci" type="color" storage="varying" description="The amount of diffuse light"/>
+			<rsl_code>
+		aov_surfacecolor += $(Cdiff);
+		aov_diffuse += $(Kd) * diffusefalloff(	$(falloff), $(N), $(I),
+										$(category) );
+		$(Ci) = aov_surfacecolor * aov_diffuse;
+				</rsl_code>
+			<rsl_include>rsl_shrimp_shadingmodels.h			</rsl_include>
+			<usage>Lambertian diffuse fall-off model, with control over the falloff between the lit and unlit regions on the surface via the &quot;falloff&quot; variable - this value should be in the [0,1] range. The diffuse color value is passed to &quot;aov_surfacecolor&quot;, and the diffuse value to the &quot;aov_diffuse&quot; AOV presets. The &quot;category&quot; variable defines the light categories used for the &quot;illuminance&quot; construct of this block.			</usage>
+		</block>
+		<block id="Phong" position_x="-2" position_y="0" author="rconstruct">
+			<input name="Cspec" type="color" storage="varying" value="color(1)" description="Specular color"/>
+			<input name="Ks" type="float" storage="varying" value=".6" description="Specular coefficient"/>
+			<input name="N" type="normal" storage="varying" value="normalize(N)" description="The surface normal"/>
+			<input name="V" type="vector" storage="varying" value="-normalize(I)" description="The viewer vector"/>
+			<input name="size" type="float" storage="varying" value="15" description="The specular highlight size"/>
+			<output name="Ci" type="color" storage="varying" description="The amount of diffuse light"/>
+			<rsl_code>
+		aov_specularcolor += $(Cspec);
+		aov_specular += $(Ks) * phong( $(N), $(V), $(size));
+		$(Ci) = aov_specularcolor * aov_specular;
+																												</rsl_code>
+			<rsl_include/>
+			<usage>Specular term, using the Phong model. The specular color value is passed to &quot;aov_specularcolor&quot;, while the specular value, to the &quot;aov_specular&quot; AOV presets.																											</usage>
+		</block>
+		<block id="PointLight" position_x="2" position_y="-1" author="rconstruct">
+			<input name="intensity" type="float" storage="varying" value="400" description="Light intensity"/>
+			<input name="lightcolor" type="color" storage="varying" value="1 1 1" description="Light color"/>
+			<input name="position" type="point" storage="varying" value="point &quot;shader&quot; ( -15, 10, 5 )" description="Light source position"/>
+			<input name="decay" type="float" storage="uniform" value="2" description="Light decay, see help"/>
+			<input name="shadowmap" type="string" storage="uniform" value="&quot;raytrace&quot;" description="Shadow map"/>
+			<input name="blur" type="float" storage="varying" value="radians(1)" description="Shadow map blur"/>
+			<input name="width" type="float" storage="uniform" value="1" description="Shadow map filter width"/>
+			<input name="samples" type="float" storage="uniform" value="16" description="Shadow map samples"/>
+			<input name="bias" type="float" storage="uniform" value="0.01" description="Shadow map bias"/>
+			<input name="filter" type="string" storage="uniform" value="&quot;gaussian&quot;" description="Shadow map filter"/>
+			<input name="nondiffuse" type="float" storage="uniform" value="0" description="Non-diffuse light"/>
+			<input name="nonspecular" type="float" storage="uniform" value="0" description="Non-specular light"/>
+			<output name="Cl" type="color" storage="varying" description="Light ray color"/>
+			<rsl_code>
+		/* standards declared at beginning of (preview) light shader */
+		__nondiffuse = $(nondiffuse);
+		/* temp storage for shadow color */
+		varying color $(blockname)_inshadow = color(0);
+		
+		__nonspecular = $(nonspecular);
+		$(Cl) = spointlight( $(position), $(intensity), $(blur),
+					$(width), $(samples), $(bias), $(decay), $(shadowmap),
+					$(filter), $(lightcolor), $(blockname)_inshadow );
+
+		__shadow = $(blockname)_inshadow;
+													</rsl_code>
+			<rsl_include>rsl_shrimp_lights.h												</rsl_include>
+			<usage>Point light shader. The &quot;decay&quot; variable defaults to 0 - no decay, with 1 being linear decay, 2 being squared decay, 3 being cubic decay and so on.												</usage>
+		</block>
+		<block id="Root block" position_x="5" position_y="1" author="" root="RIB" AOV_preview="1">
+			<rib_statements>Attribute &quot;visibility&quot; &quot;integer transmission&quot; [1]
+			</rib_statements>
+			<imager_statement/>
+			<input name="Ci" type="color" storage="varying" shader_parameter="1" value="0" description="Incident ray colour">
+				<connection parent="Add" output="value"/>
+			</input>
+			<input name="Oi" type="color" storage="varying" shader_parameter="1" value="1" description="Incident ray opacity"/>
+			<input name="P" type="point" storage="varying" shader_parameter="1" value="P" description="Displaced surface position"/>
+			<input name="N" type="normal" storage="varying" shader_parameter="1" value="N" description="Displaced surface shading normal"/>
+			<input name="Cl" type="color" storage="varying" shader_parameter="1" value="0" description="Outgoing light ray colour">
+				<connection parent="PointLight" output="Cl"/>
+			</input>
+			<input name="Ol" type="color" storage="varying" shader_parameter="1" value="1" description="Outgoing light ray opacity"/>
+			<input name="Cv" type="color" storage="varying" shader_parameter="1" value="0" description="Attenuated ray colour"/>
+			<input name="Ov" type="color" storage="varying" shader_parameter="1" value="1" description="Attenuated ray opacity"/>
+			<input name="Cm" type="color" storage="varying" shader_parameter="1" value="0" description="Output pixel colour"/>
+			<input name="Om" type="color" storage="varying" shader_parameter="1" value="1" description="Output pixel opacity"/>
+			<input name="AOV" type="color" storage="varying" shader_parameter="1" value="1" description="AOV preview output">
+				<connection parent="Add" output="value"/>
+			</input>
+			<rsl_code/>
+			<rsl_include/>
+			<usage/>
+		</block>
+	</network>
+</shrimp>
